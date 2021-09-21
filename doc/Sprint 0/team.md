@@ -5,3 +5,5 @@
 |Shengsong Xu|xushengs|1005788970 |shengsong.xu@mail.utoronto.ca|MS Teams/Email         |charles#6206
 |Abhishek Chatterjee|chatt114|1004820615|a.chatterjee@mail.utoronto.ca|MS Teams/Email   |AbChatt#2344
 |Joshua John Abraham Daniel|danie158|1007255765|j.daniel@mail.utoronto.ca|MS Teams/Email|jdaniel#2529
+
+**Discord Server Invite :** https://discord.gg/UkcnBBNyJ7
