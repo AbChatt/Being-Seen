@@ -20,21 +20,21 @@ The following are needed only if you want to use your own Azure storage account 
 
 1. Clone the repo if needed
 
-```sh
-git clone https://github.com/UTSCCSCC01/projectf21-admin.git
-```
+   ```sh
+   git clone https://github.com/UTSCCSCC01/projectf21-admin.git
+   ```
 
 2. Install NPM packages (note: run command inside the `/backend` folder)
 
-```sh
-npm install
-```
+   ```sh
+   npm install
+   ```
 
 3. Start the application (note: run command inside the `/backend` folder)
 
-```sh
-node server.js
-```
+   ```sh
+   node server.js
+   ```
 
 # Frontend Setup
 
@@ -47,25 +47,25 @@ node server.js
 
 1. Clone the repo if needed
 
-```sh
-git clone https://github.com/UTSCCSCC01/projectf21-admin.git
-```
+   ```sh
+   git clone https://github.com/UTSCCSCC01/projectf21-admin.git
+   ```
 
 2. Install NPM packages (note: run command inside the `/frontend` folder)
 
-```sh
-npm install
-```
+   ```sh
+   npm install
+   ```
 
 3. Start the application (note: run command inside the `/frontend` folder)
 
-```sh
-npm start
-# Live development server
+   ```sh
+   npm start
+   # Live development server
 
-npm run build
-# Optimized production build
-```
+   npm run build
+   # Optimized production build
+   ```
 
 ### Testing
 
