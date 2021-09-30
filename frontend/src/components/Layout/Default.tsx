@@ -16,7 +16,7 @@ interface DefaultTemplateProps {
   children: React.ReactNode;
 }
 
-const DefaultTemplate = ({ title, children }: DefaultTemplateProps) => {
+const Layout = ({ title, children }: DefaultTemplateProps) => {
   useEffect(() => {
     document.title = title;
   }, [title]);
@@ -30,4 +30,4 @@ const DefaultTemplate = ({ title, children }: DefaultTemplateProps) => {
   );
 };
 
-export default DefaultTemplate;
+export default Layout;
