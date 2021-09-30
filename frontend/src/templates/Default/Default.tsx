@@ -8,6 +8,7 @@ import {
   unstable_createMuiStrictModeTheme as createTheme,
 } from "@mui/material/styles";
 
+import Header from "components/Header";
 import theme from "styles/theme";
 
 interface DefaultTemplateProps {
@@ -23,6 +24,7 @@ const DefaultTemplate = ({ title, children }: DefaultTemplateProps) => {
   return (
     <ThemeProvider theme={createTheme(theme)}>
       <CssBaseline />
+      <Header />
       <Box p={{ xs: 2, sm: 3 }}>{children}</Box>
     </ThemeProvider>
   );
