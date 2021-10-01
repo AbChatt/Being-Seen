@@ -41,4 +41,6 @@ const decodeAuthToken = (): UserJwt | null => {
   return null;
 };
 
-export { UserRoles, decodeAuthToken };
+const removeAuthToken = () => localStorage.removeItem(STORAGE_AUTH_KEY);
+
+export { UserRoles, decodeAuthToken, removeAuthToken };
