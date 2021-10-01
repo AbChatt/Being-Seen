@@ -8,6 +8,8 @@ import {
 import HomePage from "pages/Home";
 import LoginPage from "pages/Login";
 import SignupPage from "pages/Signup";
+import ProfilePage from "pages/Profile";
+import StorePage from "pages/Store";
 
 const App = () => (
   <Router>
@@ -20,6 +22,12 @@ const App = () => (
       </Route>
       <Route exact path="/signup">
         <SignupPage />
+      </Route>
+      <Route exact path="/profile">
+        <ProfilePage />
+      </Route>
+      <Route exact path="/store">
+        <StorePage />
       </Route>
       <Route path="*">
         <Redirect to="/" />
