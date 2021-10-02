@@ -22,6 +22,11 @@ const LoginPage = () => {
 
   const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    console.log({
+      username,
+      password,
+      rememberMe,
+    });
   };
 
   const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) =>
