@@ -1,10 +1,12 @@
-require("dotenv").config();
+import dotenv from "dotenv";
+import express from "express";
 
-const express = require("express");
+dotenv.config();
 const app = express();
 const PORT = process.env.PORT;
+const API_VERSION = process.env.API_VERSION;
 
-app.get("/", (req, res) => {
+app.get(`api/${API_VERSION}/`, (req, res) => {
   res.send("Hello, World!");
 });
 
