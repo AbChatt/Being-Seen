@@ -1,13 +1,18 @@
-require("dotenv").config();
+import dotenv from "dotenv";
+import express from "express";
+import chalk from "chalk";
 
-const express = require("express");
+import userRoute from "./routes/user.js";
+import requestLogger from "./middleware/requestLogger.js";
+
+dotenv.config();
 const app = express();
 const PORT = process.env.PORT;
+const API_VERSION = process.env.API_VERSION;
 
-app.get("/", (req, res) => {
-  res.send("Hello, World!");
-});
+app.use("/", requestLogger);
+app.use(`/api/${API_VERSION}/user`, userRoute);
 
 app.listen(PORT, () => {
-  console.log(`Listening at http://localhost:${PORT}`);
+  console.log(chalk.whiteBright(`Listening at http://localhost:${PORT}`));
 });
