@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
 import express from "express";
+import chalk from "chalk";
 
 import requestLogger from "./middleware/requestLogger.js";
 
@@ -14,5 +15,5 @@ app.get(`api/${API_VERSION}/`, (req, res) => {
 app.use("/", requestLogger);
 
 app.listen(PORT, () => {
-  console.log(`Listening at http://localhost:${PORT}`);
+  console.log(chalk.whiteBright(`Listening at http://localhost:${PORT}`));
 });
