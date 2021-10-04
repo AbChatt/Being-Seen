@@ -47,9 +47,9 @@ const SignupPage = () => {
             </Tabs>
           </Box>
           <Box sx={{ width: 1 }}>
-            {tab === 0 && <DonorSignup />}
-            {tab === 1 && <MerchantSignup />}
-            {tab === 2 && <YouthSignup />}
+            {tab === 0 && <YouthSignup />}
+            {tab === 1 && <DonorSignup />}
+            {tab === 2 && <MerchantSignup />}
           </Box>
           <Typography align="center" variant="body2">
             Already have an account?
