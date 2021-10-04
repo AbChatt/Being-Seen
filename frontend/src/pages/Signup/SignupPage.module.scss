@@ -1,0 +1,13 @@
+.signupContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 48px;
+}
+
+.tabOverrides {
+  button {
+    min-width: auto;
+  }
+}
