@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
+import MuiLink from "@mui/material/Link";
 import Avatar from "@mui/material/Avatar";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
@@ -44,9 +46,17 @@ const SignupPage = () => {
               <Tab label="Merchant" />
             </Tabs>
           </Box>
-          {tab === 0 && <DonorSignup />}
-          {tab === 1 && <MerchantSignup />}
-          {tab === 2 && <YouthSignup />}
+          <Box sx={{ width: 1 }}>
+            {tab === 0 && <DonorSignup />}
+            {tab === 1 && <MerchantSignup />}
+            {tab === 2 && <YouthSignup />}
+          </Box>
+          <Typography align="center" variant="body2">
+            Already have an account?
+            <MuiLink to="/login" component={Link} sx={{ ml: 1 }}>
+              Login
+            </MuiLink>
+          </Typography>
         </div>
       </Container>
     </Layout>
