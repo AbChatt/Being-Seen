@@ -25,7 +25,9 @@ const Layout = ({ title, children }: DefaultTemplateProps) => {
     <ThemeProvider theme={createTheme(theme)}>
       <CssBaseline />
       <Header />
-      <Box p={{ xs: 2, sm: 3 }}>{children}</Box>
+      <Box p={{ xs: 2, sm: 3 }} overflow="hidden" position="relative">
+        {children}
+      </Box>
     </ThemeProvider>
   );
 };
