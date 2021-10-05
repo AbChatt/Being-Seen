@@ -16,7 +16,7 @@ import User from "../../models/User.js";
 
 const router = express.Router();
 
-router.use("/signup", validateDonorSignup);
+router.use("/signup", [validateUserSignup, validateDonorSignup]);
 router.post("/signup", async (req, res) => {
   const newUser = new User({
     role: userRoles.donor,

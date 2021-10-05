@@ -15,9 +15,8 @@ import Youth from "../../models/Youth.js";
 import User from "../../models/User.js";
 
 const router = express.Router();
-const validateUserSignup = validateDonorSignup;
 
-router.use("/signup", validateUserSignup);
+router.use("/signup", [validateUserSignup, validateYouthSignup]);
 router.post("/signup", async (req, res) => {
   const newUser = new User({
     role: userRoles.youth,
