@@ -13,6 +13,14 @@ const DonorSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  display_name: {
+    type: String,
+    required: true,
+  },
+  anonymize: {
+    type: Boolean,
+    required: true,
+  },
   profile_picture: {
     type: String,
     required: true,

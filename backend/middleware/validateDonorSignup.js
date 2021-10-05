@@ -18,6 +18,10 @@ const validateDonorSignup = async (req, res, next) => {
     return res
       .status(StatusCodes.BAD_REQUEST)
       .send(createTextMessage("Username field is empty"));
+  } else if (/\s/.test(req.body.username)) {
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .send(createTextMessage("Username cannot contain whitespace"));
   } else if (await User.exists({ username: req.body.username })) {
     return res
       .status(StatusCodes.BAD_REQUEST)

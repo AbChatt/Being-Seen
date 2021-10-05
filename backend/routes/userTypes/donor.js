@@ -27,8 +27,10 @@ router.post("/signup", async (req, res) => {
     name: req.body.name,
     username: req.body.username,
     date_of_birth: req.body.date_of_birth,
-    profile_picture: req.body.profile_picture || "#",
     organization: req.body.organization || "None",
+    profile_picture: req.body.profile_picture || "#",
+    display_name: Boolean(req.body.anonymize) ? "Anonymous" : req.body.name,
+    anonymize: Boolean(req.body.anonymize),
   });
 
   try {
