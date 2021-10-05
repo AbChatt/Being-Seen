@@ -1,5 +1,5 @@
 import { StatusCodes } from "http-status-codes";
-import { createTextMessage } from "../utils/defaultMessages.js";
+import { createTextMessage } from "../../utils/defaultMessages.js";
 
 const validateLogin = (req, res, next) => {
   // Validate username
