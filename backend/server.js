@@ -21,7 +21,7 @@ app.use(`/api/${API_VERSION}/user`, userRoute);
 
 // Mongo database connection
 mongoose.connect(process.env.MONGO_CONN_STR, { useNewUrlParser: true }, () =>
-  console.log("connected to DB!")
+  console.log(chalk.white("Connected successfully to DB"))
 );
 
 app.listen(PORT, () => {
