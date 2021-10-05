@@ -5,7 +5,7 @@ import { createTextMessage } from "../utils/defaultMessages.js";
 import hasAuthHeader from "../middleware/hasAuthHeader.js";
 
 import Donor from "../models/donors.js";
-import User from "../models/users.js"
+import User from "../models/users.js";
 const router = express.Router();
 
 router.use("/validate", hasAuthHeader);
@@ -24,7 +24,7 @@ router.post("/signup/donors", async (req, res) => {
   const user = new User({
     username: req.body.username,
     role: "donors",
-  })
+  });
 
   const donor = new Donor({
     name: req.body.name,
@@ -37,13 +37,8 @@ router.post("/signup/donors", async (req, res) => {
   });
   try {
     const savedDonor = await donor.save();
-    res.json(savedDonor);
-  } catch (err) {
-    res.json({ message: err });
-  }
-  try {
     const savedUser = await user.save();
-    res.json(savedUser);
+    res.json(savedUser,savedDonor,2)
   } catch (err) {
     res.json({ message: err });
   }
