@@ -18,6 +18,7 @@ const DonorSignup = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [pictureUrl, setPictureUrl] = useState("");
+  const [organization, setOrganization] = useState("");
   const [dateOfBirth, setDateOfBirth] = useState<Date | null>(null);
   const [anonymize, setAnonymize] = useState(false);
 
@@ -30,6 +31,7 @@ const DonorSignup = () => {
       password,
       pictureUrl,
       anonymize,
+      organization,
       dateOfBirth: dateOfBirth ? dateOfBirth.toISOString() : dateOfBirth,
     });
 
@@ -51,6 +53,10 @@ const DonorSignup = () => {
 
   const handlePictureChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPictureUrl(event.target.value);
+  };
+
+  const handleOrganization = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setOrganization(event.target.value);
   };
 
   const handleAnonymizeChange = (event: any, checked: boolean) => {
@@ -103,6 +109,13 @@ const DonorSignup = () => {
           )}
         />
       </LocalizationProvider>
+      <TextField
+        fullWidth
+        value={organization}
+        onChange={handleOrganization}
+        label="Organization"
+        margin="normal"
+      />
       <TextField
         fullWidth
         value={pictureUrl}
