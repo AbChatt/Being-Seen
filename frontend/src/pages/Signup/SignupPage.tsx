@@ -8,7 +8,7 @@ import MuiLink from "@mui/material/Link";
 import Avatar from "@mui/material/Avatar";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
-import SignupIcon from "@mui/icons-material/AccountCircle";
+import SignupIcon from "@mui/icons-material/AccountBox";
 
 import Layout from "components/Layout";
 import DonorSignup from "components/Signup/Donor";
