@@ -1,9 +1,9 @@
 import moment from "moment";
 import { StatusCodes } from "http-status-codes";
-import { createTextMessage } from "../utils/defaultMessages.js";
-import User from "../models/User.js";
+import { createTextMessage } from "../../utils/defaultMessages.js";
+import User from "../../models/User.js";
 
-const validateDonorSignup = async (req, res, next) => {
+const validateUser = async (req, res, next) => {
   console.log(req.body);
 
   // Validate name
@@ -53,4 +53,4 @@ const validateDonorSignup = async (req, res, next) => {
   next();
 };
 
-export default validateDonorSignup;
+export default validateUser;

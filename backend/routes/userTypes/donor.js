@@ -1,7 +1,8 @@
 import express from "express";
 import { StatusCodes } from "http-status-codes";
 
-import validateDonorSignup from "../../middleware/validateDonorSignup.js";
+import validateDonorSignup from "../../middleware/signup/validateDonorSignup.js";
+import validateUserSignup from "../../middleware/signup/validateUserSignup.js";
 
 import {
   createTextMessage,
@@ -15,7 +16,7 @@ import User from "../../models/User.js";
 
 const router = express.Router();
 
-router.use("/signup", validateDonorSignup);
+router.use("/signup", [validateUserSignup, validateDonorSignup]);
 router.post("/signup", async (req, res) => {
   const newUser = new User({
     role: userRoles.donor,

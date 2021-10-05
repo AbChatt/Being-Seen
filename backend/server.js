@@ -5,7 +5,7 @@ import chalk from "chalk";
 
 import mongoose from "mongoose";
 import userRoute from "./routes/user.js";
-import requestLogger from "./middleware/requestLogger.js";
+import requestLogger from "./middleware/log/requestLogger.js";
 
 dotenv.config();
 const app = express();
