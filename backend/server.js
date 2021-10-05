@@ -1,3 +1,4 @@
+import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 import chalk from "chalk";
@@ -11,9 +12,10 @@ const app = express();
 const PORT = process.env.PORT;
 const API_VERSION = process.env.API_VERSION;
 
-// Body parser
+// Body parser and CORS
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cors());
 
 // App routes
 app.use("/", requestLogger);
