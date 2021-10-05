@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 import Box from "@mui/material/Box";
 import MuiLink from "@mui/material/Link";
@@ -13,20 +13,49 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 
 import Layout from "components/Layout";
+import { decodeAuthToken, setAuthToken, UserRoles } from "utils/checkAuth";
+import axiosBase from "utils/axiosBase";
+
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import styles from "./LoginPage.module.scss";
 
 const LoginPage = () => {
+  const history = useHistory();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
 
   const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log({
-      username,
-      password,
-      rememberMe,
-    });
+    axiosBase
+      .post("/api/v1/user/login", {
+        username: username,
+        password: password,
+        remember: rememberMe,
+      })
+      .then((response) => {
+        setAuthToken(response.data.jwt);
+        const account = decodeAuthToken();
+        switch (account && account.role) {
+          case UserRoles.donor:
+            history.push("/");
+            break;
+          case UserRoles.merchant:
+            history.push("/merchant");
+            break;
+          case UserRoles.youth:
+            history.push("/store");
+            break;
+        }
+      })
+      .catch(({ response }) => {
+        if (response) {
+          toast.error(response.data.message || "Unknown error");
+        } else {
+          toast.error("Request could not be made");
+        }
+      });
   };
 
   const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) =>
@@ -40,6 +69,7 @@ const LoginPage = () => {
 
   return (
     <Layout title="Login">
+      <ToastContainer theme="colored" />
       <Container maxWidth="xs">
         <div className={styles.loginContainer}>
           <Avatar sx={{ mb: 2, bgcolor: "primary.main" }}>
