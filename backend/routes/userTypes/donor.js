@@ -37,6 +37,7 @@ router.post("/signup", async (req, res) => {
     const jwtToken = createUserToken(req.body.username, userRoles.donor);
     res.status(StatusCodes.CREATED).send(createJwtMessage(jwtToken));
   } catch (err) {
+    console.log(err);
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .send(createTextMessage("Error saving donor to database"));
