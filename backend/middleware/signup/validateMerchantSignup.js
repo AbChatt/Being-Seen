@@ -1,5 +1,5 @@
 import { StatusCodes } from "http-status-codes";
-import { createTextMessage } from "../utils/defaultMessages.js";
+import { createTextMessage } from "../../utils/defaultMessages.js";
 
 const validateMerchantSignup = (req, res, next) => {
   // Validate store name
@@ -16,16 +16,16 @@ const validateMerchantSignup = (req, res, next) => {
       .send(createTextMessage("Store location field is empty"));
   }
 
-  // Validate Paypal email
+  // Validate PayPal email
   if (!req.body.email) {
     return res
       .status(StatusCodes.BAD_REQUEST)
       .send(createTextMessage("Email field is empty"));
-  } else if (!(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(req.body.email))) {
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(req.body.email)) {
     return res
       .status(StatusCodes.BAD_REQUEST)
       .send(createTextMessage("Invalid email address provided"));
-  }  
+  }
 
   next();
 };

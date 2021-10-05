@@ -18,17 +18,17 @@ const MerchantSchema = new mongoose.Schema({
     required: true,
   },
   store_name: {
-      type: String,
-      required: true,
+    type: String,
+    required: true,
   },
   location: {
-      type: String,
-      required: true,
+    type: String,
+    required: true,
   },
   email: {
-      type: String,
-      required: true,
-  }
+    type: String,
+    required: true,
+  },
 });
 
 export default mongoose.model("merchants", MerchantSchema);
