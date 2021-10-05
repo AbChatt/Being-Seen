@@ -1,3 +1,4 @@
+import bcrypt from "bcrypt";
 import mongoose from "mongoose";
 
 const UserSchema = new mongoose.Schema({
@@ -13,6 +14,17 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+});
+
+UserSchema.pre("save", async function (next) {
+  try {
+    const salt = await bcrypt.genSalt();
+    const hashedPassword = await bcrypt.hash(this.password, salt);
+    this.password = hashedPassword;
+    next();
+  } catch (error) {
+    next(error);
+  }
 });
 
 export default mongoose.model("users", UserSchema);
