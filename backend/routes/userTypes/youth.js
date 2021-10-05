@@ -29,8 +29,6 @@ router.post("/signup", async (req, res) => {
     username: req.body.username,
     date_of_birth: req.body.date_of_birth,
     profile_picture: req.body.profile_picture || "#",
-    story: req.body.story,
-    saving_plan: req.body.saving_plan
   });
 
   try {
@@ -42,7 +40,7 @@ router.post("/signup", async (req, res) => {
     console.log(err);
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .send(createTextMessage("Error saving donor to database"));
+      .send(createTextMessage("Error saving youth to database"));
   }
 });
 
