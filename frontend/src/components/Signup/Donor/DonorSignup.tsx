@@ -3,8 +3,10 @@ import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Avatar from "@mui/material/Avatar";
+import Checkbox from "@mui/material/Checkbox";
 import TextField from "@mui/material/TextField";
 import AdapterMoment from "@mui/lab/AdapterMoment";
+import FormControlLabel from "@mui/material/FormControlLabel";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
 
@@ -17,6 +19,7 @@ const DonorSignup = () => {
   const [password, setPassword] = useState("");
   const [pictureUrl, setPictureUrl] = useState("");
   const [dateOfBirth, setDateOfBirth] = useState<Date | null>(null);
+  const [anonymize, setAnonymize] = useState(false);
 
   const handleSignup = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -26,6 +29,7 @@ const DonorSignup = () => {
       username,
       password,
       pictureUrl,
+      anonymize,
       dateOfBirth: dateOfBirth ? dateOfBirth.toISOString() : dateOfBirth,
     });
 
@@ -47,6 +51,10 @@ const DonorSignup = () => {
 
   const handlePictureChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPictureUrl(event.target.value);
+  };
+
+  const handleAnonymizeChange = (event: any, checked: boolean) => {
+    setAnonymize(checked);
   };
 
   const handleDateChange = (newDate: Date | null) => {
@@ -101,6 +109,12 @@ const DonorSignup = () => {
         onChange={handlePictureChange}
         label="Profile Picture URL"
         margin="normal"
+      />
+      <FormControlLabel
+        checked={anonymize}
+        label="Anonymize my name"
+        onChange={handleAnonymizeChange}
+        control={<Checkbox />}
       />
       {pictureUrl && (
         <Box display="flex" justifyContent="center" mt={2}>
