@@ -1,4 +1,4 @@
-const validateDonorSignup = async (req, res, next) => {
+const validateDonorSignup = (req, res, next) => {
   next();
 };
 

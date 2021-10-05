@@ -1,9 +1,7 @@
 import { StatusCodes } from "http-status-codes";
 import { createTextMessage } from "../utils/defaultMessages.js";
 
-const validateMerchantSignup = async (req, res, next) => {
-  console.log(req.body);
-
+const validateMerchantSignup = (req, res, next) => {
   // Validate store name
   if (!req.body.store_name) {
     return res
