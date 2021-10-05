@@ -4,8 +4,10 @@ import { decodeUserToken } from "../utils/jwtHelpers.js";
 import { createTextMessage } from "../utils/defaultMessages.js";
 import hasAuthHeader from "../middleware/hasAuthHeader.js";
 
-import Donor from "../models/donors.js";
-import User from "../models/users.js";
+import donorRoute from "./userTypes/donor.js";
+import merchantRoute from "./userTypes/merchant.js";
+import youthRoute from "./userTypes/youth.js";
+
 const router = express.Router();
 
 router.use("/validate", hasAuthHeader);
@@ -19,29 +21,8 @@ router.get("/validate", (req, res) => {
   }
 });
 
-router.post("/signup/donors", async (req, res) => {
-  console.log(req.body);
-  const user = new User({
-    username: req.body.username,
-    role: "donors",
-  });
-
-  const donor = new Donor({
-    name: req.body.name,
-    username: req.body.username,
-    profile_picture: req.body.profile_picture,
-    date_of_birth: req.body.date_of_birth,
-    password: req.body.password,
-    credit_card: req.body.credit_card,
-    organization: req.body.organization,
-  });
-  try {
-    const savedDonor = await donor.save();
-    const savedUser = await user.save();
-    res.json(savedUser,savedDonor,2)
-  } catch (err) {
-    res.json({ message: err });
-  }
-});
+router.use("/donor", donorRoute);
+router.use("/merchant", merchantRoute);
+router.use("/youth", youthRoute);
 
 export default router;
