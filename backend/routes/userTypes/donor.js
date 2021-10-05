@@ -1,35 +1,45 @@
 import express from "express";
 import { StatusCodes } from "http-status-codes";
-import { decodeUserToken, createUserToken } from "../../utils/jwtHelpers.js";
-import { createTextMessage } from "../../utils/defaultMessages.js";
+
+import validateDonorSignup from "../../middleware/validateDonorSignup.js";
+
+import {
+  createTextMessage,
+  createJwtMessage,
+} from "../../utils/defaultMessages.js";
+import { createUserToken } from "../../utils/jwtHelpers.js";
+import userRoles from "../../utils/userRoles.js";
+
 import Donor from "../../models/Donor.js";
 import User from "../../models/User.js";
 
 const router = express.Router();
 
+router.use("/signup", validateDonorSignup);
 router.post("/signup", async (req, res) => {
-  console.log(req.body);
-
-  const user = new User({
+  const newUser = new User({
+    role: userRoles.donor,
     username: req.body.username,
-    role: "donors",
+    password: req.body.password,
   });
 
-  const donor = new Donor({
+  const newDonor = new Donor({
     name: req.body.name,
     username: req.body.username,
-    profile_picture: req.body.profile_picture,
     date_of_birth: req.body.date_of_birth,
-    password: req.body.password,
-    credit_card: req.body.credit_card,
-    organization: req.body.organization,
+    profile_picture: req.body.profile_picture || "#",
+    organization: req.body.organization || "None",
   });
+
   try {
-    const savedDonor = await donor.save();
-    const savedUser = await user.save();
-    res.json(savedUser, savedDonor, 2);
+    await newUser.save();
+    await newDonor.save();
+    const jwtToken = createUserToken(req.body.username, userRoles.donor);
+    res.status(StatusCodes.CREATED).send(createJwtMessage(jwtToken));
   } catch (err) {
-    res.json({ message: err });
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .send(createTextMessage("Error saving donor to database"));
   }
 });
 
