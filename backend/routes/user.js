@@ -41,7 +41,7 @@ router.post("/login", async (req, res) => {
       createJwtMessage(
         createUserToken(
           req.body.username,
-          req.body.password,
+          retrieved.role,
           Boolean(req.body.remember)
         )
       )
