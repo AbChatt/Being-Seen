@@ -1,7 +1,8 @@
 import express from "express";
 import { StatusCodes } from "http-status-codes";
 
-import validateDonorSignup from "../../middleware/validateDonorSignup.js";
+import validateDonorSignup from "../../middleware/signup/validateDonorSignup.js";
+import validateUserSignup from "../../middleware/signup/validateUserSignup.js";
 
 import {
   createTextMessage,
