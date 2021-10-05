@@ -1,13 +1,8 @@
-import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import jwt from "jsonwebtoken";
+import userRoles from "./userRoles.js";
 
 dotenv.config();
-
-const UserRoles = {
-  donor: "donor",
-  merchant: "merchant",
-  youth: "youth",
-};
 
 const stripAuthBearer = (authorizationHeader) =>
   authorizationHeader.replace(/^Bearer\s/, "");
@@ -32,7 +27,7 @@ const decodeUserToken = (token) => {
     if (
       decoded.role &&
       decoded.username &&
-      Object.values(UserRoles).includes(decoded.role)
+      Object.values(userRoles).includes(decoded.role)
     ) {
       return decoded;
     }
@@ -44,4 +39,4 @@ const decodeUserToken = (token) => {
   return null;
 };
 
-export { UserRoles, createUserToken, decodeUserToken };
+export { createUserToken, decodeUserToken };
