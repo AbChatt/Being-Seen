@@ -36,11 +36,10 @@ const validateUser = async (req, res, next) => {
   }
 
   // Validate date of birth
-  if (!req.body.date_of_birth) {
-    return res
-      .status(StatusCodes.BAD_REQUEST)
-      .send(createTextMessage("Date of birth field is empty"));
-  } else if (!moment(req.body.date_of_birth, moment.ISO_8601, true).isValid()) {
+  if (
+    !req.body.date_of_birth ||
+    !moment(req.body.date_of_birth, moment.ISO_8601, true).isValid()
+  ) {
     return res
       .status(StatusCodes.BAD_REQUEST)
       .send(createTextMessage("Date of birth is invalid"));
