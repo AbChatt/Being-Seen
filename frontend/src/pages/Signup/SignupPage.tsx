@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
@@ -14,11 +14,18 @@ import Layout from "components/Layout";
 import DonorSignup from "components/Signup/Donor";
 import YouthSignup from "components/Signup/Youth";
 import MerchantSignup from "components/Signup/Merchant";
+import { decodeAuthToken } from "utils/checkAuth";
 
 import styles from "./SignupPage.module.scss";
 
 const SignupPage = () => {
+  const history = useHistory();
+  const account = decodeAuthToken();
   const [tab, setTab] = useState(0);
+
+  if (account) {
+    history.push("/");
+  }
 
   const changeTab = (event: React.SyntheticEvent, newTab: number) => {
     setTab(newTab);
