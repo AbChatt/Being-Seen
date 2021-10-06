@@ -43,7 +43,6 @@ const DonorSignup = () => {
       })
       .then((response) => {
         setAuthToken(response.data.jwt);
-        toast.success("Sign up succeed :)");
         history.push("/");
       })
       .catch(({ response }) => {
