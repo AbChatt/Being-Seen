@@ -12,7 +12,7 @@ import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
 import { useHistory } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { setAuthToken } from "utils/checkAuth"
+import { setAuthToken } from "utils/checkAuth";
 import axiosBase from "utils/axiosBase";
 
 const DonorSignup = () => {
@@ -27,7 +27,7 @@ const DonorSignup = () => {
 
   const handleSignup = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    
+
     axiosBase
       .post("/user/donor/signup", {
         name: name,
@@ -49,8 +49,6 @@ const DonorSignup = () => {
           toast.error("Request could not be made");
         }
       });
-
-
   };
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {

@@ -22,9 +22,14 @@ import styles from "./LoginPage.module.scss";
 
 const LoginPage = () => {
   const history = useHistory();
+  const account = decodeAuthToken();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
+
+  if (account) {
+    history.push("/");
+  }
 
   const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -36,8 +41,8 @@ const LoginPage = () => {
       })
       .then((response) => {
         setAuthToken(response.data.jwt);
-        const account = decodeAuthToken();
-        switch (account && account.role) {
+        const loggedInAccount = decodeAuthToken();
+        switch (loggedInAccount && loggedInAccount.role) {
           case UserRoles.donor:
             history.push("/");
             break;
