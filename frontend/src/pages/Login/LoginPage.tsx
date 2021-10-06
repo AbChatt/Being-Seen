@@ -29,7 +29,7 @@ const LoginPage = () => {
   const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     axiosBase
-      .post("/api/v1/user/login", {
+      .post("/user/login", {
         username: username,
         password: password,
         remember: rememberMe,
