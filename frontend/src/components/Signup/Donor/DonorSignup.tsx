@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -10,10 +11,14 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
 
+import { setAuthToken } from "utils/checkAuth";
+
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import axiosBase from "utils/axiosBase";
 
 const DonorSignup = () => {
+  const history = useHistory();
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -25,18 +30,29 @@ const DonorSignup = () => {
   const handleSignup = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    console.log({
-      name,
-      username,
-      password,
-      pictureUrl,
-      anonymize,
-      organization,
-      dateOfBirth: dateOfBirth ? dateOfBirth.toISOString() : dateOfBirth,
-    });
-
-    toast.success("A success message for later :)");
-    toast.error("An error message for later :(");
+    axiosBase
+      .post("/user/donor/signup", {
+        name: name,
+        username: username,
+        password: password,
+        date_of_birth: dateOfBirth,
+        organization: organization,
+        profile_picture: pictureUrl,
+        anonymize: anonymize,
+        displayname: anonymize,
+      })
+      .then((response) => {
+        setAuthToken(response.data.jwt);
+        toast.success("Sign up succeed :)");
+        history.push("/");
+      })
+      .catch(({ response }) => {
+        if (response) {
+          toast.error(response.data.message || "Unknown error");
+        } else {
+          toast.error("Request could not be made");
+        }
+      });
   };
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
