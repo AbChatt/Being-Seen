@@ -39,7 +39,6 @@ const DonorSignup = () => {
         organization: organization,
         profile_picture: pictureUrl,
         anonymize: anonymize,
-        displayname: anonymize,
       })
       .then((response) => {
         setAuthToken(response.data.jwt);
