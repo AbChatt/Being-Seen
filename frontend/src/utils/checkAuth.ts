@@ -1,5 +1,6 @@
 import jwtDecode from "jwt-decode";
 import hasOwnProperty from "utils/hasOwnProperty";
+import { AxiosRequestConfig } from "axios";
 
 const STORAGE_AUTH_KEY = "auth";
 
@@ -41,9 +42,24 @@ const decodeAuthToken = (): UserJwt | null => {
   return null;
 };
 
-const setAuthToken = (token: string) =>
+const setAuthToken = (token: string) => {
   localStorage.setItem(STORAGE_AUTH_KEY, token);
+};
 
-const removeAuthToken = () => localStorage.removeItem(STORAGE_AUTH_KEY);
+const removeAuthToken = () => {
+  localStorage.removeItem(STORAGE_AUTH_KEY);
+};
 
-export { UserRoles, decodeAuthToken, setAuthToken, removeAuthToken };
+const getAuthHeader = (): AxiosRequestConfig => ({
+  headers: {
+    Authorization: `Bearer ${localStorage.getItem(STORAGE_AUTH_KEY)}`,
+  },
+});
+
+export {
+  UserRoles,
+  decodeAuthToken,
+  setAuthToken,
+  removeAuthToken,
+  getAuthHeader,
+};
