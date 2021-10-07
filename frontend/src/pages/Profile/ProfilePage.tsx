@@ -2,7 +2,7 @@ import { useHistory } from "react-router-dom";
 import { decodeAuthToken, UserRoles } from "utils/checkAuth";
 import Layout from "components/Layout";
 
-const StorePage = () => {
+const ProfilePage = () => {
   const history = useHistory();
   const account = decodeAuthToken();
 
@@ -17,4 +17,4 @@ const StorePage = () => {
   );
 };
 
-export default StorePage;
+export default ProfilePage;

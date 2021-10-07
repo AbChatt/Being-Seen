@@ -67,7 +67,9 @@ const MerchantSignup = () => {
     setPictureUrl(event.target.value);
   };
 
-  const handleStoreNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleStoreNameChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setStoreName(event.target.value);
   };
 
