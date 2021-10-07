@@ -40,7 +40,7 @@ const MerchantSignup = () => {
       })
       .then((response) => {
         setAuthToken(response.data.jwt);
-        history.push("/");
+        history.push("/profile");
       })
       .catch(({ response }) => {
         if (response) {
