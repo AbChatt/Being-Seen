@@ -8,6 +8,7 @@ interface DefaultTemplateProps {
   children: React.ReactNode;
 }
 
+// Render header followed by the passed children (also sets document title)
 const Layout = ({ title, children }: DefaultTemplateProps) => {
   useEffect(() => {
     document.title = title;
