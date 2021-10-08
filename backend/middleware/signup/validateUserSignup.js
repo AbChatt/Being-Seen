@@ -3,6 +3,8 @@ import { StatusCodes } from "http-status-codes";
 import { createTextMessage } from "../../utils/defaultMessages.js";
 import User from "../../models/User.js";
 
+// Middleware to validate required parameters associated with all user signup
+// endpoints (name, username, password, date of birth) are present and valid
 const validateUser = async (req, res, next) => {
   console.log(req.body);
 

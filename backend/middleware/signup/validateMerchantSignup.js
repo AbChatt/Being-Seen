@@ -1,6 +1,8 @@
 import { StatusCodes } from "http-status-codes";
 import { createTextMessage } from "../../utils/defaultMessages.js";
 
+// Middleware to validate required parameters unique to merchant signup
+// endpoint (store name, location, PayPal email) are present and valid
 const validateMerchantSignup = (req, res, next) => {
   // Validate store name
   if (!req.body.store_name) {
