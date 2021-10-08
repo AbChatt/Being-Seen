@@ -12,6 +12,7 @@ interface NavbarProps {
   onLogout: () => any;
 }
 
+// Render desktop menu based on account role (or defaults if not logged in)
 const Navbar = ({ onLogout }: NavbarProps) => {
   const account = decodeAuthToken();
 

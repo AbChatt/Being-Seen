@@ -39,6 +39,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   justifyContent: "flex-start",
 }));
 
+// Render a default clickable row (as a link) to be used in a mobile drawer
 const DrawerRow = ({ text, path, icon }: DrawerRowProps) => (
   <ListItem button component={Link} to={path}>
     <ListItemIcon>{icon}</ListItemIcon>
@@ -46,6 +47,7 @@ const DrawerRow = ({ text, path, icon }: DrawerRowProps) => (
   </ListItem>
 );
 
+// Render mobile menu based on account role (or defaults if not logged in)
 const Drawer = ({ open, onClose, onLogout }: DrawerProps) => {
   const account = decodeAuthToken();
 
