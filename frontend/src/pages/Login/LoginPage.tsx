@@ -20,6 +20,8 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import styles from "./LoginPage.module.scss";
 
+// Render the login page + login form of the application. If a user is already
+// logged in, they are redirected to the homepage.
 const LoginPage = () => {
   const history = useHistory();
   const account = decodeAuthToken();
@@ -31,6 +33,7 @@ const LoginPage = () => {
     history.push("/");
   }
 
+  // Sends a post request to backend API to check if credentials are valid
   const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     axiosBase
@@ -40,6 +43,8 @@ const LoginPage = () => {
         remember: rememberMe,
       })
       .then((response) => {
+        // On success, we store the JWT token returned and redirect the existing
+        // user to their respective page (e.g., youths redirected to /store)
         setAuthToken(response.data.jwt);
         const loggedInAccount = decodeAuthToken();
         switch (loggedInAccount && loggedInAccount.role) {
@@ -55,6 +60,8 @@ const LoginPage = () => {
         }
       })
       .catch(({ response }) => {
+        // On failure, we determine whether the request itself was made. If so,
+        // we display the error message from the API to the user.
         if (response) {
           toast.error(response.data.message || "Unknown error");
         } else {

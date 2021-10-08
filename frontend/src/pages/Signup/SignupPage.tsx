@@ -18,6 +18,9 @@ import { decodeAuthToken } from "utils/checkAuth";
 
 import styles from "./SignupPage.module.scss";
 
+// Render the signup page and handle navigation between the various signup
+// forms for different user types. If a user is already logged in, they are
+// redirected to the homepage.
 const SignupPage = () => {
   const history = useHistory();
   const account = decodeAuthToken();
