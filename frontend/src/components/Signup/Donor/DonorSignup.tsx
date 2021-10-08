@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -9,12 +10,14 @@ import AdapterMoment from "@mui/lab/AdapterMoment";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
-import { useHistory } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+
 import { setAuthToken } from "utils/checkAuth";
 import axiosBase from "utils/axiosBase";
 
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+// Render the donor signup form to be displayed on the signup page
 const DonorSignup = () => {
   const history = useHistory();
   const [name, setName] = useState("");
@@ -25,6 +28,7 @@ const DonorSignup = () => {
   const [dateOfBirth, setDateOfBirth] = useState<Date | null>(null);
   const [anonymize, setAnonymize] = useState(false);
 
+  // Sends a post request to backend API to signup a donor
   const handleSignup = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -39,10 +43,14 @@ const DonorSignup = () => {
         anonymize: anonymize,
       })
       .then((response) => {
+        // On success, we store the JWT token returned and redirect the new
+        // donor to the homepage where they can view the homeless youths
         setAuthToken(response.data.jwt);
         history.push("/");
       })
       .catch(({ response }) => {
+        // On failure, we determine whether the request itself was made. If so,
+        // we display the error message from the API to the donor.
         if (response) {
           toast.error(response.data.message || "Unknown error");
         } else {

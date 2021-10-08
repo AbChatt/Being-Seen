@@ -10,11 +10,12 @@ import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
 
 import { setAuthToken } from "utils/checkAuth";
+import axiosBase from "utils/axiosBase";
 
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import axiosBase from "utils/axiosBase";
 
+// Render the youth signup form to be displayed on the signup page
 const YouthSignup = () => {
   const history = useHistory();
   const [name, setName] = useState("");
@@ -35,10 +36,14 @@ const YouthSignup = () => {
         profile_picture: pictureUrl,
       })
       .then((response) => {
+        // On success, we store the JWT token returned and redirect the youth
+        // to the /store page where they can view products from merchants
         setAuthToken(response.data.jwt);
         history.push("/store");
       })
       .catch(({ response }) => {
+        // On failure, we determine whether the request itself was made. If so,
+        // we display the error message from the API to the youth.
         if (response) {
           toast.error(response.data.message || "Unknown error");
         } else {
