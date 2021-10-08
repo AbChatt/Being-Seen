@@ -5,7 +5,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import LoginIcon from "@mui/icons-material/Login";
 import SignupIcon from "@mui/icons-material/ArrowForward";
 
-import { decodeAuthToken } from "utils/checkAuth";
+import { decodeAuthToken } from "utils/authHelpers";
 import UserRoles from "utils/UserRoles";
 import styles from "./Navbar.module.scss";
 

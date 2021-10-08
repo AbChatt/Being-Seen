@@ -14,7 +14,7 @@ import Layout from "components/Layout";
 import DonorSignup from "components/Signup/Donor";
 import YouthSignup from "components/Signup/Youth";
 import MerchantSignup from "components/Signup/Merchant";
-import { decodeAuthToken } from "utils/checkAuth";
+import { decodeAuthToken } from "utils/authHelpers";
 
 import styles from "./SignupPage.module.scss";
 

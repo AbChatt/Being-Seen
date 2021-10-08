@@ -17,7 +17,7 @@ import ProfileIcon from "@mui/icons-material/AccountCircle";
 import StoreIcon from "@mui/icons-material/Store";
 import YouthIcon from "@mui/icons-material/Face";
 
-import { decodeAuthToken } from "utils/checkAuth";
+import { decodeAuthToken } from "utils/authHelpers";
 import UserRoles from "utils/UserRoles";
 
 interface DrawerProps {

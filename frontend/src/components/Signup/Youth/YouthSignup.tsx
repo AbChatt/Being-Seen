@@ -9,7 +9,7 @@ import AdapterMoment from "@mui/lab/AdapterMoment";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
 
-import { setAuthToken } from "utils/checkAuth";
+import { setAuthToken } from "utils/authHelpers";
 import axiosBase from "utils/axiosBase";
 
 import { toast, ToastContainer } from "react-toastify";

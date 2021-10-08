@@ -1,5 +1,5 @@
 import { useHistory } from "react-router-dom";
-import { decodeAuthToken } from "utils/checkAuth";
+import { decodeAuthToken } from "utils/authHelpers";
 import UserRoles from "utils/UserRoles";
 import Layout from "components/Layout";
 

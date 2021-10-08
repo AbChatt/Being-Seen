@@ -11,7 +11,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Drawer from "components/Menu/Drawer";
 import Navbar from "components/Menu/Navbar";
 
-import { removeAuthToken } from "utils/checkAuth";
+import { removeAuthToken } from "utils/authHelpers";
 import styles from "./Header.module.scss";
 
 // Render the header to be included on every page (it also manages the

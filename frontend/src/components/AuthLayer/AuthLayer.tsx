@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
-import { getAuthHeader, removeAuthToken } from "utils/checkAuth";
+import { getAuthHeader, removeAuthToken } from "utils/authHelpers";
 import axiosBase from "utils/axiosBase";
 
 interface AuthLayerProps {

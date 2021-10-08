@@ -13,7 +13,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 
 import Layout from "components/Layout";
-import { decodeAuthToken, setAuthToken } from "utils/checkAuth";
+import { decodeAuthToken, setAuthToken } from "utils/authHelpers";
 import UserRoles from "utils/UserRoles";
 import axiosBase from "utils/axiosBase";
 
