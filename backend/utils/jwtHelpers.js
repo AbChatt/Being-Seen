@@ -4,9 +4,14 @@ import userRoles from "./userRoles.js";
 
 dotenv.config();
 
+// Remove the "Bearer " prefix from a given string (authorization headers that
+// follow the bearer scheme will have this prefix). If not, return string as is.
 const stripAuthBearer = (authorizationHeader) =>
   authorizationHeader.replace(/^Bearer\s/, "");
 
+// Create a signed JWT token that encapsulates the a username to later identify
+// the user and a role to determine authorization. An expiration time is also
+// included to prevent lifelong tokens.
 const createUserToken = (username, role, remember) =>
   jwt.sign(
     {
@@ -19,6 +24,9 @@ const createUserToken = (username, role, remember) =>
     }
   );
 
+// Decode a given token (or authorization header value following bearer scheme)
+// and determine validity according to our JWT secret (from environment file).
+// Return the decoded token (if decoded and valid) or null otherwise.
 const decodeUserToken = (token) => {
   token = stripAuthBearer(token);
 
