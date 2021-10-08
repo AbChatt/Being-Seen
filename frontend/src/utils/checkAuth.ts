@@ -1,14 +1,9 @@
 import jwtDecode from "jwt-decode";
 import hasOwnProperty from "utils/hasOwnProperty";
 import { AxiosRequestConfig } from "axios";
+import UserRoles from "utils/UserRoles";
 
 const STORAGE_AUTH_KEY = "auth";
-
-enum UserRoles {
-  donor = "donor",
-  merchant = "merchant",
-  youth = "youth",
-}
 
 interface UserJwt {
   username: string;
@@ -56,10 +51,4 @@ const getAuthHeader = (): AxiosRequestConfig => ({
   },
 });
 
-export {
-  UserRoles,
-  decodeAuthToken,
-  setAuthToken,
-  removeAuthToken,
-  getAuthHeader,
-};
+export { decodeAuthToken, setAuthToken, removeAuthToken, getAuthHeader };

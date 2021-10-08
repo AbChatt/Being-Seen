@@ -13,7 +13,8 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 
 import Layout from "components/Layout";
-import { decodeAuthToken, setAuthToken, UserRoles } from "utils/checkAuth";
+import { decodeAuthToken, setAuthToken } from "utils/checkAuth";
+import UserRoles from "utils/UserRoles";
 import axiosBase from "utils/axiosBase";
 
 import { toast, ToastContainer } from "react-toastify";

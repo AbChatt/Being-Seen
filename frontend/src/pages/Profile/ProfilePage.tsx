@@ -1,5 +1,6 @@
 import { useHistory } from "react-router-dom";
-import { decodeAuthToken, UserRoles } from "utils/checkAuth";
+import { decodeAuthToken } from "utils/checkAuth";
+import UserRoles from "utils/UserRoles";
 import Layout from "components/Layout";
 
 // Render the profile page of the application. If a user is not logged in (or
