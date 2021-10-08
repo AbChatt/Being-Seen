@@ -16,6 +16,8 @@ const UserSchema = new mongoose.Schema({
   },
 });
 
+// Hash and salt passwords (for security) on user objects before inserting it
+// into the Mongo database. Process is achieved using bcrypt password hashing.
 UserSchema.pre("save", async function (next) {
   try {
     const salt = await bcrypt.genSalt();
@@ -27,8 +29,9 @@ UserSchema.pre("save", async function (next) {
   }
 });
 
-UserSchema.methods.comparePassword = async function (plainTextPassword) {
-  return bcrypt.compare(plainTextPassword, this.password);
+// Compare given plaintext password with a user object's hashed password
+UserSchema.methods.comparePassword = async function (plaintextPassword) {
+  return bcrypt.compare(plaintextPassword, this.password);
 };
 
 export default mongoose.model("users", UserSchema);
