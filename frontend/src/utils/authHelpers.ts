@@ -16,6 +16,9 @@ interface UserJwt {
 // Decode JWT token from local storage and return the decoded token provided it
 // can be decoded and it follows the general contract of UserJwt. If not,
 // return null to indicate the user is not authenticated.
+//
+// Note: This method does not validate the token's signature. It merely decodes
+//       the payload (if possible). Validation should be done via call to API.
 const decodeAuthToken = (): UserJwt | null => {
   let payload: Object = {};
   const authToken = localStorage.getItem(STORAGE_AUTH_KEY) || "";
