@@ -9,6 +9,7 @@ interface AuthLayerProps {
   children: React.ReactNode;
 }
 
+// Render a loading overlay
 const Loading = () => (
   <Box
     display="flex"
@@ -20,6 +21,7 @@ const Loading = () => (
   </Box>
 );
 
+// Render children after validating the current JWT token in local storage
 const AuthLayer = ({ children }: AuthLayerProps) => {
   const [loading, setLoading] = useState(true);
 
@@ -27,9 +29,13 @@ const AuthLayer = ({ children }: AuthLayerProps) => {
     axiosBase
       .get("/user/validate", getAuthHeader())
       .catch(() => {
+        // Catch indicates call failed (i.e., token is invalid). Thus, token is
+        // to be removed from local storage due to its invalidity.
         removeAuthToken();
       })
       .finally(() => {
+        // Regardless of whether call failed or succeeded, we end the loading
+        // phase and render the children (who decide what to do).
         setTimeout(() => {
           setLoading(false);
         }, 750);
