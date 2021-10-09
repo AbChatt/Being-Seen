@@ -5,13 +5,15 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import LoginIcon from "@mui/icons-material/Login";
 import SignupIcon from "@mui/icons-material/ArrowForward";
 
-import { decodeAuthToken, UserRoles } from "utils/checkAuth";
+import { decodeAuthToken } from "utils/authHelpers";
+import UserRoles from "utils/UserRoles";
 import styles from "./Navbar.module.scss";
 
 interface NavbarProps {
   onLogout: () => any;
 }
 
+// Render desktop menu based on account role (or defaults if not logged in)
 const Navbar = ({ onLogout }: NavbarProps) => {
   const account = decodeAuthToken();
 

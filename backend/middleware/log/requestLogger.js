@@ -1,6 +1,7 @@
 import chalk from "chalk";
 import moment from "moment";
 
+// Middleware to log requests for debugging purposes
 const requestLogger = (req, res, next) => {
   const currentDate = moment(moment.now()).format("YYYY-MM-DD hh:mm:ss");
   const requestDate = chalk.blue(currentDate);

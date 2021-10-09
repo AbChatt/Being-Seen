@@ -14,10 +14,13 @@ import Layout from "components/Layout";
 import DonorSignup from "components/Signup/Donor";
 import YouthSignup from "components/Signup/Youth";
 import MerchantSignup from "components/Signup/Merchant";
-import { decodeAuthToken } from "utils/checkAuth";
+import { decodeAuthToken } from "utils/authHelpers";
 
 import styles from "./SignupPage.module.scss";
 
+// Render the signup page and handle navigation between the various signup
+// forms for different user types. If a user is already logged in, they are
+// redirected to the homepage.
 const SignupPage = () => {
   const history = useHistory();
   const account = decodeAuthToken();

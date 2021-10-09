@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -7,12 +8,14 @@ import TextField from "@mui/material/TextField";
 import AdapterMoment from "@mui/lab/AdapterMoment";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
-import { useHistory } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { setAuthToken } from "utils/checkAuth";
+
+import { setAuthToken } from "utils/authHelpers";
 import axiosBase from "utils/axiosBase";
 
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+// Render the merchant signup form to be displayed on the signup page
 const MerchantSignup = () => {
   const history = useHistory();
   const [name, setName] = useState("");
@@ -24,6 +27,7 @@ const MerchantSignup = () => {
   const [email, setEmail] = useState("");
   const [dateOfBirth, setDateOfBirth] = useState<Date | null>(null);
 
+  // Sends a post request to backend API to signup a merchant
   const handleSignup = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -39,10 +43,14 @@ const MerchantSignup = () => {
         profile_picture: pictureUrl,
       })
       .then((response) => {
+        // On success, we store the JWT token returned and redirect the new
+        // merchant to their profile page to manage their store and items
         setAuthToken(response.data.jwt);
         history.push("/profile");
       })
       .catch(({ response }) => {
+        // On failure, we determine whether the request itself was made. If so,
+        // we display the error message from the API to the merchant.
         if (response) {
           toast.error(response.data.message || "Unknown error");
         } else {

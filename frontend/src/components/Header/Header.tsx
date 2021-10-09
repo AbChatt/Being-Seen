@@ -11,14 +11,18 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Drawer from "components/Menu/Drawer";
 import Navbar from "components/Menu/Navbar";
 
-import { removeAuthToken } from "utils/checkAuth";
+import { removeAuthToken } from "utils/authHelpers";
 import styles from "./Header.module.scss";
 
+// Render the header to be included on every page (it also manages the
+// rendering of desktop and mobile menu components).
 const Header = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const closeDrawer = () => setDrawerOpen(false);
   const openDrawer = () => setDrawerOpen(true);
 
+  // Remove the JWT token from local storage and refresh to make sure page is
+  // rendered again (page can decide whether to redirect unauthorized user).
   const handleLogout = () => {
     removeAuthToken();
     window.location.reload();
