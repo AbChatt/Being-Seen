@@ -10,6 +10,7 @@ import LoginPage from "pages/Login";
 import SignupPage from "pages/Signup";
 import ProfilePage from "pages/Profile";
 import StorePage from "pages/Store";
+import UserPage from "pages/User";
 
 const App = () => (
   <Router>
@@ -28,6 +29,9 @@ const App = () => (
       </Route>
       <Route exact path="/store">
         <StorePage />
+      </Route>
+      <Route exact path="/u/:username">
+        <UserPage />
       </Route>
       <Route path="*">
         <Redirect to="/" />
