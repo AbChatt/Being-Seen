@@ -1,5 +1,6 @@
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
+import Chip from "@mui/material/Chip";
 import Card from "@mui/material/Card";
 import Avatar from "@mui/material/Avatar";
 import Divider from "@mui/material/Divider";
@@ -12,6 +13,7 @@ import UserIcon from "@mui/icons-material/Person";
 
 import Layout from "components/Layout";
 import { getDonations, getPublicYouth } from "utils/getPlaceholders";
+import styles from "./UserPage.module.scss";
 
 interface StatisticProps {
   stat: string | number;
@@ -44,6 +46,11 @@ const UserPage = () => {
               sx={{ height: "auto", width: "100%" }}
               variant="rounded"
             />
+            <div className={styles.chipContainer}>
+              <Chip color="primary" label={`@${youth.username}`} />
+              <Chip color="primary" label={youth.name} />
+              <Chip color="primary" label={youth.dob} />
+            </div>
             <Typography variant="h5" sx={{ mt: 2.5 }}>
               {youth.name}'s Saving Plan
             </Typography>
