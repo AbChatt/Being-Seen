@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import moment from "moment";
 
 import Card from "@mui/material/Card";
 import CardActionArea from "@mui/material/CardActionArea";
@@ -9,17 +10,11 @@ import Divider from "@mui/material/Divider";
 import Avatar from "@mui/material/Avatar";
 import Grow from "@mui/material/Grow";
 
+import { PublicYouth } from "common/Types";
 import styles from "./YouthCard.module.scss";
 
-interface YouthCardProps {
-  name: string;
-  story: string;
-  username: string;
-  image: string;
-  age: number;
-}
-
-const YouthCard = ({ name, story, username, image, age }: YouthCardProps) => {
+// Renders a clickable card displaying a short preview of the youth
+const YouthCard = ({ name, story, username, image, dob }: PublicYouth) => {
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
@@ -40,7 +35,7 @@ const YouthCard = ({ name, story, username, image, age }: YouthCardProps) => {
             />
             <CardContent>
               <Typography variant="h6">
-                {name} ({age})
+                {name} ({moment().diff(dob, "years")})
               </Typography>
               <Typography variant="body2" color="primary">
                 @{username}
