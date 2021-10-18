@@ -1,5 +1,6 @@
 export interface Donation {
   donor: string;
+  youth: string;
   image: string;
   amount: number;
   date: string;

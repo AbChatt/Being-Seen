@@ -3,6 +3,7 @@ import { Donation, PublicYouth } from "common/Types";
 
 const getDonation = (): Donation => ({
   donor: "Donald Trump",
+  youth: "Barack Obama",
   image:
     "https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Donald_Trump_official_portrait.jpg/800px-Donald_Trump_official_portrait.jpg",
   date: moment().toISOString(),
