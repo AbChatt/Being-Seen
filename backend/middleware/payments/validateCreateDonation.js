@@ -5,7 +5,7 @@ import User from "../../models/User.js";
 
 // Middleware to validate whether parameters associated with the create donation
 // endpoint (donation amount, youth, donor) are present and valid
-const validateCreateDonation = (req, res, next) => {
+const validateCreateDonation = async (req, res, next) => {
   console.log(req.body);
 
   // Validate donation amount
@@ -26,7 +26,7 @@ const validateCreateDonation = (req, res, next) => {
       .status(StatusCodes.BAD_REQUEST)
       .send(createTextMessage("Youth username is empty"));
   } else if (
-    !(await User.exists({ username: req.body.username, role: userRoles.youth }))
+    !(await User.exists({ username: req.body.youth, role: userRoles.youth }))
   ) {
     return res
       .status(StatusCodes.NOT_FOUND)
@@ -39,7 +39,7 @@ const validateCreateDonation = (req, res, next) => {
       .status(StatusCodes.BAD_REQUEST)
       .send(createTextMessage("Donor username is empty"));
   } else if (
-    !(await User.exists({ username: req.body.username, role: userRoles.donor }))
+    !(await User.exists({ username: req.body.donor, role: userRoles.donor }))
   ) {
     return res
       .status(StatusCodes.NOT_FOUND)
@@ -49,4 +49,4 @@ const validateCreateDonation = (req, res, next) => {
   next();
 };
 
-export { validateCreateDonation };
+export default validateCreateDonation;
