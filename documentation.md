@@ -10,13 +10,13 @@
 **Authorization**: All user types are authorized to view this page (including unregistered users).
 **Miscellaneous**:
 
-- Users will be able to browser through profiles of homeless youths registered on the site.
+- Users will be able to browse through profiles of homeless youths registered on the site.
 - Serves as the base route that other routes will redirect unauthorized users to.
 
 ### `/login`: Login page
 
 **Description**: This is the login page where all types of users will be able to login.
-**Authorization**: Unregistered users are only authorized to view this page (logged in users are redirected to `/`).
+**Authorization**: Only unregistered users are authorized to view this page (logged in users are redirected to `/`).
 **Miscellaneous**:
 
 - Users will have access to a link to `/login` (in the header) if they are not logged in.
@@ -25,8 +25,8 @@
 
 ### `/signup`: Signup page
 
-**Description**: This is the login page where all types of users will be able to login.
-**Authorization**: Unregistered users are only authorized to view this page (logged in users are redirected to `/`).
+**Description**: This is the login page where all types of users will be able to register.
+**Authorization**: Only unregistered users are authorized to view this page (logged in users are redirected to `/`).
 **Miscellaneous**:
 
 - Users will have access to a link to `/signup` (in the header) if they are not logged in.
@@ -47,7 +47,7 @@
 
 ### `/store`: Store page (NOT DONE)
 
-**Description**: This is the store page where users will be able to browser through products uploaded by merchants.
+**Description**: This is the store page where users will be able to browse through products uploaded by merchants.
 **Authorization**: Only youth users are authorized to view this page (all other users are redirected to `/`).
 **Miscellaneous**:
 
@@ -59,8 +59,8 @@
 
 ### `POST /api/v1/login` : Login endpoint
 
-**Description**: This is the login endpoint where all user types will be able to authenticate themselves will receiving authorization.
-**Request Fields** Only authentication fields (detailed below) are required.
+**Description**: This is the login endpoint where all user types will be able to authenticate themselves while receiving authorization.
+**Request Fields**: Only authentication fields (detailed below) are required.
 **Authentication**: Requests must pass their username and password as a JSON payload.
 **Authorization**: No authorization required.
 **Responses**:
@@ -85,7 +85,7 @@
 ### `GET /api/v1/validate`: Validate endpoint
 
 **Description**: This is the validate endpoint where all user types can validate (in terms of expiration, format, etc.) their JWT token.
-**Request Fields** Only authorization fields (detailed below) are required.
+**Request Fields**: Only authorization fields (detailed below) are required.
 **Authentication**: No authentication required.
 **Authorization**: Requests must pass their JWT token as a `Authorization` header (bearer format is preferable).
 **Responses**:
