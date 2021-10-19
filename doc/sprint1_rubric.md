@@ -201,31 +201,35 @@ Tracking on Jira Total Mark: 20/ 20
 ---
 ## Sprint Demo (Max 14 marks) 
   - Attendance (max 2 marks)
-    - 2 marks = full team is present
+    - **2 marks = full team is present**
     - 1 mark = one member is not present
     - 0 marks = more than one member is not present
   
   - Working software (max 2 marks)
-    - 8 marks = features presented work flawlessly
+    - **8 marks = features presented work flawlessly**
     - 1 mark removed for each bug/error identified or for missing records on Jira
 
   - Presentation (max 2 marks)
-    - 2 marks = UI demonstrated is visually appealing and intuitive for users
+    - **2 marks = UI demonstrated is visually appealing and intuitive for users**
     - 1 mark = one or more errors identified by the demo TA
     - 0 marks = UI is visually unappealing
 
   - Documentation (max 2 marks)
+    - **2 marks = documentation has been created for frontend and backend systems with great detail**
+    - 1 mark = documentation has been created for frontend and backend systems with some errors
+    - 0 marks = documentation has not been created
 
-  - 2 marks = documentation has been created for frontend and backend systems with great detail
-  - 1 mark = documentation has been created for frontend and backend systems with some errors
-  - 0 marks = documentation has not been created
+  Your Mark: 14 / 14
 
-  Your Mark: __ / 14
+Comments:
+- UI is really good!
+- Might wanna make the name field show up as an error if the username
+- Typically no one uploads their profile pic, just uploads the file. This could be a security risk
 
 ---
 
 
 ## Total Mark
 
-72 / 89
+86 / 89
 
