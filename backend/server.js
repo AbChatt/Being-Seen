@@ -105,7 +105,7 @@ app.post("/checkout", async (req, res) => {
         value: '50.00'
       },
       payee: {
-        email_address: 'beenSeen@business.example.com'
+        email_address: 'sb-gdy9m6881683@business.example.com'
       }
     }]
   });
@@ -114,6 +114,7 @@ app.post("/checkout", async (req, res) => {
   try {
     order = await client().execute(request);
     orderId = order.result.id;
+    console.log(`order: ${JSON.stringify(order)}`);
   } catch (err) {
 
     // 4. Handle any errors from the call
@@ -121,11 +122,16 @@ app.post("/checkout", async (req, res) => {
     return res.sendStatus(500);
   }
 
-  // 5. Return a successful response to the client with the order ID
-  res.status(200).json({
-    orderID: order.result.id
-  });
+  for (let i = 0; i < order.result.links.length; i++) {
+    if (order.result.links[i].rel === "approve") {
+      res.redirect(order.result.links[i].href);
+    }
+  }
 
+  // // 5. Return a successful response to the client with the order ID
+  // res.status(200).json({
+  //   orderID: order.result.id
+  // });
 });
 
 app.get("/success", async (req, res) => {
