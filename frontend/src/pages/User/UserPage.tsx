@@ -1,40 +1,26 @@
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
-import Card from "@mui/material/Card";
 import Avatar from "@mui/material/Avatar";
 import Divider from "@mui/material/Divider";
 import SvgIcon from "@mui/material/SvgIcon";
 import Container from "@mui/material/Container";
-import CardContent from "@mui/material/CardContent";
-import DonationsTable from "components/DonationsTable";
 import Typography from "@mui/material/Typography";
 import UserIcon from "@mui/icons-material/Person";
 
 import Layout from "components/Layout";
-import { getDonations, getPublicYouth } from "utils/getPlaceholders";
+import DonationCard from "components/DonationCard";
+
+import UserRoles from "utils/UserRoles";
+import { decodeAuthToken } from "utils/authHelpers";
+import { getPublicYouth } from "utils/getPlaceholders";
+
 import styles from "./UserPage.module.scss";
-
-interface StatisticProps {
-  stat: string | number;
-  label: string;
-}
-
-// Renders a statistic followed by a label (used for donations card)
-const Statistic = ({ stat, label }: StatisticProps) => (
-  <div style={{ textAlign: "center" }}>
-    <Typography sx={{ fontWeight: 700 }} variant="h6">
-      {stat}
-    </Typography>
-    <Typography color="text.secondary">{label}</Typography>
-  </div>
-);
 
 // Renders page to view a user's page (currently only supports youths)
 const UserPage = () => {
-  let donationTotal = 0;
-  let youth = getPublicYouth(1);
-  youth.donations.forEach((donation) => (donationTotal += donation.amount));
+  const account = decodeAuthToken();
+  const youth = getPublicYouth(1);
 
   return (
     <Layout title="User page">
@@ -73,25 +59,20 @@ const UserPage = () => {
             <Typography sx={{ mt: 2.5 }} style={{ whiteSpace: "pre-wrap" }}>
               {youth.story}
             </Typography>
-            <Card sx={{ mt: 5 }} style={{ background: "rgba(0 0 0 / 2%)" }}>
-              <CardContent>
-                <Grid container sx={{ mb: 2.5 }}>
-                  <Grid item xs={4}>
-                    <Statistic stat={`$${donationTotal}`} label="raised" />
-                  </Grid>
-                  <Grid item xs={4}>
-                    <Statistic
-                      stat={youth.donations.length}
-                      label="donations"
-                    />
-                  </Grid>
-                  <Grid item xs={4}>
-                    <Statistic stat={0} label="followers" />
-                  </Grid>
-                </Grid>
-                <DonationsTable donations={getDonations()} />
-              </CardContent>
-            </Card>
+            <Box sx={{ mt: 5 }}>
+              {account && account.role === UserRoles.donor ? (
+                <DonationCard
+                  donations={youth.donations}
+                  youthUsername={youth.username}
+                  donorUsername={account.username}
+                />
+              ) : (
+                <DonationCard
+                  donations={youth.donations}
+                  youthUsername={youth.username}
+                />
+              )}
+            </Box>
           </Grid>
         </Grid>
       </Container>
