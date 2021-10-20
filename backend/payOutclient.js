@@ -1,4 +1,5 @@
-import payPalSdk from "@paypal/checkout-server-sdk";
+import payPalSdk from "@paypal/payouts-sdk";
+import dotenv from "dotenv";
 
 /**
  * Returns PayPal HTTP client instance with environment which has access
@@ -13,10 +14,8 @@ const client = () => new payPalSdk.core.PayPalHttpClient(environment());
  * LiveEnvironment.
  */
 const environment = () => {
-  const clientId =
-    "AQRv7RvP2Klz56NL3TgX3a-fbaDeL7NJj8ql5v96GehLn_PfDpFUvpaTl_5VbfV7nyU4Z44XElGPgxo5";
-  const clientSecret =
-    "ELOuK7Qo6XDHw7vS4rU7tThSFq4BA2SQfcOnBcjJlGCMeSOMhVWm3f0HYzEbeUPjDbDy-fVkwOoHGIks";
+    const clientId = process.env.CLIENT_ID;
+    const clientSecret = process.env.CLIENT_SECRETE;
   return new payPalSdk.core.SandboxEnvironment(clientId, clientSecret);
 };
 

@@ -7,8 +7,8 @@ import mongoose from "mongoose";
 import userRoute from "./routes/user.js";
 import requestLogger from "./middleware/log/requestLogger.js";
 
-import paypal from "@paypal/checkout-server-sdk";
-import client from "./payPalClient.js";
+import paypal from "@paypal/payouts-sdk";
+// import client from "./payOutClient.js";
 
 dotenv.config();
 const app = express();
@@ -32,122 +32,49 @@ mongoose.connect(process.env.MONGO_CONN_STR, { useNewUrlParser: true }, () =>
 app.set("view engine", "ejs");
 app.get("/", (req, res) => res.render("index"));
 
-// let orderId = "";
-// app.post("/checkout", (req, res) => {
-//   // Construct a request object and set desired parameters
-//   // Here, OrdersCreateRequest() creates a POST request to /v2/checkout/orders
-//   let request = new paypal.orders.OrdersCreateRequest();
-//   request.requestBody({
-//     intent: "CAPTURE",
-//     application_context: {
-//       return_url: "http://localhost:3000/success",
-//     },
-//     purchase_units: [
-//       {
-//         amount: {
-//           currency_code: "CAD",
-//           value: "50.00",
-//         },
-//       },
-//     ],
-//   });
+let clientId = "AQQ7olvuWvgRMgrd2Sc-HAua9GA6clPRTdqAQveM2hG1cmroBXu9I0ERzRTT1L-zn9xAYDB0Fy-oHN_A";
+console.log(process.env.CLIENT_ID);
+console.log(process.env.CLIENT_SECRET);
+let clientSecret = "EIfVuEFKOlgzyXgOTXcS1beiJXCOJGYryVqYNUgZjaCddxFDfZCbHlyM9lnV89OEIUOpSl-QB1xwW4zO";
+let environment = new paypal.core.SandboxEnvironment(clientId, clientSecret);
+let client = new paypal.core.PayPalHttpClient(environment);
 
-//   // Call API with your client and get a response for your call
-//   let createOrder = async () => {
-//     let response = await client().execute(request);
-//     console.log(`Response: ${JSON.stringify(response)}`);
-//     orderId = response.result.id;
-
-//     for (let i = 0; i < response.result.links.length; i++) {
-//       if (response.result.links[i].rel === "approve") {
-//         res.redirect(response.result.links[i].href);
-//       }
-//     }
-//   };
-
-//   createOrder();
-//   console.log("Creating order now");
-// });
-
-// app.get("/success", async (req, res) => {
-//   let captureOrder = async (orderId) => {
-//     let request = new paypal.orders.OrdersCaptureRequest(orderId);
-//     request.requestBody({});
-//     // Call API with your client and get a response for your call
-//     let response = await client().execute(request);
-//     // If call returns body in response, you can get the deserialized version from the result attribute of the response.
-//     console.log(`Response: ${JSON.stringify(response)}`);
-//   };
-
-//   let capture = await captureOrder(orderId); //'REPLACE-WITH-APPROVED-ORDER-ID'
-//   console.log("Captured order now");
-//   res.send("");
-// });
-
-
-
-
-let orderId = "";
-// 2. Set up your server to receive a call from the client
 app.post("/checkout", async (req, res) => {
-
-  // 3. Call PayPal to set up a transaction with payee
-  const request = new paypal.orders.OrdersCreateRequest();
-  request.prefer("return=representation");
-  request.requestBody({
-    intent: 'CAPTURE',
-    application_context: {
-            return_url: "http://localhost:3000/success",
-          },
-    purchase_units: [{
-      amount: {
-        currency_code: 'CAD',
-        value: '50.00'
+  let requestBody = {
+    sender_batch_header: {
+      recipient_type: "EMAIL",
+      email_message: "SDK payouts test txn",
+      note: "Enjoy your Payout!!",
+      sender_batch_id: "Test_sdk_5",
+      email_subject: "This is a test transaction from SDK",
+    },
+    items: [
+      {
+        note: "Your 10$ Payout!",
+        amount: {
+          currency: "CAD",
+          value: "10.00",
+        },
+        receiver: "merchantId@utsc.com",
+        sender_item_id: "Test_txn_1",
       },
-      payee: {
-        email_address: 'sb-gdy9m6881683@business.example.com'
-      }
-    }]
-  });
+    ],
+  };
+  // let requestBody = createPayoutBody(productInfo);
 
-  let order;
-  try {
-    order = await client().execute(request);
-    orderId = order.result.id;
-    console.log(`order: ${JSON.stringify(order)}`);
-  } catch (err) {
+  // Construct a request object and set desired parameters
+  // Here, PayoutsPostRequest() creates a POST request to /v1/payments/payouts
+  let request = new paypal.payouts.PayoutsPostRequest();
+  request.requestBody(requestBody);
 
-    // 4. Handle any errors from the call
-    console.error(err);
-    return res.sendStatus(500);
-  }
+  // Call API with your client and get a response for your call
+  let createPayouts = async function () {
+    let response = await client.execute(request);
+    console.log(`Response: ${JSON.stringify(response)}`);
+  };
 
-  for (let i = 0; i < order.result.links.length; i++) {
-    if (order.result.links[i].rel === "approve") {
-      res.redirect(order.result.links[i].href);
-    }
-  }
-
-  // // 5. Return a successful response to the client with the order ID
-  // res.status(200).json({
-  //   orderID: order.result.id
-  // });
+  await createPayouts();
+  res.send("");
 });
-
-app.get("/success", async (req, res) => {
-    let captureOrder = async (orderId) => {
-      let request = new paypal.orders.OrdersCaptureRequest(orderId);
-      request.requestBody({});
-      // Call API with your client and get a response for your call
-      let response = await client().execute(request);
-      // If call returns body in response, you can get the deserialized version from the result attribute of the response.
-      console.log(`Response: ${JSON.stringify(response)}`);
-    };
-  
-    let capture = await captureOrder(orderId); //'REPLACE-WITH-APPROVED-ORDER-ID'
-    console.log("Captured order now");
-    res.send("order complete");
-  });
-
 
 app.listen(3000, () => console.log("Server Started"));

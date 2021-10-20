@@ -10,6 +10,7 @@ import {
 } from "../../utils/defaultMessages.js";
 import { createUserToken } from "../../utils/jwtHelpers.js";
 import userRoles from "../../utils/userRoles.js";
+import createPayoutBody from "../../utils/payPalUtils.js";
 
 import Youth from "../../models/Youth.js";
 import User from "../../models/User.js";
@@ -42,6 +43,44 @@ router.post("/signup", async (req, res) => {
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .send(createTextMessage("Error saving youth to database"));
   }
+});
+
+router.post("/checkout", async (req, res) => {
+  let requestBody = {
+    sender_batch_header: {
+      recipient_type: "EMAIL",
+      email_message: "SDK payouts test txn",
+      note: "Enjoy your Payout!!",
+      sender_batch_id: "Test_sdk_3",
+      email_subject: "This is a test transaction from SDK",
+    },
+    items: [
+      {
+        note: "Your 10$ Payout!",
+        amount: {
+          currency: "CAD",
+          value: "10.00",
+        },
+        receiver: "sb-24mve8025231@business.example.com",
+        sender_item_id: "Test_txn_1",
+      },
+    ],
+  };
+  // let requestBody = createPayoutBody(productInfo);
+
+  // Construct a request object and set desired parameters
+  // Here, PayoutsPostRequest() creates a POST request to /v1/payments/payouts
+  let request = new paypal.payouts.PayoutsPostRequest();
+  request.requestBody(requestBody);
+
+  // Call API with your client and get a response for your call
+  let createPayouts = async function () {
+    let response = await client().execute(request);
+    console.log(`Response: ${JSON.stringify(response)}`);
+  };
+
+  await createPayouts();
+  res.send("");
 });
 
 export default router;
