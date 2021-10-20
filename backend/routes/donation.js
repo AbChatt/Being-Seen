@@ -8,6 +8,10 @@ import validateSaveDonation from "../middleware/payments/validateSaveDonation.js
 import PendingDonation from "../models/PendingDonation.js";
 import Donation from "../models/Donation.js";
 import client from "../utils/payPalClient.js";
+//import User from "../models/User.js";
+import Youth from "../models/Youth.js";
+//import { Mongoose } from "mongoose";
+//import { months } from "moment";
 
 const router = express.Router();
 
@@ -72,7 +76,15 @@ router.post("/save", async (req, res) => {
       youth: pendingDonation.youth,
       amount: pendingDonation.amount,
     });
+
     await newDonation.save();
+    const updateCredit = await Youth.updateOne(
+      { username: newDonation.youth },
+      { $set: { credit_balance: credit_balance + newDonation.amount } }
+    );
+    //get youth's balace
+    //update balance
+
     res.send(createTextMessage("Donation processed successfully"));
   } catch (err) {
     console.log(err);
