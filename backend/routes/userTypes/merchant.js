@@ -4,10 +4,8 @@ import { StatusCodes } from "http-status-codes";
 import validateMerchantSignup from "../../middleware/signup/validateMerchantSignup.js";
 import validateUserSignup from "../../middleware/signup/validateUserSignup.js";
 
-import {
-  createTextMessage,
-  createJwtMessage,
-} from "../../utils/defaultMessages.js";
+import { createTextMessage } from "../../utils/defaultMessages.js";
+import { createJwtMessage } from "../../utils/defaultMessages.js";
 import { createUserToken } from "../../utils/jwtHelpers.js";
 import userRoles from "../../utils/userRoles.js";
 
@@ -16,6 +14,7 @@ import User from "../../models/User.js";
 
 const router = express.Router();
 
+// api/v1/user/merchant/signup
 router.use("/signup", [validateUserSignup, validateMerchantSignup]);
 router.post("/signup", async (req, res) => {
   const newUser = new User({

@@ -1,10 +1,8 @@
 import express from "express";
 import { StatusCodes } from "http-status-codes";
 
-import {
-  createTextMessage,
-  createJwtMessage,
-} from "../utils/defaultMessages.js";
+import { createJwtMessage } from "../utils/defaultMessages.js";
+import { createTextMessage } from "../utils/defaultMessages.js";
 import { createUserToken, decodeUserToken } from "../utils/jwtHelpers.js";
 
 import validateLogin from "../middleware/login/validateLogin.js";
@@ -18,6 +16,7 @@ import User from "../models/User.js";
 
 const router = express.Router();
 
+// api/v1/user/validate
 router.use("/validate", hasAuthHeader);
 router.get("/validate", (req, res) => {
   if (decodeUserToken(req.headers.authorization)) {
@@ -29,6 +28,7 @@ router.get("/validate", (req, res) => {
   }
 });
 
+// api/v1/user/login
 router.use("/login", validateLogin);
 router.post("/login", async (req, res) => {
   const retrieved = await User.findOne({ username: req.body.username });
