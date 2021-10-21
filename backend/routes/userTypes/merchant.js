@@ -37,10 +37,10 @@ router.post("/signup", async (req, res) => {
     await newUser.save();
     await newMerchant.save();
     const jwtToken = createUserToken(req.body.username, userRoles.merchant);
-    res.status(StatusCodes.CREATED).send(createJwtMessage(jwtToken));
+    return res.status(StatusCodes.CREATED).send(createJwtMessage(jwtToken));
   } catch (err) {
     console.log(err);
-    res
+    return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .send(createTextMessage("Error saving merchant to database"));
   }

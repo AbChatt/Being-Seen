@@ -20,9 +20,9 @@ const router = express.Router();
 router.use("/validate", hasAuthHeader);
 router.get("/validate", (req, res) => {
   if (decodeUserToken(req.headers.authorization)) {
-    res.send(createTextMessage("JWT passed is valid"));
+    return res.send(createTextMessage("JWT passed is valid"));
   } else {
-    res
+    return res
       .status(StatusCodes.UNAUTHORIZED)
       .send(createTextMessage("JWT passed is not valid"));
   }
@@ -33,11 +33,11 @@ router.use("/login", validateLogin);
 router.post("/login", async (req, res) => {
   const retrieved = await User.findOne({ username: req.body.username });
   if (!retrieved || !(await retrieved.comparePassword(req.body.password))) {
-    res
+    return res
       .status(StatusCodes.UNAUTHORIZED)
       .send(createTextMessage("Username or password is incorrect"));
   } else {
-    res.send(
+    return res.send(
       createJwtMessage(
         createUserToken(
           req.body.username,

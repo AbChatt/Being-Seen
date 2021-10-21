@@ -45,10 +45,12 @@ router.post("/create", async (req, res) => {
       amount: donationAmount,
     });
     await pendingDonation.save();
-    res.status(StatusCodes.CREATED).send(createTextMessage(order.result.id));
+    return res
+      .status(StatusCodes.CREATED)
+      .send(createTextMessage(order.result.id));
   } catch (err) {
     console.log(err);
-    res
+    return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .send(createTextMessage("Could not create order"));
   }
@@ -94,10 +96,10 @@ router.post("/save", async (req, res) => {
       }
     );
 
-    res.send(createTextMessage("Donation processed successfully"));
+    return res.send(createTextMessage("Donation processed successfully"));
   } catch (err) {
     console.log(err);
-    res
+    return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .send(createTextMessage("Error processing donation"));
   }
