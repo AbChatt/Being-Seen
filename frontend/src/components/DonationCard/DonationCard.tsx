@@ -71,7 +71,7 @@ const DonationCard = ({
             <Statistic stat={0} label="followers" />
           </Grid>
         </Grid>
-        <DonationsTable donations={donations} />
+        {donations.length !== 0 && <DonationsTable donations={donations} />}
         {donorUsername && (
           <Box
             display="flex"
