@@ -25,6 +25,10 @@ const YouthSchema = new mongoose.Schema({
     type: String,
     default: "This user has not published their saving plan",
   },
+  credit_balance: {
+    type: Number,
+    default: 0,
+  },
 });
 
 export default mongoose.model("youths", YouthSchema);
