@@ -14,9 +14,9 @@ const client = () => new payPalSdk.core.PayPalHttpClient(environment());
  */
 const environment = () => {
   const clientId =
-    "AXidlZhw-HrSH88Cl7DZnDKHKXICHElpSTshdoog9mSJORngN52503ugVpsUQNrJUfUDSp2jgAHoav6K";
+    "AV1x6EmVIuywrckX_H7LT9SRMBWhqLh5oW-G-56kkLMiOAFqTcFeVnuppNTZd1oJVqZSNQ3ufYpyObz9";
   const clientSecret =
-    "EJ9y6s2j3fRWhtIKQjlF8PIFQ6F3g8umkkbwoqDK-LIMytgc5z7IbSUQrxOPsvIs2SF7Yx0iYCI0qNYe";
+    "ECGWxY93ZJmpDsRovLFImiStWPf1f0lZ_rst29BOkWsvBDYq8khlSpmKIB32wsQC5FNco73CcSNHB3Da";
   return new payPalSdk.core.SandboxEnvironment(clientId, clientSecret);
 };
 
