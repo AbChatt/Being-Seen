@@ -114,6 +114,7 @@ const DonationCard = ({
                 })
               }
               options={{
+                currency: "CAD",
                 clientId:
                   "AV1x6EmVIuywrckX_H7LT9SRMBWhqLh5oW-G-56kkLMiOAFqTcFeVnuppNTZd1oJVqZSNQ3ufYpyObz9",
               }}
