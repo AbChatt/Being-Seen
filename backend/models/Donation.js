@@ -17,6 +17,10 @@ const DonationSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  date: {
+    type: String,
+    required: true,
+  },
 });
 
 export default mongoose.model("donations", DonationSchema);
