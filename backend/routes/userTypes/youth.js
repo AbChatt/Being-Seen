@@ -9,7 +9,9 @@ import { createJwtMessage } from "../../utils/defaultMessages.js";
 import { createUserToken } from "../../utils/jwtHelpers.js";
 import userRoles from "../../utils/userRoles.js";
 
+import Donation from "../../models/Donation.js";
 import Youth from "../../models/Youth.js";
+import Donor from "../../models/Donor.js";
 import User from "../../models/User.js";
 
 const router = express.Router();
@@ -40,6 +42,52 @@ router.post("/signup", async (req, res) => {
     return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .send(createTextMessage("Error saving youth to database"));
+  }
+});
+
+// api/v1/user/youth
+router.get("/", async (req, res) => {
+  try {
+    const retrievedYouths = await Youth.find({});
+    const parsedYouths = await Promise.all(
+      retrievedYouths.map(async (youth) => {
+        const rawDonations = await Donation.find({
+          youth: youth.username,
+        });
+
+        const parsedDonations = await Promise.all(
+          rawDonations.map(async (donation) => {
+            const retrievedDonor = await Donor.findOne({
+              username: donation.donor,
+            });
+
+            return {
+              donor: retrievedDonor.display_name,
+              youth: youth.name,
+              amount: donation.amount,
+              date: donation.date,
+            };
+          })
+        );
+
+        return {
+          name: youth.name,
+          username: youth.username,
+          dateOfBirth: youth.date_of_birth,
+          profilePicture: youth.profile_picture,
+          savingPlan: youth.profile_picture,
+          story: youth.story,
+          donations: parsedDonations,
+        };
+      })
+    );
+
+    return res.send(parsedYouths);
+  } catch (err) {
+    console.log(err);
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .send(createTextMessage("Error retrieving youth from database"));
   }
 });
 
