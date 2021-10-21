@@ -72,17 +72,17 @@ router.get("/", async (req, res) => {
       username: youth.username,
       dateOfBirth: youth.date_of_birth,
       profilePicture: youth.profile_picture,
-      savingPlan: youth.profile_picture,
+      savingPlan: youth.saving_plan,
       story: youth.story,
       donations: parsedDonations,
     };
   };
 
   // Request wants a specific youth
-  if (req.body.username) {
+  if (req.query.username) {
     if (
       !(await User.exists({
-        username: req.body.username,
+        username: req.query.username,
         role: userRoles.youth,
       }))
     ) {
@@ -93,7 +93,7 @@ router.get("/", async (req, res) => {
 
     try {
       const retrievedYouth = await Youth.findOne({
-        username: req.body.username,
+        username: req.query.username,
       });
       const parsedYouth = await parseRetrievedYouth(retrievedYouth);
       return res.send(parsedYouth);
