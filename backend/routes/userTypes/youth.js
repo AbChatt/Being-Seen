@@ -47,38 +47,70 @@ router.post("/signup", async (req, res) => {
 
 // api/v1/user/youth
 router.get("/", async (req, res) => {
+  const parseRetrievedYouth = async (youth) => {
+    const rawDonations = await Donation.find({
+      youth: youth.username,
+    });
+
+    const parsedDonations = await Promise.all(
+      rawDonations.map(async (donation) => {
+        const retrievedDonor = await Donor.findOne({
+          username: donation.donor,
+        });
+
+        return {
+          donor: retrievedDonor.display_name,
+          youth: youth.name,
+          amount: donation.amount,
+          date: donation.date,
+        };
+      })
+    );
+
+    return {
+      name: youth.name,
+      username: youth.username,
+      dateOfBirth: youth.date_of_birth,
+      profilePicture: youth.profile_picture,
+      savingPlan: youth.profile_picture,
+      story: youth.story,
+      donations: parsedDonations,
+    };
+  };
+
+  // Request wants a specific youth
+  if (req.body.username) {
+    if (
+      !(await User.exists({
+        username: req.body.username,
+        role: userRoles.youth,
+      }))
+    ) {
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .send(createTextMessage("Cannot find given youth"));
+    }
+
+    try {
+      const retrievedYouth = await Youth.findOne({
+        username: req.body.username,
+      });
+      const parsedYouth = await parseRetrievedYouth(retrievedYouth);
+      return res.send(parsedYouth);
+    } catch (err) {
+      console.log(err);
+      return res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .send(createTextMessage("Error retrieving youth from database"));
+    }
+  }
+
+  // Request wants all youths
   try {
     const retrievedYouths = await Youth.find({});
     const parsedYouths = await Promise.all(
       retrievedYouths.map(async (youth) => {
-        const rawDonations = await Donation.find({
-          youth: youth.username,
-        });
-
-        const parsedDonations = await Promise.all(
-          rawDonations.map(async (donation) => {
-            const retrievedDonor = await Donor.findOne({
-              username: donation.donor,
-            });
-
-            return {
-              donor: retrievedDonor.display_name,
-              youth: youth.name,
-              amount: donation.amount,
-              date: donation.date,
-            };
-          })
-        );
-
-        return {
-          name: youth.name,
-          username: youth.username,
-          dateOfBirth: youth.date_of_birth,
-          profilePicture: youth.profile_picture,
-          savingPlan: youth.profile_picture,
-          story: youth.story,
-          donations: parsedDonations,
-        };
+        return await parseRetrievedYouth(youth);
       })
     );
 
@@ -87,7 +119,7 @@ router.get("/", async (req, res) => {
     console.log(err);
     return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .send(createTextMessage("Error retrieving youth from database"));
+      .send(createTextMessage("Error retrieving youths from database"));
   }
 });
 
