@@ -98,7 +98,7 @@ const UserPage = () => {
               <Box sx={{ mt: 5 }}>
                 {account && account.role === UserRoles.donor ? (
                   <DonationCard
-                    youthUsername="charles1"
+                    youthUsername={username}
                     donations={youth.donations}
                     donorUsername={account.username}
                   />
