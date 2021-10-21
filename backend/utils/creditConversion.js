@@ -1,14 +1,13 @@
+const conversion_rate = 5;
 
-const conversion_rate = 5
-function donation_to_credit(donation){
-    donation = donation / conversion_rate;
-    return donation;
-}
+const donationToCredit = (donation) => {
+  donation = donation / conversion_rate;
+  return donation;
+};
 
+const creditToDonation = (credit) => {
+  credit = credit * conversion_rate;
+  return credit;
+};
 
-function credit_to_donation(credit){
-    credit = credit * conversion_rate;
-    return credit;
-}
-
-export {donation_to_credit, credit_to_donation};
+export { donationToCredit, creditToDonation };

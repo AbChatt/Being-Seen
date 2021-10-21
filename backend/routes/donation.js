@@ -2,21 +2,18 @@ import express from "express";
 import paypal from "@paypal/checkout-server-sdk";
 import { StatusCodes } from "http-status-codes";
 
+import client from "../utils/payPalClient.js";
+import { donationToCredit } from "../utils/creditConversion.js";
 import { createTextMessage } from "../utils/defaultMessages.js";
 import validateCreateDonation from "../middleware/payments/validateCreateDonation.js";
 import validateSaveDonation from "../middleware/payments/validateSaveDonation.js";
 import PendingDonation from "../models/PendingDonation.js";
 import Donation from "../models/Donation.js";
-import client from "../utils/payPalClient.js";
-//import User from "../models/User.js";
 import Youth from "../models/Youth.js";
-import { donation_to_credit } from "../utils/creditConversion.js";
-//import { Mongoose } from "mongoose";
-//import { months } from "moment";
 
 const router = express.Router();
-//http://localhost:5000/api/v1/payment/donation/create
 
+// api/v1/payment/donation/create
 router.use("/create", validateCreateDonation);
 router.post("/create", async (req, res) => {
   const donorUsername = req.body.donor;
@@ -55,7 +52,7 @@ router.post("/create", async (req, res) => {
   }
 });
 
-//http://localhost:5000/api/v1/payment/donation/save
+// api/v1/payment/donation/save
 router.use("/save", validateSaveDonation);
 router.post("/save", async (req, res) => {
   const orderId = req.body.orderId;
@@ -66,6 +63,7 @@ router.post("/save", async (req, res) => {
     const pendingDonation = await PendingDonation.findOne({
       donor_id: orderId,
     });
+
     if (order.result.status !== "COMPLETED") {
       return res
         .status(StatusCodes.BAD_REQUEST)
@@ -89,13 +87,10 @@ router.post("/save", async (req, res) => {
         $set: {
           credit_balance:
             retrievedYouth.credit_balance +
-            donation_to_credit(newDonation.amount),
+            donationToCredit(newDonation.amount),
         },
       }
     );
-
-    //get youth's balace
-    //update balance
 
     res.send(createTextMessage("Donation processed successfully"));
   } catch (err) {
