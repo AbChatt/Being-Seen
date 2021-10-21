@@ -10,10 +10,12 @@ import Donation from "../models/Donation.js";
 import client from "../utils/payPalClient.js";
 //import User from "../models/User.js";
 import Youth from "../models/Youth.js";
+import { donation_to_credit } from "../utils/creditConversion.js";
 //import { Mongoose } from "mongoose";
 //import { months } from "moment";
 
 const router = express.Router();
+//http://localhost:5000/api/v1/payment/donation/create
 
 router.use("/create", validateCreateDonation);
 router.post("/create", async (req, res) => {
@@ -53,6 +55,7 @@ router.post("/create", async (req, res) => {
   }
 });
 
+//http://localhost:5000/api/v1/payment/donation/save
 router.use("/save", validateSaveDonation);
 router.post("/save", async (req, res) => {
   const orderId = req.body.orderId;
@@ -63,7 +66,6 @@ router.post("/save", async (req, res) => {
     const pendingDonation = await PendingDonation.findOne({
       donor_id: orderId,
     });
-
     if (order.result.status !== "COMPLETED") {
       return res
         .status(StatusCodes.BAD_REQUEST)
@@ -75,13 +77,23 @@ router.post("/save", async (req, res) => {
       donor: pendingDonation.donor,
       youth: pendingDonation.youth,
       amount: pendingDonation.amount,
+      date: order.result.create_time,
     });
 
     await newDonation.save();
-    const updateCredit = await Youth.updateOne(
+
+    const retrievedYouth = await Youth.findOne({ username: newDonation.youth });
+    await Youth.updateOne(
       { username: newDonation.youth },
-      { $set: { credit_balance: credit_balance + newDonation.amount } }
+      {
+        $set: {
+          credit_balance:
+            retrievedYouth.credit_balance +
+            donation_to_credit(newDonation.amount),
+        },
+      }
     );
+
     //get youth's balace
     //update balance
 
