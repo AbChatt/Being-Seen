@@ -61,7 +61,7 @@ router.post("/save", async (req, res) => {
   try {
     const order = await client().execute(request);
     const pendingDonation = await PendingDonation.findOne({
-      donor_id: orderId,
+      order_id: orderId,
     });
 
     if (order.result.status !== "COMPLETED") {
