@@ -87,36 +87,22 @@ router.post("/upload", async (req, res) => {
 });
 
 router.get("/products", async (req, res) => {
-  const parseRetrievedProducts = async (product) => {
-    return {
-      name: product.name,
-      description: product.description,
-      picture: product.picture,
-      store_owner_username: product.store_owner_username,
-      price: product.price,
-    };
-  };
+  const parseRetrievedProducts = (product) => ({
+    name: product.name,
+    description: product.description,
+    picture: product.picture,
+    owner: product.store_owner_username,
+    price: product.price,
+  });
 
   // Request wants products from a specific merchant
-  if (req.query.store_owner_username) {
-    if (
-      !(await Product.exists({
-        store_owner_username: req.query.store_owner_username,
-      }))
-    ) {
-      return res
-        .status(StatusCodes.NOT_FOUND)
-        .send(createTextMessage("Cannot find products for the given merchant"));
-    }
-
+  if (req.query.owner) {
     try {
       const retrievedProducts = await Product.find({
-        store_owner_username: req.query.store_owner_username,
+        store_owner_username: req.query.owner,
       });
-      const parsedProducts = await Promise.all(
-        retrievedProducts.map(async (product) => {
-          return await parseRetrievedProducts(product);
-        })
+      const parsedProducts = retrievedProducts.map((product) =>
+        parseRetrievedProducts(product)
       );
 
       return res.send(parsedProducts);
@@ -131,12 +117,9 @@ router.get("/products", async (req, res) => {
   // Request wants all youths
   try {
     const retrievedProducts = await Product.find({});
-    const parsedProducts = await Promise.all(
-      retrievedProducts.map(async (product) => {
-        return await parseRetrievedProducts(product);
-      })
+    const parsedProducts = retrievedProducts.map((product) =>
+      parseRetrievedProducts(product)
     );
-
     return res.send(parsedProducts);
   } catch (err) {
     console.log(err);
