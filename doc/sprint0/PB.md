@@ -48,7 +48,6 @@
 
 ### Donors
 
-
 - As Dorothy (a donor), I want to register as a donor so that I can access features and tools provided by the site:
   - Dorothy can input her username, profile picture, DOB etc.
   - Dorothy can set her account type as Donor.
@@ -74,5 +73,3 @@
 - As a user, I want to login to the website so that I can access the features of my account type:
   - User is logged in only when proper credentials are provided.
   - Users can keep their login information by clicking a "remember me" button.
-  - User is locked out after three failed attempts.
-
