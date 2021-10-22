@@ -11,6 +11,7 @@ import SignupPage from "pages/Signup";
 import ProfilePage from "pages/Profile";
 import StorePage from "pages/Store";
 import UserPage from "pages/User";
+import UploadPage from "pages/Upload";
 
 const App = () => (
   <Router>
@@ -32,6 +33,9 @@ const App = () => (
       </Route>
       <Route exact path="/u/:username">
         <UserPage />
+      </Route>
+      <Route exact path="/upload">
+        <UploadPage />
       </Route>
       <Route path="*">
         <Redirect to="/" />
