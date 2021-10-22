@@ -3,6 +3,11 @@ import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 
 import Box from "@mui/material/Box";
+<<<<<<< HEAD
+=======
+import { toast } from "react-toastify";
+import TextField from "@mui/material/TextField";
+>>>>>>> develop
 import Button from "@mui/material/Button";
 import Avatar from "@mui/material/Avatar";
 import TextField from "@mui/material/TextField";
@@ -72,6 +77,7 @@ const UploadPage = () => {
 
   return (
     <Layout title="Upload Page">
+<<<<<<< HEAD
       <Container maxWidth="xl" sx={{ py: 5 }}>
         <Typography gutterBottom variant="h4">
           Upload a new product
@@ -127,6 +133,71 @@ const UploadPage = () => {
           </Button>
         </Box>
       </Container>
+=======
+      <h1>Upload a new product</h1>
+      <Box noValidate component="form" onSubmit={handleUpload} sx={{ mt: 1 }}>
+        <TextField
+          autoFocus
+          required
+          fullWidth
+          value={name}
+          onChange={handleNameChange}
+          autoComplete="name"
+          label="Name"
+          margin="normal"
+        />
+        <TextField
+          autoFocus
+          required
+          fullWidth
+          value={description}
+          onChange={handleDescriptionChange}
+          autoComplete="description"
+          label="Description"
+          margin="normal"
+        />
+        <TextField
+          required
+          fullWidth
+          value={username}
+          onChange={handleUsernameChange}
+          autoComplete="username"
+          label="Username"
+          margin="normal"
+        />
+        <TextField
+          autoFocus
+          required
+          fullWidth
+          value={price}
+          onChange={handlePriceChange}
+          autoComplete="price"
+          label="Price"
+          margin="normal"
+        />
+        <TextField
+          fullWidth
+          value={pictureUrl}
+          onChange={handlePictureChange}
+          label="Product Picture URL"
+          margin="normal"
+        />
+        {pictureUrl && (
+          <Box display="flex" justifyContent="center" mt={2}>
+            <Avatar src={pictureUrl} sx={{ width: 64, height: 64 }} />
+          </Box>
+        )}
+        <Button
+          fullWidth
+          size="large"
+          type="submit"
+          variant="contained"
+          sx={{ mt: 3, mb: 2 }}
+        >
+          Upload
+        </Button>
+      </Box>
+>>>>>>> develop
     </Layout>
   );
 };
