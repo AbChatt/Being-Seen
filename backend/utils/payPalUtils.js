@@ -1,4 +1,5 @@
 import { creditToDonation } from "../utils/creditConversion.js";
+import Merchant from "../models/Merchant.js";
 
 
 // helper function that handle payOut request body
@@ -6,7 +7,8 @@ async function createPayOutBody(productInfo){
     let senderBatchId = "Test_sdk_" + Math.random().toString(36).substring(7);
 
     const price =  creditToDonation(productInfo.price);
-    const receiverEmail = productInfo.email;
+    const owner = Merchant.findOne({userName: productInfo.store_owner_username});
+    const receiverEmail = owner.email;
     return {
         sender_batch_header: {
           recipient_type: "EMAIL",
