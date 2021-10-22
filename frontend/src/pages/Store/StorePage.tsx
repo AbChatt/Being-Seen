@@ -4,12 +4,15 @@ import { toast } from "react-toastify";
 
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
+import SearchIcon from "@mui/icons-material/Search";
+import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
+
 import { Product } from "common/Types";
 import Layout from "components/Layout";
-import SearchBox from "components/SearchBox";
 import ProductCard from "components/ProductCard";
+
 import handleResponseError from "utils/handleResponseError";
 import { decodeAuthToken } from "utils/authHelpers";
 import UserRoles from "utils/UserRoles";
@@ -54,7 +57,10 @@ const StorePage = () => {
       <Container maxWidth="xl" sx={{ py: 5 }}>
         <Box mb={3}>
           <Typography variant="h4">Store</Typography>
-          <SearchBox />
+          <Box display="flex" alignItems="flex-end">
+            <SearchIcon sx={{ mr: 1, my: 0.5 }} />
+            <TextField label="Search" variant="standard" />
+          </Box>
         </Box>
         {products.length ? (
           <Grid container spacing={2}>
