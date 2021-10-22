@@ -1,99 +1,119 @@
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
-import Card from "@mui/material/Card";
 import Avatar from "@mui/material/Avatar";
 import Divider from "@mui/material/Divider";
 import SvgIcon from "@mui/material/SvgIcon";
 import Container from "@mui/material/Container";
-import CardContent from "@mui/material/CardContent";
-import DonationsTable from "components/DonationsTable";
 import Typography from "@mui/material/Typography";
 import UserIcon from "@mui/icons-material/Person";
+import { toast, ToastContainer } from "react-toastify";
 
 import Layout from "components/Layout";
-import { getDonations, getPublicYouth } from "utils/getPlaceholders";
+import DonationCard from "components/DonationCard";
+import { PublicYouth } from "common/Types";
+
+import UserRoles from "utils/UserRoles";
+import { decodeAuthToken } from "utils/authHelpers";
+import handleResponseError from "utils/handleResponseError";
+import axiosBase from "utils/axiosBase";
+
 import styles from "./UserPage.module.scss";
-
-interface StatisticProps {
-  stat: string | number;
-  label: string;
-}
-
-// Renders a statistic followed by a label (used for donations card)
-const Statistic = ({ stat, label }: StatisticProps) => (
-  <div style={{ textAlign: "center" }}>
-    <Typography sx={{ fontWeight: 700 }} variant="h6">
-      {stat}
-    </Typography>
-    <Typography color="text.secondary">{label}</Typography>
-  </div>
-);
 
 // Renders page to view a user's page (currently only supports youths)
 const UserPage = () => {
-  let donationTotal = 0;
-  let youth = getPublicYouth(1);
-  youth.donations.forEach((donation) => (donationTotal += donation.amount));
+  const account = decodeAuthToken();
+  const [loading, setLoading] = useState(true);
+  const [youth, setYouth] = useState<PublicYouth | null>(null);
+  const { username } = useParams<{ username: string }>();
+
+  useEffect(() => {
+    axiosBase
+      .get("/user/youth", {
+        params: {
+          username: username,
+        },
+      })
+      .then((response) => {
+        setYouth({
+          name: response.data.name,
+          username: response.data.username,
+          dob: response.data.dateOfBirth,
+          image: response.data.profilePicture,
+          savingPlan: response.data.savingPlan,
+          story: response.data.story,
+          donations: response.data.donations,
+        });
+      })
+      .catch(({ response }) => {
+        handleResponseError(response, toast);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [username]);
 
   return (
-    <Layout title="User page">
+    <Layout title="User page" loading={loading}>
+      <ToastContainer theme="colored" />
       <Container maxWidth="xl" sx={{ py: 5 }}>
-        <Grid container spacing={6}>
-          <Grid item xs={12} md={4}>
-            <Avatar
-              src={youth.image}
-              sx={{ height: "auto", width: "100%" }}
-              variant="rounded"
-            />
-            <div className={styles.chipContainer}>
-              <Chip color="primary" label={`@${youth.username}`} />
-              <Chip color="primary" label={youth.name} />
-              <Chip color="primary" label={youth.dob} />
-            </div>
-            <Typography variant="h5" sx={{ mt: 2.5 }}>
-              {youth.name}'s Saving Plan
-            </Typography>
-            <Divider />
-            <Typography sx={{ mt: 2.5 }} style={{ whiteSpace: "pre-wrap" }}>
-              {youth.savingPlan}
-            </Typography>
+        {youth ? (
+          <Grid container spacing={6}>
+            <Grid item xs={12} md={4}>
+              <Avatar
+                src={youth.image}
+                sx={{ height: "auto", width: "100%" }}
+                variant="rounded"
+              />
+              <div className={styles.chipContainer}>
+                <Chip color="primary" label={`@${youth.username}`} />
+                <Chip color="primary" label={youth.name} />
+                <Chip color="primary" label={youth.dob} />
+              </div>
+              <Typography variant="h5" sx={{ mt: 2.5 }}>
+                {youth.name}'s Saving Plan
+              </Typography>
+              <Divider />
+              <Typography sx={{ mt: 2.5 }} style={{ whiteSpace: "pre-wrap" }}>
+                {youth.savingPlan}
+              </Typography>
+            </Grid>
+            <Grid item xs={12} md={8}>
+              <Box display="flex" alignItems="center">
+                <SvgIcon
+                  color="primary"
+                  sx={{ height: "3rem", width: "3rem", mr: 2.5 }}
+                >
+                  <UserIcon />
+                </SvgIcon>
+                <Typography variant="h3">{youth.name}</Typography>
+              </Box>
+              <Divider />
+              <Typography sx={{ mt: 2.5 }} style={{ whiteSpace: "pre-wrap" }}>
+                {youth.story}
+              </Typography>
+              <Box sx={{ mt: 5 }}>
+                {account && account.role === UserRoles.donor ? (
+                  <DonationCard
+                    youthUsername={username}
+                    donations={youth.donations}
+                    donorUsername={account.username}
+                  />
+                ) : (
+                  <DonationCard
+                    donations={youth.donations}
+                    youthUsername={youth.username}
+                  />
+                )}
+              </Box>
+            </Grid>
           </Grid>
-          <Grid item xs={12} md={8}>
-            <Box display="flex" alignItems="center">
-              <SvgIcon
-                color="primary"
-                sx={{ height: "3rem", width: "3rem", mr: 2.5 }}
-              >
-                <UserIcon />
-              </SvgIcon>
-              <Typography variant="h3">{youth.name}</Typography>
-            </Box>
-            <Divider />
-            <Typography sx={{ mt: 2.5 }} style={{ whiteSpace: "pre-wrap" }}>
-              {youth.story}
-            </Typography>
-            <Card sx={{ mt: 5 }} style={{ background: "rgba(0 0 0 / 2%)" }}>
-              <CardContent>
-                <Grid container sx={{ mb: 2.5 }}>
-                  <Grid item xs={4}>
-                    <Statistic stat={`$${donationTotal}`} label="raised" />
-                  </Grid>
-                  <Grid item xs={4}>
-                    <Statistic
-                      stat={youth.donations.length}
-                      label="donations"
-                    />
-                  </Grid>
-                  <Grid item xs={4}>
-                    <Statistic stat={0} label="followers" />
-                  </Grid>
-                </Grid>
-                <DonationsTable donations={getDonations()} />
-              </CardContent>
-            </Card>
-          </Grid>
-        </Grid>
+        ) : (
+          <Typography variant="h3">Cannot find {username}</Typography>
+        )}
       </Container>
     </Layout>
   );
