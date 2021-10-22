@@ -165,3 +165,15 @@
 
 - `201`: request was successful and list of products is updated on profile page as well as store page.
 - `500`: unknown internal server error.
+
+### `POST /api/v1/payment/purchase`: purchase product endpoint
+
+**Description**: This is the purchase product endpoint that youth use to purchase products. <br />
+**Request Fields**: Request must pass the product name as a JSON payload. <br />
+**Authentication**: No authentication required. <br />
+**Authorization**: Requests must pass their JWT token as an `Authorization` header (bearer format is preferable). <br />
+**Responses**:
+
+- `200`: request was successful and purchase was successful.
+- `400`: bad request due to not enough credits in the youth account, or does not contain the required fields, etc.
+- `500`: unknown internal server error.
