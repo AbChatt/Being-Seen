@@ -75,7 +75,7 @@ const ProductCard = ({
           {name}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          {isMerchant ? `$${price}` : `${+price / 5} credits`}
+          {isMerchant ? `$${price}` : `${(+price / 5).toFixed(2)} credits`}
         </Typography>
       </CardContent>
       <CardActions disableSpacing>

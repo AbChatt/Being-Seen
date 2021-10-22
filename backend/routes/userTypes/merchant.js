@@ -7,7 +7,7 @@ import validateProductUpload from "../../middleware/upload/validateProductUpload
 
 import { createTextMessage } from "../../utils/defaultMessages.js";
 import { createJwtMessage } from "../../utils/defaultMessages.js";
-import { createUserToken } from "../../utils/jwtHelpers.js";
+import { createUserToken, decodeUserToken } from "../../utils/jwtHelpers.js";
 import userRoles from "../../utils/userRoles.js";
 
 import Merchant from "../../models/Merchant.js";
@@ -50,38 +50,26 @@ router.post("/signup", async (req, res) => {
 
 router.use("/upload", validateProductUpload);
 router.post("/upload", async (req, res) => {
-  const retrieved = await Merchant.findOne({
-    username: req.body.store_owner_username,
-  });
-  const reused_name = await Product.findOne({
-    name: req.body.name,
-  });
-  if (!retrieved) {
-    res
-      .status(StatusCodes.UNAUTHORIZED)
-      .send(createTextMessage("Username does not exist"));
-  } else if (reused_name) {
-    res
-      .status(StatusCodes.UNAUTHORIZED)
-      .send(createTextMessage("Name already exists"));
-  } else {
-    const newProduct = new Product({
-      name: req.body.name,
-      description: req.body.description,
-      picture: req.body.picture || "#",
-      store_owner_username: req.body.store_owner_username,
-      price: Number(req.body.price),
-    });
+  const decoded = decodeUserToken(req.headers.authorization);
 
-    try {
-      await newProduct.save();
-      res.send("");
-    } catch (err) {
-      console.log(err);
-      res
-        .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .send(createTextMessage("Error saving product to database"));
-    }
+  const newProduct = new Product({
+    name: req.body.name,
+    description: req.body.description,
+    picture: req.body.picture || "#",
+    store_owner_username: decoded.username,
+    price: (+req.body.price).toFixed(2),
+  });
+
+  try {
+    await newProduct.save();
+    return res
+      .status(StatusCodes.CREATED)
+      .send(createTextMessage("Product successfully uploaded"));
+  } catch (err) {
+    console.log(err);
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .send(createTextMessage("Error saving product to database"));
   }
 });
 
