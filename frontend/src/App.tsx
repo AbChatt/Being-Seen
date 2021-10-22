@@ -4,15 +4,19 @@ import {
   Redirect,
   BrowserRouter as Router,
 } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 
 import HomePage from "pages/Home";
 import LoginPage from "pages/Login";
 import SignupPage from "pages/Signup";
 import ProfilePage from "pages/Profile";
 import StorePage from "pages/Store";
+import UserPage from "pages/User";
+import UploadPage from "pages/Upload";
 
 const App = () => (
   <Router>
+    <ToastContainer theme="colored" />
     <Switch>
       <Route exact path="/">
         <HomePage />
@@ -28,6 +32,12 @@ const App = () => (
       </Route>
       <Route exact path="/store">
         <StorePage />
+      </Route>
+      <Route exact path="/u/:username">
+        <UserPage />
+      </Route>
+      <Route exact path="/upload">
+        <UploadPage />
       </Route>
       <Route path="*">
         <Redirect to="/" />

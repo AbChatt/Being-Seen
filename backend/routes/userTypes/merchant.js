@@ -3,19 +3,20 @@ import { StatusCodes } from "http-status-codes";
 
 import validateMerchantSignup from "../../middleware/signup/validateMerchantSignup.js";
 import validateUserSignup from "../../middleware/signup/validateUserSignup.js";
+import validateProductUpload from "../../middleware/upload/validateProductUpload.js";
 
-import {
-  createTextMessage,
-  createJwtMessage,
-} from "../../utils/defaultMessages.js";
-import { createUserToken } from "../../utils/jwtHelpers.js";
+import { createTextMessage } from "../../utils/defaultMessages.js";
+import { createJwtMessage } from "../../utils/defaultMessages.js";
+import { createUserToken, decodeUserToken } from "../../utils/jwtHelpers.js";
 import userRoles from "../../utils/userRoles.js";
 
 import Merchant from "../../models/Merchant.js";
 import User from "../../models/User.js";
+import Product from "../../models/Product.js";
 
 const router = express.Router();
 
+// api/v1/user/merchant/signup
 router.use("/signup", [validateUserSignup, validateMerchantSignup]);
 router.post("/signup", async (req, res) => {
   const newUser = new User({
@@ -38,12 +39,80 @@ router.post("/signup", async (req, res) => {
     await newUser.save();
     await newMerchant.save();
     const jwtToken = createUserToken(req.body.username, userRoles.merchant);
-    res.status(StatusCodes.CREATED).send(createJwtMessage(jwtToken));
+    return res.status(StatusCodes.CREATED).send(createJwtMessage(jwtToken));
   } catch (err) {
     console.log(err);
-    res
+    return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .send(createTextMessage("Error saving merchant to database"));
+  }
+});
+
+router.use("/upload", validateProductUpload);
+router.post("/upload", async (req, res) => {
+  const decoded = decodeUserToken(req.headers.authorization);
+
+  const newProduct = new Product({
+    name: req.body.name,
+    description: req.body.description,
+    picture: req.body.picture || "#",
+    store_owner_username: decoded.username,
+    price: (+req.body.price).toFixed(2),
+  });
+
+  try {
+    await newProduct.save();
+    return res
+      .status(StatusCodes.CREATED)
+      .send(createTextMessage("Product successfully uploaded"));
+  } catch (err) {
+    console.log(err);
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .send(createTextMessage("Error saving product to database"));
+  }
+});
+
+router.get("/products", async (req, res) => {
+  const parseRetrievedProducts = (product) => ({
+    name: product.name,
+    description: product.description,
+    picture: product.picture,
+    owner: product.store_owner_username,
+    price: product.price,
+  });
+
+  // Request wants products from a specific merchant
+  if (req.query.owner) {
+    try {
+      const retrievedProducts = await Product.find({
+        store_owner_username: req.query.owner,
+      });
+      const parsedProducts = retrievedProducts.map((product) =>
+        parseRetrievedProducts(product)
+      );
+
+      return res.send(parsedProducts);
+    } catch (err) {
+      console.log(err);
+      return res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .send(createTextMessage("Error retrieving products from database"));
+    }
+  }
+
+  // Request wants all products
+  try {
+    const retrievedProducts = await Product.find({});
+    const parsedProducts = retrievedProducts.map((product) =>
+      parseRetrievedProducts(product)
+    );
+    return res.send(parsedProducts);
+  } catch (err) {
+    console.log(err);
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .send(createTextMessage("Error retrieving products from database"));
   }
 });
 

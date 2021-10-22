@@ -17,7 +17,7 @@ import { decodeAuthToken, setAuthToken } from "utils/authHelpers";
 import UserRoles from "utils/UserRoles";
 import axiosBase from "utils/axiosBase";
 
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import styles from "./LoginPage.module.scss";
 
@@ -82,7 +82,6 @@ const LoginPage = () => {
 
   return (
     <Layout title="Login">
-      <ToastContainer theme="colored" />
       <Container maxWidth="xs">
         <div className={styles.loginContainer}>
           <Avatar sx={{ mb: 2, bgcolor: "primary.main" }}>

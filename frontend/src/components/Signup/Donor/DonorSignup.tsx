@@ -14,7 +14,7 @@ import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
 import { setAuthToken } from "utils/authHelpers";
 import axiosBase from "utils/axiosBase";
 
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 // Render the donor signup form to be displayed on the signup page
@@ -89,7 +89,6 @@ const DonorSignup = () => {
 
   return (
     <Box noValidate component="form" onSubmit={handleSignup} sx={{ mt: 1 }}>
-      <ToastContainer theme="colored" />
       <TextField
         autoFocus
         required
