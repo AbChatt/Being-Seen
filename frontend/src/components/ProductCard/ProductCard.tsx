@@ -50,10 +50,6 @@ const ProductCard = ({
   };
 
   const handleBuy = () => {
-    console.log(`Purchase product: ${name}`);
-    console.log(`Header to pass to server JWT token`);
-    console.log(getAuthHeader());
-
     axiosBase
       .post(
         "/payment/purchase",
