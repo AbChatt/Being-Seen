@@ -1,40 +1,62 @@
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import ProductCard from "components/ProductCard";
+import axiosBase from "utils/axiosBase";
+import { useEffect, useState } from "react";
+import handleResponseError from "utils/handleResponseError";
+import { Products } from "common/Types";
+import { decodeAuthToken } from "utils/authHelpers";
 import Layout from "components/Layout";
+import Grid from "@mui/material/Grid";
+import { toast, ToastContainer } from "react-toastify";
 
 const MerchantProfile = () => {
+  const account = decodeAuthToken();
+  const [loading, setLoading] = useState(true);
+  const [products, setProducts] = useState<Products[]>([]);
+
+  useEffect(() => {
+    axiosBase
+      .get("/user/merchant/products", {
+        params: {
+          store_owner_username: account?.username,
+        },
+      })
+      .then((response) => {
+        setProducts(
+          response.data.map((data: any) => ({
+            name: data.name,
+            description: data.description,
+            picture: data.picture,
+            store_owner_username: data.store_owner_username,
+            price: String(data.price),
+          }))
+        );
+      })
+      .catch(({ response }) => {
+        handleResponseError(response, toast);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [account?.username]);
+
   return (
-    <Layout title="Merchant Profile">
+    <Layout title="Merchant Profile" loading={loading}>
+      <ToastContainer theme="colored" />
       <Typography align="right">
         <Button size="small" href="/upload">
-          Upload products
+          Upload new product
         </Button>
       </Typography>
       <h1>My products</h1>
-      <Card sx={{ maxWidth: 345 }}>
-        <CardMedia
-          component="img"
-          height="140"
-          image="https://cdn.apartmenttherapy.info/image/upload/f_auto,q_auto:eco,c_fill,g_auto,w_1500/k%2FPhoto%2FRecipes%2F2019-10-recipe-brussels-sprouts-caesar-salad%2FBrusselsSproutCaesarSaladOption1"
-          alt="caesar salad"
-        />
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
-            Caesar Salad
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            300 credits
-          </Typography>
-        </CardContent>
-        <CardActions>
-          <Button size="small">Edit</Button>
-          <Button size="small">Delete</Button>
-        </CardActions>
-      </Card>
+      <Grid container spacing={2}>
+        {products.map((product, idx) => (
+          <Grid key={`product-${idx}`} item xs={12} sm={6} md={4} lg={3} xl={2}>
+            <ProductCard {...product} />
+          </Grid>
+        ))}
+      </Grid>
     </Layout>
   );
 };

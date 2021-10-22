@@ -18,11 +18,11 @@ const ProfilePage = () => {
 
   switch (account && account.role) {
     case UserRoles.merchant:
-      return <MerchantProfile></MerchantProfile>;
+      return <MerchantProfile />;
     case UserRoles.donor:
-      return <DonorProfile></DonorProfile>;
+      return <DonorProfile />;
     case UserRoles.youth:
-      return <YouthProfile></YouthProfile>;
+      return <YouthProfile />;
     case null:
       return (
         <Layout title="Profile">

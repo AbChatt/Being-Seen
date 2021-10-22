@@ -76,6 +76,7 @@ const UploadPage = () => {
 
   return (
     <Layout title="Upload Page">
+      <h1>Upload a new product</h1>
       <Box noValidate component="form" onSubmit={handleUpload} sx={{ mt: 1 }}>
         <ToastContainer theme="colored" />
         <TextField
@@ -121,7 +122,7 @@ const UploadPage = () => {
           fullWidth
           value={pictureUrl}
           onChange={handlePictureChange}
-          label="Profile Picture URL"
+          label="Product Picture URL"
           margin="normal"
         />
         {pictureUrl && (
