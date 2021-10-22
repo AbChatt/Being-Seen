@@ -34,7 +34,7 @@
 - Error handling is done purely server side (for security) and toast notifications provide optimal user experience.
 - Successful signup will redirect users to their default page (donors -> `/`, youths -> `/store`, merchants -> `/profile`).
 
-### `/profile`: Profile page (NOT DONE)
+### `/profile`: Profile page (NOT DONE FOR YOUTHS + DONORS)
 
 **Description**: This is the profile page where all types of users will be able to edit details on their account. <br />
 **Authorization**: All logged in users are authorized to view this page (unregistered users are redirected to `/`). <br />
@@ -45,7 +45,7 @@
 - Every user type will have a dynamically rendered page showing controls for their specific user type.
 - `POST` requests (or `PATCH` is also appropriate) will be used to send data to the backend.
 
-### `/store`: Store page (NOT DONE)
+### `/store`: Store page
 
 **Description**: This is the store page where users will be able to browse through products uploaded by merchants. <br />
 **Authorization**: Only youth users are authorized to view this page (all other users are redirected to `/`). <br />
@@ -92,4 +92,53 @@
 
 - `200`: user has a valid token and an appropriate message is passed back.
 - `401`: user has an invalid token and an appropriate message is passed back.
+- `500`: unknown internal server error.
+
+### `POST /api/v1/payment/donation/create`: Create donation endpoint
+
+**Description**: This is the create donation endpoint which creates a donation (order) with PayPal and saves it server side (note, this does not execute payment). <br />
+**Request Fields**: Requests must pass the youth username, donor username, and amount as a JSON payload. <br />
+**Authentication**: No authentication required. <br />
+**Authorization**: No authorization required. <br />
+**Responses**:
+
+- `201`: donation order was successfully created and an order ID is passed back to approve.
+- `400`: bad request signal when request is malformed, does not contain the required fields, etc. (error sent as response)
+- `404`: youth account or donor account could not be found. (error sent as response)
+- `500`: unknown internal server error.
+
+### `POST /api/v1/payment/donation/save`: Save donation endpoint
+
+**Description**: This is the save donation endpoint which saves a donation (if it is approved by PayPal and user). <br />
+**Request Fields**: Requests must pass the order ID that was approved by PayPal and user. <br />
+**Authentication**: No authentication required. <br />
+**Authorization**: No authorization required. <br />
+**Responses**:
+
+- `200`: donation order was successfully processed and success message is sent back.
+- `400`: bad request signal when request is malformed, does not contain the required fields, etc. (error sent as response)
+- `404`: order ID could not be found on server side (meaning it is invalid). (error sent as response)
+- `500`: unknown internal server error.
+
+### `GET /api/v1/user/youth`: Get youths endpoint
+
+**Description**: This is the get youths endpoint which passes back either a single youth or all youths in DB. <br />
+**Request Fields**: Request may pass a URL parameter denoting the individual youth they want information for. <br />
+**Authentication**: No authentication required. <br />
+**Authorization**: No authorization required. <br />
+**Responses**:
+
+- `200`: request was successful and list or single youth is sent back.
+- `404`: provided youth could not be found on server side (only happens if request for single youth). (error sent as response)
+- `500`: unknown internal server error.
+
+### `GET /api/v1/user/merchants/products`: Get youths endpoint
+
+**Description**: This is the get merchant products endpoint a single merchant's product or all products in DB. <br />
+**Request Fields**: Request may pass a URL parameter denoting the merchant name they want product information for. <br />
+**Authentication**: No authentication required. <br />
+**Authorization**: No authorization required. <br />
+**Responses**:
+
+- `200`: request was successful and list of products is sent back (non-existing merchants get empty list).
 - `500`: unknown internal server error.
