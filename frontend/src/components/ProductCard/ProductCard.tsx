@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 
 import Avatar from "@mui/material/Avatar";
 import Card from "@mui/material/Card";
@@ -62,12 +62,13 @@ const ProductCard = ({
         },
         getAuthHeader()
       )
-      .then((response) => response.data.message)
+      .then((response) => toast.success(response.data.message))
       .catch(({ response }) => handleResponseError(response, toast));
   };
 
   return (
     <Card>
+      <ToastContainer theme="colored" />
       <Avatar
         src={picture}
         variant="square"
