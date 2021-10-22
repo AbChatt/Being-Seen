@@ -23,6 +23,6 @@ export interface Products {
   name: string;
   description: string;
   picture: string;
-  store_owner_username: string;
+  owner: string;
   price: string;
 }

@@ -30,7 +30,7 @@ export default function ProductCard({
   name,
   description,
   picture,
-  store_owner_username,
+  owner,
   price,
 }: Products) {
   const [expanded, setExpanded] = React.useState(false);

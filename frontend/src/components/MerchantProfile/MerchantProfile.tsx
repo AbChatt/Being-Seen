@@ -28,7 +28,7 @@ const MerchantProfile = () => {
             name: data.name,
             description: data.description,
             picture: data.picture,
-            store_owner_username: data.store_owner_username,
+            owner: data.store_owner_username,
             price: String(data.price),
           }))
         );
