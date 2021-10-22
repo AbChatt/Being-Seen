@@ -13,8 +13,10 @@ const client = () => new payPalSdk.core.PayPalHttpClient(environment());
  * LiveEnvironment.
  */
 const environment = () => {
-    const clientId = "AQQ7olvuWvgRMgrd2Sc-HAua9GA6clPRTdqAQveM2hG1cmroBXu9I0ERzRTT1L-zn9xAYDB0Fy-oHN_A";
-    const clientSecret = "EIfVuEFKOlgzyXgOTXcS1beiJXCOJGYryVqYNUgZjaCddxFDfZCbHlyM9lnV89OEIUOpSl-QB1xwW4zOs";
+  const clientId =
+    "AQQ7olvuWvgRMgrd2Sc-HAua9GA6clPRTdqAQveM2hG1cmroBXu9I0ERzRTT1L-zn9xAYDB0Fy-oHN_A";
+  const clientSecret =
+    "EIfVuEFKOlgzyXgOTXcS1beiJXCOJGYryVqYNUgZjaCddxFDfZCbHlyM9lnV89OEIUOpSl-QB1xwW4zOs";
   return new payPalSdk.core.SandboxEnvironment(clientId, clientSecret);
 };
 
