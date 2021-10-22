@@ -1,30 +1,31 @@
-import { useHistory } from "react-router-dom";
-import { decodeAuthToken } from "utils/authHelpers";
-import UserRoles from "utils/UserRoles";
-import Layout from "components/Layout";
 import { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
+
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
-import axiosBase from "utils/axiosBase";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
+
 import { Product } from "common/Types";
+import Layout from "components/Layout";
 import ProductCard from "components/ProductCard";
 import handleResponseError from "utils/handleResponseError";
+import { decodeAuthToken } from "utils/authHelpers";
+import UserRoles from "utils/UserRoles";
+import axiosBase from "utils/axiosBase";
 
 // Render the store page of the application. If a user is not logged in (or does
 // not have the youth role), we redirect them to the homepage.
 const StorePage = () => {
   const history = useHistory();
   const account = decodeAuthToken();
+  const [loading, setLoading] = useState(true);
+  const [products, setProducts] = useState<Product[]>([]);
 
   if (!account || account.role !== UserRoles.youth) {
     history.push("/");
   }
-
-  const [loading, setLoading] = useState(true);
-  const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
     axiosBase
@@ -51,12 +52,7 @@ const StorePage = () => {
   return (
     <Layout title="Store" loading={loading}>
       <Container maxWidth="xl" sx={{ py: 5 }}>
-        <Box
-          mb={3}
-          display="flex"
-          justifyContent="space-between"
-          alignItems="center"
-        >
+        <Box mb={3}>
           <Typography variant="h4">Store</Typography>
         </Box>
         {products.length ? (
@@ -68,7 +64,7 @@ const StorePage = () => {
             ))}
           </Grid>
         ) : (
-          <Typography> Sorry, no product is offered </Typography>
+          <Typography>Sorry, no product is offered</Typography>
         )}
       </Container>
     </Layout>
