@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { PayPalButton } from "react-paypal-button-v2";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -58,7 +58,6 @@ const DonationCard = ({
 
   return (
     <Card style={{ background: "rgba(0 0 0 / 2%)" }}>
-      <ToastContainer theme="colored" />
       <CardContent>
         <Grid container sx={{ mb: 2.5 }}>
           <Grid item xs={4}>

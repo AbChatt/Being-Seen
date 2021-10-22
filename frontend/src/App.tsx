@@ -4,6 +4,7 @@ import {
   Redirect,
   BrowserRouter as Router,
 } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 
 import HomePage from "pages/Home";
 import LoginPage from "pages/Login";
@@ -15,6 +16,7 @@ import UploadPage from "pages/Upload";
 
 const App = () => (
   <Router>
+    <ToastContainer theme="colored" />
     <Switch>
       <Route exact path="/">
         <HomePage />

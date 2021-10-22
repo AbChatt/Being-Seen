@@ -5,7 +5,7 @@ import Layout from "components/Layout";
 import React, { useState } from "react";
 import axiosBase from "utils/axiosBase";
 import Box from "@mui/material/Box";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Avatar from "@mui/material/Avatar";
@@ -78,7 +78,6 @@ const UploadPage = () => {
     <Layout title="Upload Page">
       <h1>Upload a new product</h1>
       <Box noValidate component="form" onSubmit={handleUpload} sx={{ mt: 1 }}>
-        <ToastContainer theme="colored" />
         <TextField
           autoFocus
           required

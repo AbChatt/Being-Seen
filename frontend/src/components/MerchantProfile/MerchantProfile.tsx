@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
@@ -48,7 +48,6 @@ const MerchantProfile = () => {
 
   return (
     <Layout title="Merchant Profile" loading={loading}>
-      <ToastContainer theme="colored" />
       <Container maxWidth="xl" sx={{ py: 5 }}>
         <Box
           mb={3}

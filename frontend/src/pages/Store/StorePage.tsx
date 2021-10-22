@@ -3,7 +3,7 @@ import { decodeAuthToken } from "utils/authHelpers";
 import UserRoles from "utils/UserRoles";
 import Layout from "components/Layout";
 import { useEffect, useState } from "react";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import axiosBase from "utils/axiosBase";
@@ -50,7 +50,6 @@ const StorePage = () => {
 
   return (
     <Layout title="Store" loading={loading}>
-      <ToastContainer theme="colored" />
       <Container maxWidth="xl" sx={{ py: 5 }}>
         <Box
           mb={3}

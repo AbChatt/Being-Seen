@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 
 import Avatar from "@mui/material/Avatar";
 import Card from "@mui/material/Card";
@@ -64,7 +64,6 @@ const ProductCard = ({
 
   return (
     <Card>
-      <ToastContainer theme="colored" />
       <Avatar
         src={picture}
         variant="square"
