@@ -9,6 +9,7 @@ import { toast, ToastContainer } from "react-toastify";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Avatar from "@mui/material/Avatar";
+import { getAuthHeader } from "utils/authHelpers";
 
 // Render the profile page of the application. If a user is not logged in (or
 // is not a merchant), we redirect them to the homepage.
@@ -16,7 +17,6 @@ const UploadPage = () => {
   const history = useHistory();
   const account = decodeAuthToken();
   const [name, setName] = useState("");
-  const [username, setUsername] = useState("");
   const [pictureUrl, setPictureUrl] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
@@ -29,13 +29,16 @@ const UploadPage = () => {
   const handleUpload = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     axiosBase
-      .post("/user/merchant/upload", {
-        name: name,
-        description: description,
-        picture: pictureUrl,
-        store_owner_username: username,
-        price: price,
-      })
+      .post(
+        "/user/merchant/upload",
+        {
+          name: name,
+          description: description,
+          picture: pictureUrl,
+          price: price,
+        },
+        getAuthHeader()
+      )
       .then((response) => {
         // On success, we redirect the merchant to their profile page
         // to manage their store and items
@@ -54,10 +57,6 @@ const UploadPage = () => {
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value);
-  };
-
-  const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setUsername(event.target.value);
   };
 
   const handlePictureChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -97,15 +96,6 @@ const UploadPage = () => {
           onChange={handleDescriptionChange}
           autoComplete="description"
           label="Description"
-          margin="normal"
-        />
-        <TextField
-          required
-          fullWidth
-          value={username}
-          onChange={handleUsernameChange}
-          autoComplete="username"
-          label="Username"
           margin="normal"
         />
         <TextField

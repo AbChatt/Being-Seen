@@ -7,7 +7,7 @@ import validateProductUpload from "../../middleware/upload/validateProductUpload
 
 import { createTextMessage } from "../../utils/defaultMessages.js";
 import { createJwtMessage } from "../../utils/defaultMessages.js";
-import { createUserToken } from "../../utils/jwtHelpers.js";
+import { createUserToken, decodeUserToken } from "../../utils/jwtHelpers.js";
 import userRoles from "../../utils/userRoles.js";
 
 import Merchant from "../../models/Merchant.js";
@@ -50,16 +50,18 @@ router.post("/signup", async (req, res) => {
 
 router.use("/upload", validateProductUpload);
 router.post("/upload", async (req, res) => {
-  const retrieved = await Merchant.findOne({
-    username: req.body.store_owner_username,
-  });
+  const decoded = decodeUserToken(req.headers.authorization);
   const reused_name = await Product.findOne({
     name: req.body.name,
   });
-  if (!retrieved) {
+  if (!decoded) {
     res
       .status(StatusCodes.UNAUTHORIZED)
       .send(createTextMessage("Username does not exist"));
+  } else if (decoded.role != userRoles.merchant) {
+    res
+      .status(StatusCodes.UNAUTHORIZED)
+      .send(createTextMessage("User is not a merchant"));
   } else if (reused_name) {
     res
       .status(StatusCodes.UNAUTHORIZED)
@@ -69,8 +71,8 @@ router.post("/upload", async (req, res) => {
       name: req.body.name,
       description: req.body.description,
       picture: req.body.picture || "#",
-      store_owner_username: req.body.store_owner_username,
-      price: Number(req.body.price),
+      store_owner_username: decoded.username,
+      price: Number(req.body.price).toFixed(2),
     });
 
     try {

@@ -18,26 +18,15 @@ const validateProductUpload = (req, res, next) => {
       .send(createTextMessage("Description field is empty"));
   }
 
-  // Validate store owner username
-  if (!req.body.store_owner_username) {
-    return res
-      .status(StatusCodes.BAD_REQUEST)
-      .send(createTextMessage("Username field is empty"));
-  } else if (/\s/.test(req.body.store_owner_username)) {
-    return res
-      .status(StatusCodes.BAD_REQUEST)
-      .send(createTextMessage("Username cannot contain whitespace"));
-  }
-
   // Validate product price
   if (!req.body.price) {
     return res
       .status(StatusCodes.BAD_REQUEST)
       .send(createTextMessage("Price field is empty"));
-  } else if (!/^[1-9]\d*$/.test(req.body.price)) {
+  } else if (!/[+-]?([1-9]+([.][0-9]*)?|[.][0-9]+)/.test(req.body.price)) {
     return res
       .status(StatusCodes.BAD_REQUEST)
-      .send(createTextMessage("Price must be a positive integer"));
+      .send(createTextMessage("Price must be positive"));
   }
 
   next();
