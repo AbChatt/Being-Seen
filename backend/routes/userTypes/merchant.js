@@ -51,39 +51,25 @@ router.post("/signup", async (req, res) => {
 router.use("/upload", validateProductUpload);
 router.post("/upload", async (req, res) => {
   const decoded = decodeUserToken(req.headers.authorization);
-  const reused_name = await Product.findOne({
-    name: req.body.name,
-  });
-  if (!decoded) {
-    res
-      .status(StatusCodes.UNAUTHORIZED)
-      .send(createTextMessage("Username does not exist"));
-  } else if (decoded.role != userRoles.merchant) {
-    res
-      .status(StatusCodes.UNAUTHORIZED)
-      .send(createTextMessage("User is not a merchant"));
-  } else if (reused_name) {
-    res
-      .status(StatusCodes.UNAUTHORIZED)
-      .send(createTextMessage("Name already exists"));
-  } else {
-    const newProduct = new Product({
-      name: req.body.name,
-      description: req.body.description,
-      picture: req.body.picture || "#",
-      store_owner_username: decoded.username,
-      price: Number(req.body.price).toFixed(2),
-    });
 
-    try {
-      await newProduct.save();
-      res.send("");
-    } catch (err) {
-      console.log(err);
-      res
-        .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .send(createTextMessage("Error saving product to database"));
-    }
+  const newProduct = new Product({
+    name: req.body.name,
+    description: req.body.description,
+    picture: req.body.picture || "#",
+    store_owner_username: decoded.username,
+    price: (+req.body.price).toPrecision(2),
+  });
+
+  try {
+    await newProduct.save();
+    return res
+      .status(StatusCodes.CREATED)
+      .send("Product successfully uploaded");
+  } catch (err) {
+    console.log(err);
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .send(createTextMessage("Error saving product to database"));
   }
 });
 
