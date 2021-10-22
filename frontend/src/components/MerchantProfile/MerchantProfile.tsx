@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 
 import Button from "@mui/material/Button";
+import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import axiosBase from "utils/axiosBase";
 import Grid from "@mui/material/Grid";
@@ -47,23 +48,33 @@ const MerchantProfile = () => {
   return (
     <Layout title="Merchant Profile" loading={loading}>
       <ToastContainer theme="colored" />
-      <Typography align="right">
-        <Button size="small" to="/upload" component={Link}>
-          Upload new product
-        </Button>
-      </Typography>
-      <h1>My products</h1>
-      {products.length ? (
-        <Grid container spacing={2}>
-          {products.map((product, idx) => (
-            <Grid key={`item-${idx}`} item xs={12} sm={6} md={4} lg={3} xl={2}>
-              <ProductCard {...product} showControls />
-            </Grid>
-          ))}
-        </Grid>
-      ) : (
-        <Typography>No products uploaded yet</Typography>
-      )}
+      <Container maxWidth="xl" sx={{ py: 5 }}>
+        <Typography align="right">
+          <Button size="small" to="/upload" component={Link}>
+            Upload new product
+          </Button>
+        </Typography>
+        <h1>My products</h1>
+        {products.length ? (
+          <Grid container spacing={2}>
+            {products.map((product, idx) => (
+              <Grid
+                key={`item-${idx}`}
+                item
+                xs={12}
+                sm={6}
+                md={4}
+                lg={3}
+                xl={2}
+              >
+                <ProductCard {...product} showControls />
+              </Grid>
+            ))}
+          </Grid>
+        ) : (
+          <Typography>No products uploaded yet</Typography>
+        )}
+      </Container>
     </Layout>
   );
 };
