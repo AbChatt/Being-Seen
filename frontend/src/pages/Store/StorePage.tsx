@@ -2,6 +2,16 @@ import { useHistory } from "react-router-dom";
 import { decodeAuthToken } from "utils/authHelpers";
 import UserRoles from "utils/UserRoles";
 import Layout from "components/Layout";
+import { useEffect, useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
+import Container from "@mui/material/Container";
+import Typography from "@mui/material/Typography";
+import axiosBase from "utils/axiosBase";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import { Product } from "common/Types";
+import ProductCard from "components/ProductCard";
+import handleResponseError from "utils/handleResponseError";
 
 // Render the store page of the application. If a user is not logged in (or does
 // not have the youth role), we redirect them to the homepage.
@@ -13,9 +23,32 @@ const StorePage = () => {
     history.push("/");
   }
 
+  const [loading, setLoading] = useState(true);
+  const [products, setProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    axiosBase
+      .get("/user/merchant/products")
+      .then((response) => {
+        setProducts(
+          response.data.map((data: any) => ({
+            name: data.name,
+            description: data.description,
+            picture: data.picture,
+            owner: data.owner,
+            price: String(data.price),
+          }))
+        );
+      })
+      .catch(({ response }) => {
+        handleResponseError(response, toast);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [account?.username]);
+
   return (
-    <Layout title="Store">
-      <h1>Store Page</h1>
     <Layout title="Store" loading={loading}>
       <ToastContainer theme="colored" />
       <Container maxWidth="xl" sx={{ py: 5 }}>
@@ -25,10 +58,7 @@ const StorePage = () => {
           justifyContent="space-between"
           alignItems="center"
         >
-          <Typography variant="h4">Products</Typography>
-          <Button to="/upload" component={Link} variant="contained">
-            Upload new product
-          </Button>
+          <Typography variant="h4">Store</Typography>
         </Box>
         {products.length ? (
           <Grid container spacing={2}>
@@ -39,7 +69,7 @@ const StorePage = () => {
             ))}
           </Grid>
         ) : (
-          <Typography> No products </Typography>
+          <Typography> Sorry, no product is offered </Typography>
         )}
       </Container>
     </Layout>
