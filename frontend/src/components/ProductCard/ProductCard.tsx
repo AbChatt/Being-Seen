@@ -10,7 +10,9 @@ import CardContent from "@mui/material/CardContent";
 import IconButton, { IconButtonProps } from "@mui/material/IconButton";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { styled } from "@mui/material/styles";
+
 import { Product } from "common/Types";
+import { getAuthHeader } from "utils/authHelpers";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -28,7 +30,7 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 }));
 
 interface ProductCardProps extends Product {
-  showControls: boolean;
+  isMerchant?: boolean;
 }
 
 const ProductCard = ({
@@ -36,12 +38,18 @@ const ProductCard = ({
   description,
   picture,
   price,
-  showControls,
+  isMerchant,
 }: ProductCardProps) => {
   const [expanded, setExpanded] = useState(false);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
+  };
+
+  const handleBuy = () => {
+    console.log(`Purchase product: ${name}`);
+    console.log(`Header to pass to server JWT token`);
+    console.log(getAuthHeader());
   };
 
   return (
@@ -57,15 +65,23 @@ const ProductCard = ({
           {name}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          {price} credits
+          {isMerchant ? `$${price}` : `${+price / 5} credits`}
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        {showControls && (
+        {isMerchant ? (
           <>
-            <Button size="small">Edit</Button>
-            <Button size="small">Delete</Button>
+            <Button size="small" variant="contained" sx={{ mr: 1 }}>
+              Edit
+            </Button>
+            <Button size="small" variant="contained" color="error">
+              Delete
+            </Button>
           </>
+        ) : (
+          <Button size="small" variant="contained" onClick={handleBuy}>
+            Buy
+          </Button>
         )}
         <ExpandMore expand={expanded} onClick={handleExpandClick}>
           <ExpandMoreIcon />
