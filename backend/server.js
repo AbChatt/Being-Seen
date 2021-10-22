@@ -5,6 +5,7 @@ import chalk from "chalk";
 
 import mongoose from "mongoose";
 import userRoute from "./routes/user.js";
+import paymentsRoute from "./routes/payment.js";
 import requestLogger from "./middleware/log/requestLogger.js";
 
 dotenv.config();
@@ -20,6 +21,7 @@ app.use(cors());
 // App routes
 app.use("/", requestLogger);
 app.use(`/api/${API_VERSION}/user`, userRoute);
+app.use(`/api/${API_VERSION}/payment`, paymentsRoute);
 
 // Mongo database connection
 mongoose.connect(process.env.MONGO_CONN_STR, { useNewUrlParser: true }, () =>

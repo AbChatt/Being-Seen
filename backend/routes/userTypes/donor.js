@@ -4,10 +4,8 @@ import { StatusCodes } from "http-status-codes";
 import validateDonorSignup from "../../middleware/signup/validateDonorSignup.js";
 import validateUserSignup from "../../middleware/signup/validateUserSignup.js";
 
-import {
-  createTextMessage,
-  createJwtMessage,
-} from "../../utils/defaultMessages.js";
+import { createTextMessage } from "../../utils/defaultMessages.js";
+import { createJwtMessage } from "../../utils/defaultMessages.js";
 import { createUserToken } from "../../utils/jwtHelpers.js";
 import userRoles from "../../utils/userRoles.js";
 
@@ -16,6 +14,7 @@ import User from "../../models/User.js";
 
 const router = express.Router();
 
+// api/v1/user/donor/signup
 router.use("/signup", [validateUserSignup, validateDonorSignup]);
 router.post("/signup", async (req, res) => {
   const newUser = new User({
@@ -38,10 +37,10 @@ router.post("/signup", async (req, res) => {
     await newUser.save();
     await newDonor.save();
     const jwtToken = createUserToken(req.body.username, userRoles.donor);
-    res.status(StatusCodes.CREATED).send(createJwtMessage(jwtToken));
+    return res.status(StatusCodes.CREATED).send(createJwtMessage(jwtToken));
   } catch (err) {
     console.log(err);
-    res
+    return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .send(createTextMessage("Error saving donor to database"));
   }
