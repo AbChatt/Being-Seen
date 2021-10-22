@@ -1,14 +1,17 @@
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import ProductCard from "components/ProductCard";
 import axiosBase from "utils/axiosBase";
-import { useEffect, useState } from "react";
-import handleResponseError from "utils/handleResponseError";
-import { Products } from "common/Types";
-import { decodeAuthToken } from "utils/authHelpers";
-import Layout from "components/Layout";
 import Grid from "@mui/material/Grid";
-import { toast, ToastContainer } from "react-toastify";
+
+import { Products } from "common/Types";
+import ProductCard from "components/ProductCard";
+import { decodeAuthToken } from "utils/authHelpers";
+import handleResponseError from "utils/handleResponseError";
+import Layout from "components/Layout";
 
 const MerchantProfile = () => {
   const account = decodeAuthToken();
@@ -45,18 +48,22 @@ const MerchantProfile = () => {
     <Layout title="Merchant Profile" loading={loading}>
       <ToastContainer theme="colored" />
       <Typography align="right">
-        <Button size="small" href="/upload">
+        <Button size="small" to="/upload" component={Link}>
           Upload new product
         </Button>
       </Typography>
       <h1>My products</h1>
-      <Grid container spacing={2}>
-        {products.map((product, idx) => (
-          <Grid key={`product-${idx}`} item xs={12} sm={6} md={4} lg={3} xl={2}>
-            <ProductCard {...product} />
-          </Grid>
-        ))}
-      </Grid>
+      {products.length ? (
+        <Grid container spacing={2}>
+          {products.map((product, idx) => (
+            <Grid key={`item-${idx}`} item xs={12} sm={6} md={4} lg={3} xl={2}>
+              <ProductCard {...product} />
+            </Grid>
+          ))}
+        </Grid>
+      ) : (
+        <Typography>No products uploaded yet</Typography>
+      )}
     </Layout>
   );
 };
