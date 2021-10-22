@@ -113,7 +113,7 @@ router.get("/products", async (req, res) => {
     }
   }
 
-  // Request wants all youths
+  // Request wants all products
   try {
     const retrievedProducts = await Product.find({});
     const parsedProducts = retrievedProducts.map((product) =>
