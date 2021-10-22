@@ -18,7 +18,6 @@ export interface PublicYouth {
 export interface PrivateYouth extends PublicYouth {
   credits: number;
 }
-<<<<<<< HEAD
 
 export interface Product {
   name: string;
@@ -27,5 +26,3 @@ export interface Product {
   owner: string;
   price: string;
 }
-=======
->>>>>>> develop
