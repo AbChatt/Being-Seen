@@ -19,7 +19,7 @@ const YouthCard = ({ name, story, username, image, dob }: PublicYouth) => {
 
   useEffect(() => {
     // Required when initial image onLoad does not fire
-    setTimeout(() => setLoaded(true), 750);
+    setTimeout(() => setLoaded(true), 300);
   }, []);
 
   return (
@@ -31,7 +31,10 @@ const YouthCard = ({ name, story, username, image, dob }: PublicYouth) => {
               src={image}
               variant="square"
               sx={{ height: 200, width: "100%" }}
-              imgProps={{ onLoad: () => setLoaded(true) }}
+              imgProps={{
+                onLoad: () => setLoaded(true),
+                onError: () => setLoaded(true),
+              }}
             />
             <CardContent>
               <Typography variant="h6">
