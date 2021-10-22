@@ -64,7 +64,7 @@ router.post("/upload", async (req, res) => {
     await newProduct.save();
     return res
       .status(StatusCodes.CREATED)
-      .send("Product successfully uploaded");
+      .send(createTextMessage("Product successfully uploaded"));
   } catch (err) {
     console.log(err);
     return res
