@@ -6,9 +6,9 @@ import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-
 import { Product } from "common/Types";
 import Layout from "components/Layout";
+import SearchBox from "components/SearchBox";
 import ProductCard from "components/ProductCard";
 import handleResponseError from "utils/handleResponseError";
 import { decodeAuthToken } from "utils/authHelpers";
@@ -54,6 +54,7 @@ const StorePage = () => {
       <Container maxWidth="xl" sx={{ py: 5 }}>
         <Box mb={3}>
           <Typography variant="h4">Store</Typography>
+          <SearchBox />
         </Box>
         {products.length ? (
           <Grid container spacing={2}>
