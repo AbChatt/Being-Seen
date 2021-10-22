@@ -110,7 +110,7 @@ const StorePage = () => {
             </Button>
           </Box>
         </Box>
-        {products.length ? (
+        {renderedProducts.length ? (
           <Grid container spacing={2}>
             {renderedProducts.map((product, idx) => (
               <Grid key={`p-${idx}`} item xs={12} sm={6} md={4} lg={3} xl={2}>
