@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 import Avatar from "@mui/material/Avatar";
 import Card from "@mui/material/Card";
@@ -13,6 +14,8 @@ import { styled } from "@mui/material/styles";
 
 import { Product } from "common/Types";
 import { getAuthHeader } from "utils/authHelpers";
+import axiosBase from "utils/axiosBase";
+import handleResponseError from "utils/handleResponseError";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -50,6 +53,17 @@ const ProductCard = ({
     console.log(`Purchase product: ${name}`);
     console.log(`Header to pass to server JWT token`);
     console.log(getAuthHeader());
+
+    axiosBase
+      .post(
+        "/payment/purchase",
+        {
+          product: name,
+        },
+        getAuthHeader()
+      )
+      .then((response) => response.data.message)
+      .catch(({ response }) => handleResponseError(response, toast));
   };
 
   return (
