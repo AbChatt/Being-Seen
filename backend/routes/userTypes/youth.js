@@ -13,7 +13,7 @@ import userRoles from "../../utils/userRoles.js";
 import createPayoutBody from "../../utils/payPalUtils.js";
 
 import Youth from "../../models/Youth.js";
-import User from "../../models/User.js";
+import User from "../../models/User.js"
 
 const router = express.Router();
 
