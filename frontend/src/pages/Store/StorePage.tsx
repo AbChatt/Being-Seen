@@ -71,11 +71,21 @@ const StorePage = () => {
   };
 
   const handleSortAscending = () => {
-    console.log("Need to sort products here ascending");
+    const temp = [...products];
+    temp.sort(
+      (firstItem, secondItem) =>
+        parseFloat(firstItem.price) - parseFloat(secondItem.price)
+    );
+    setProducts(temp);
   };
 
   const handleSortDescending = () => {
-    console.log("Need to sort products here descending");
+    const temp = [...products];
+    temp.sort(
+      (firstItem, secondItem) =>
+        parseFloat(firstItem.price) - parseFloat(secondItem.price)
+    );
+    setProducts(temp.reverse());
   };
 
   return (
