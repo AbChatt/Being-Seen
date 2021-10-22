@@ -86,7 +86,6 @@ router.post("/upload", async (req, res) => {
   }
 });
 
-router.use("/products");
 router.get("/products", async (req, res) => {
   const parseRetrievedProducts = async (product) => {
     return {
