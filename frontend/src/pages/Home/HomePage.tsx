@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 
 import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
@@ -43,7 +43,6 @@ const HomePage = () => {
 
   return (
     <Layout title="Home" loading={loading}>
-      <ToastContainer theme="colored" />
       <Container maxWidth="xl" sx={{ py: 5 }}>
         <Typography variant="h4" align="center" sx={{ mb: 5 }}>
           Homeless Youths

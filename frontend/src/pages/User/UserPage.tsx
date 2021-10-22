@@ -10,7 +10,7 @@ import SvgIcon from "@mui/material/SvgIcon";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import UserIcon from "@mui/icons-material/Person";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 
 import Layout from "components/Layout";
 import DonationCard from "components/DonationCard";
@@ -58,7 +58,6 @@ const UserPage = () => {
 
   return (
     <Layout title="User page" loading={loading}>
-      <ToastContainer theme="colored" />
       <Container maxWidth="xl" sx={{ py: 5 }}>
         {youth ? (
           <Grid container spacing={6}>
