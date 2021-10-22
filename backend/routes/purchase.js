@@ -69,7 +69,7 @@ router.post("/", async (req, res) => {
       }
     );
 
-    res.send(createTextMessage("Successfully processed payment"));
+    return res.send(createTextMessage("Successfully processed payment"));
   } catch (err) {
     console.log(err);
     return res
