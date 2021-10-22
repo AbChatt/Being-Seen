@@ -67,6 +67,18 @@
 - Error handling is done purely server side (for security) and toast notifications provide optimal user experience.
 - Successful upload will redirect merchants to their profile.
 
+### `/u/:username`: User page
+
+**Description**: This is the user page where you can view a page for a specific page where merchants will be able to upload their products. <br />
+**Authorization**: No authorization required. <br />
+**Miscellaneous**:
+
+- Donors will have UI to donate to the teen if they are logged in.
+- Non-donor user types will just be able to view details on user (no ability to donate).
+- `POST` requests are used in order to securely transfer credentials to the backend `/api/v1/payment/donation/create` and `/api/v1/payment/donation/save` endpoint.
+- Error handling is done purely server side (for security) and toast notifications provide optimal user experience.
+- Successful payment will show a toast notifications.
+
 # Backend
 
 ### `POST /api/v1/user/login` : Login endpoint
@@ -164,4 +176,16 @@
 **Responses**:
 
 - `201`: request was successful and list of products is updated on profile page as well as store page.
+- `500`: unknown internal server error.
+
+### `POST /api/v1/payment/purchase`: purchase product endpoint
+
+**Description**: This is the purchase product endpoint that youth use to purchase products. <br />
+**Request Fields**: Request must pass the product name as a JSON payload. <br />
+**Authentication**: No authentication required. <br />
+**Authorization**: Requests must pass their JWT token as an `Authorization` header (bearer format is preferable). <br />
+**Responses**:
+
+- `200`: request was successful and purchase was successful.
+- `400`: bad request due to not enough credits in the youth account, or does not contain the required fields, etc.
 - `500`: unknown internal server error.
