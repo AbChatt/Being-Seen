@@ -7,7 +7,7 @@ import Typography from "@mui/material/Typography";
 import axiosBase from "utils/axiosBase";
 import Grid from "@mui/material/Grid";
 
-import { Products } from "common/Types";
+import { Product } from "common/Types";
 import ProductCard from "components/ProductCard";
 import { decodeAuthToken } from "utils/authHelpers";
 import handleResponseError from "utils/handleResponseError";
@@ -16,13 +16,13 @@ import Layout from "components/Layout";
 const MerchantProfile = () => {
   const account = decodeAuthToken();
   const [loading, setLoading] = useState(true);
-  const [products, setProducts] = useState<Products[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
     axiosBase
       .get("/user/merchant/products", {
         params: {
-          store_owner_username: account?.username,
+          owner: account?.username,
         },
       })
       .then((response) => {
@@ -31,7 +31,7 @@ const MerchantProfile = () => {
             name: data.name,
             description: data.description,
             picture: data.picture,
-            owner: data.store_owner_username,
+            owner: data.owner,
             price: String(data.price),
           }))
         );
@@ -57,7 +57,7 @@ const MerchantProfile = () => {
         <Grid container spacing={2}>
           {products.map((product, idx) => (
             <Grid key={`item-${idx}`} item xs={12} sm={6} md={4} lg={3} xl={2}>
-              <ProductCard {...product} />
+              <ProductCard {...product} showControls />
             </Grid>
           ))}
         </Grid>

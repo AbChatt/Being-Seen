@@ -10,7 +10,7 @@ import CardContent from "@mui/material/CardContent";
 import IconButton, { IconButtonProps } from "@mui/material/IconButton";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { styled } from "@mui/material/styles";
-import { Products } from "common/Types";
+import { Product } from "common/Types";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -27,12 +27,17 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
   }),
 }));
 
-export default function ProductCard({
+interface ProductCardProps extends Product {
+  showControls: boolean;
+}
+
+const ProductCard = ({
   name,
   description,
   picture,
   price,
-}: Products) {
+  showControls,
+}: ProductCardProps) => {
   const [expanded, setExpanded] = useState(false);
 
   const handleExpandClick = () => {
@@ -56,8 +61,12 @@ export default function ProductCard({
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <Button size="small">Edit</Button>
-        <Button size="small">Delete</Button>
+        {showControls && (
+          <>
+            <Button size="small">Edit</Button>
+            <Button size="small">Delete</Button>
+          </>
+        )}
         <ExpandMore expand={expanded} onClick={handleExpandClick}>
           <ExpandMoreIcon />
         </ExpandMore>
@@ -69,4 +78,6 @@ export default function ProductCard({
       </Collapse>
     </Card>
   );
-}
+};
+
+export default ProductCard;
