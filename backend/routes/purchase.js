@@ -4,6 +4,10 @@ import { StatusCodes } from "http-status-codes";
 
 import client from "../utils/payPalClient.js";
 import { createTextMessage } from "../utils/defaultMessages.js";
+import {
+  creditToDonation,
+  donationToCredit,
+} from "../utils/creditConversion.js";
 
 import Youth from "../models/Youth.js";
 import Product from "../models/Product.js";
@@ -19,7 +23,9 @@ router.post("/", async (req, res) => {
   const retrievedYouth = await Youth.findOne({ username: youthUsername });
 
   // if youth don't have enough credit to buy the product
-  if (retrievedYouth.credit_balance < retriecedProduct.price) {
+  if (
+    retrievedYouth.credit_balance < donationToCredit(retriecedProduct.price)
+  ) {
     res
       .status(StatusCodes.BAD_REQUEST)
       .send(createTextMessage("not enough credits!"));
@@ -29,7 +35,7 @@ router.post("/", async (req, res) => {
   let createPayOutBody = async (productInfo) => {
     let senderBatchId = "Test_sdk_" + Math.random().toString(36).substring(7);
 
-    const price = creditToDonation(productInfo.price);
+    const price = productInfo.price;
     const owner = Merchant.findOne({
       userName: productInfo.store_owner_username,
     });
