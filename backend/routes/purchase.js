@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 import client from "../utils/payPalClient.js";
 import { createTextMessage } from "../utils/defaultMessages.js";
 import { donationToCredit } from "../utils/creditConversion.js";
+import validatePurchase from "../middleware/payments/validatePurchase.js";
 
 import Youth from "../models/Youth.js";
 import Product from "../models/Product.js";
@@ -14,8 +15,16 @@ import Merchant from "../models/Merchant.js";
 const router = express.Router();
 
 // api/v1/payment/purchase
+router.use("/", validatePurchase);
 router.post("/", async (req, res) => {
-  const youthUsername = req.body.youth;
+  const decoded = decodeUserToken(req.headers.authorization);
+  if (!decoded || decoded.role !== "youth") {
+    return res
+      .status(StatusCodes.UNAUTHORIZED)
+      .send(createTextMessage("JWT passed is not valid"));
+  }
+
+  const youthUsername = decoded.role;
   const productName = req.body.product;
 
   const retrievedProduct = await Product.findOne({ name: productName });
