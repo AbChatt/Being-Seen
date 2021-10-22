@@ -1,20 +1,23 @@
+import { creditToDonation } from "../utils/creditConversion.js";
+
+
 // helper function that handle payOut request body
 async function createPayOutBody(productInfo){
     let senderBatchId = "Test_sdk_" + Math.random().toString(36).substring(7);
-    const price = productInfo.price;
-    const currency = productInfo.currency;
+
+    const price =  creditToDonation(productInfo.price);
     const receiverEmail = productInfo.email;
     return {
         sender_batch_header: {
           recipient_type: "EMAIL",
-          note: "Enjoy your Payout!!",
+          note: "",
           sender_batch_id: senderBatchId,
-          email_subject: "This is a test transaction from SDK",
+          email_subject: "",
         },
         items: [
           {
             amount: {
-              currency: currency,
+              currency: "CAD",
               value: price,
             },
             receiver: receiverEmail,
