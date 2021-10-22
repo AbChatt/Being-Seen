@@ -57,7 +57,7 @@ router.post("/upload", async (req, res) => {
     description: req.body.description,
     picture: req.body.picture || "#",
     store_owner_username: decoded.username,
-    price: (+req.body.price).toPrecision(2),
+    price: (+req.body.price).toFixed(2),
   });
 
   try {
