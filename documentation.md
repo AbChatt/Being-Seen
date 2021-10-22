@@ -55,6 +55,18 @@
 - Youths will be able to browse offered goods and services from merchants (and categorize, filter, etc.).
 - `GET` requests will be used to obtain the listings from the backend.
 
+### `/upload`: Upload page
+
+**Description**: This is the upload page where merchants will be able to upload their products. <br />
+**Authorization**: Only merchant users are authorized to view this page (all other users are redirected to `/`). <br />
+**Miscellaneous**:
+
+- Merchants will have access to a link to `/profile` (in the header) if they are logged in - upon navigating to their profile, there is an "upload new product" button that will take them to the upload page.
+- Merchants will be able to input product names, write a description, add price and a photo of the product.
+- `POST` requests are used in order to securely transfer credentials to the backend `/api/v1/user/merchant/upload` endpoint.
+- Error handling is done purely server side (for security) and toast notifications provide optimal user experience.
+- Successful upload will redirect merchants to their profile.
+
 # Backend
 
 ### `POST /api/v1/user/login` : Login endpoint
@@ -132,13 +144,24 @@
 - `404`: provided youth could not be found on server side (only happens if request for single youth). (error sent as response)
 - `500`: unknown internal server error.
 
-### `GET /api/v1/user/merchants/products`: Get youths endpoint
+### `GET /api/v1/user/merchant/products`: Get products endpoint
 
-**Description**: This is the get merchant products endpoint a single merchant's product or all products in DB. <br />
+**Description**: This is the get merchant products endpoint which passes back a single merchant's products or all products in DB. <br />
 **Request Fields**: Request may pass a URL parameter denoting the merchant name they want product information for. <br />
 **Authentication**: No authentication required. <br />
 **Authorization**: No authorization required. <br />
 **Responses**:
 
 - `200`: request was successful and list of products is sent back (non-existing merchants get empty list).
+- `500`: unknown internal server error.
+
+### `POST /api/v1/user/merchant/upload`: Upload product endpoint
+
+**Description**: This is the upload product endpoint that merchants use to add new products. <br />
+**Request Fields**: Request must pass the product name, description and price as a JSON payload. <br />
+**Authentication**: No authentication required. <br />
+**Authorization**: Requests must pass their JWT token as an `Authorization` header (bearer format is preferable). <br />
+**Responses**:
+
+- `201`: request was successful and list of products is updated on profile page as well as store page.
 - `500`: unknown internal server error.
