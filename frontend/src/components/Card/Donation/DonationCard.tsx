@@ -112,16 +112,14 @@ const DonationCard = ({
                     donor: donorUsername,
                   })
                   .then((response) => response.data.message)
-                  .catch(({ response }) => handleResponseError(response, toast))
+                  .catch(({ response }) => handleResponseError(response))
               }
               onApprove={(data: any, actions: any) =>
                 actions.order.capture().then((details: { id: string }) => {
                   axiosBase
                     .post("/payment/donation/save", { orderId: details.id })
                     .then((response) => toast.success(response.data.message))
-                    .catch(({ response }) =>
-                      handleResponseError(response, toast)
-                    );
+                    .catch(({ response }) => handleResponseError(response));
                 })
               }
               options={{

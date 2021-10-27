@@ -60,7 +60,7 @@ const ProductCard = ({
         getAuthHeader()
       )
       .then((response) => toast.success(response.data.message))
-      .catch(({ response }) => handleResponseError(response, toast));
+      .catch(({ response }) => handleResponseError(response));
   };
 
   return (

@@ -1,13 +1,14 @@
 import express from "express";
 import { StatusCodes } from "http-status-codes";
 
-import validateMerchantSignup from "../middleware/signup/validateMerchantSignup.js";
+import verifyAuthHeader from "../middleware/security/verifyAuthHeader.js";
 import validateUserSignup from "../middleware/signup/validateUserSignup.js";
+import validateMerchantSignup from "../middleware/signup/validateMerchantSignup.js";
 import validateProductUpload from "../middleware/upload/validateProductUpload.js";
 
+import { createUserToken, decodeUserToken } from "../utils/jwtHelpers.js";
 import { createTextMessage } from "../utils/defaultMessages.js";
 import { createJwtMessage } from "../utils/defaultMessages.js";
-import { createUserToken, decodeUserToken } from "../utils/jwtHelpers.js";
 import userRoles from "../utils/userRoles.js";
 
 import Merchant from "../models/Merchant.js";
@@ -48,7 +49,10 @@ router.post("/signup", async (req, res) => {
   }
 });
 
-router.use("/upload", validateProductUpload);
+router.use("/upload", [
+  verifyAuthHeader(userRoles.merchant),
+  validateProductUpload,
+]);
 router.post("/upload", async (req, res) => {
   const decoded = decodeUserToken(req.headers.authorization);
 

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { toast } from "react-toastify";
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -50,7 +49,7 @@ const UploadPage = () => {
         history.push("/profile");
       })
       .catch(({ response }) => {
-        handleResponseError(response, toast);
+        handleResponseError(response);
       });
   };
 
