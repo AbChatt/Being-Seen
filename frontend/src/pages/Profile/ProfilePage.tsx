@@ -2,9 +2,9 @@ import { useHistory } from "react-router-dom";
 import { decodeAuthToken } from "utils/authHelpers";
 import UserRoles from "utils/UserRoles";
 import Layout from "components/Layout";
-import DonorProfile from "components/DonorProfile";
-import YouthProfile from "components/YouthProfile";
-import MerchantProfile from "components/MerchantProfile";
+import DonorProfile from "components/Profile/Donor";
+import YouthProfile from "components/Profile/Youth";
+import MerchantProfile from "components/Profile/Merchant";
 
 // Render the profile page of the application. If a user is not logged in (or
 // do not have a role we recognize), we redirect them to the homepage.
