@@ -11,6 +11,7 @@ import HomePage from "pages/Home";
 import LoginPage from "pages/Login";
 import SignupPage from "pages/Signup";
 import DashboardPage from "pages/Dashboard";
+import ProfilePage from "pages/Profile";
 import StorePage from "pages/Store";
 import UserPage from "pages/User";
 import UploadPage from "pages/Upload";
@@ -30,6 +31,9 @@ const App = () => (
       </Route>
       <Route exact path="/dashboard">
         <DashboardPage />
+      </Route>
+      <Route exact path="/profile">
+        <ProfilePage />
       </Route>
       <Route exact path="/store">
         <StorePage />
