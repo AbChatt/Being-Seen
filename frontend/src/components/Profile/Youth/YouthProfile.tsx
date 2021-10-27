@@ -8,7 +8,7 @@ import Chip from "@mui/material/Chip";
 import Box from "@mui/material/Box";
 
 import { PrivateYouth } from "common/Types";
-import { decodeAuthToken } from "utils/authHelpers";
+import { decodeAuthToken, getAuthHeader } from "utils/authHelpers";
 import handleResponseError from "utils/handleResponseError";
 import DonationCard from "components/Card/Donation";
 import axiosBase from "utils/axiosBase";
@@ -21,11 +21,7 @@ const YouthProfile = () => {
 
   useEffect(() => {
     axiosBase
-      .get("/user/youth", {
-        params: {
-          username: account?.username,
-        },
-      })
+      .post("/user/youth/private", {}, getAuthHeader())
       .then((response) => {
         setYouth({
           name: response.data.name,
@@ -35,7 +31,7 @@ const YouthProfile = () => {
           savingPlan: response.data.savingPlan,
           story: response.data.story,
           donations: response.data.donations,
-          credits: response.data.credits || 20,
+          credits: response.data.credits,
         });
       })
       .catch(({ response }) => {
