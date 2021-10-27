@@ -14,7 +14,7 @@ import { decodeAuthToken } from "utils/authHelpers";
 import handleResponseError from "utils/handleResponseError";
 import Layout from "components/Layout";
 
-const MerchantProfile = () => {
+const MerchantDashboard = () => {
   const account = decodeAuthToken();
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState<Product[]>([]);
@@ -46,7 +46,7 @@ const MerchantProfile = () => {
   }, [account?.username]);
 
   return (
-    <Layout title="Merchant Profile" loading={loading}>
+    <Layout title="Merchant Dashboard" loading={loading}>
       <Container maxWidth="xl" sx={{ py: 5 }}>
         <Box
           mb={3}
@@ -75,4 +75,4 @@ const MerchantProfile = () => {
   );
 };
 
-export default MerchantProfile;
+export default MerchantDashboard;

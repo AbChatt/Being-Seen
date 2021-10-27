@@ -13,7 +13,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import LoginIcon from "@mui/icons-material/Login";
 import SignupIcon from "@mui/icons-material/ArrowForward";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import ProfileIcon from "@mui/icons-material/AccountCircle";
+import DashboardIcon from "@mui/icons-material/Dashboard";
 import StoreIcon from "@mui/icons-material/Store";
 import YouthIcon from "@mui/icons-material/Face";
 
@@ -69,7 +69,11 @@ const Drawer = ({ open, onClose, onLogout }: DrawerProps) => {
             {account.role === UserRoles.youth && (
               <DrawerRow text="Store" path="/store" icon={<StoreIcon />} />
             )}
-            <DrawerRow text="Profile" path="/profile" icon={<ProfileIcon />} />
+            <DrawerRow
+              text="Dashboard"
+              path="/dashboard"
+              icon={<DashboardIcon />}
+            />
             <Divider />
             <ListItem button onClick={onLogout}>
               <ListItemIcon>

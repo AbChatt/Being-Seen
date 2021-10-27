@@ -52,7 +52,7 @@ const LoginPage = () => {
             history.push("/");
             break;
           case UserRoles.merchant:
-            history.push("/profile");
+            history.push("/dashboard");
             break;
           case UserRoles.youth:
             history.push("/store");

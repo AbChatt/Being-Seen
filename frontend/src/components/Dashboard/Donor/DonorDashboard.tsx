@@ -10,7 +10,7 @@ import handleResponseError from "utils/handleResponseError";
 import DonationCard from "components/Card/Donation";
 import Layout from "components/Layout";
 
-const YouthProfile = () => {
+const DonorDashboard = () => {
   const account = decodeAuthToken();
   const [loading, setLoading] = useState(true);
   const [donor, setDonor] = useState<Donor | null>(null);
@@ -38,7 +38,7 @@ const YouthProfile = () => {
   }, [account?.username]);
 
   return (
-    <Layout title="Donor Profile" loading={loading}>
+    <Layout title="Donor Dashboard" loading={loading}>
       <Container maxWidth="xl" sx={{ py: 5 }}>
         {donor ? (
           <>
@@ -61,4 +61,4 @@ const YouthProfile = () => {
   );
 };
 
-export default YouthProfile;
+export default DonorDashboard;

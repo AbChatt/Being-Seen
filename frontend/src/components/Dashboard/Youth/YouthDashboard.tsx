@@ -13,7 +13,7 @@ import DonationCard from "components/Card/Donation";
 import axiosBase from "utils/axiosBase";
 import Layout from "components/Layout";
 
-const YouthProfile = () => {
+const YouthDashboard = () => {
   const account = decodeAuthToken();
   const [loading, setLoading] = useState(true);
   const [youth, setYouth] = useState<PrivateYouth | null>(null);
@@ -42,7 +42,7 @@ const YouthProfile = () => {
   }, [account?.username]);
 
   return (
-    <Layout title="Youth Profile" loading={loading}>
+    <Layout title="Youth Dashboard" loading={loading}>
       <Container maxWidth="xl" sx={{ py: 5 }}>
         {youth ? (
           <>
@@ -82,4 +82,4 @@ const YouthProfile = () => {
   );
 };
 
-export default YouthProfile;
+export default YouthDashboard;
