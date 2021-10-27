@@ -70,22 +70,15 @@ const StorePage = () => {
     setSearch(event.target.value);
   };
 
+  const sortProductsAscending = () =>
+    [...products].sort((p1, p2) => p1.price - p2.price);
+
   const handleSortAscending = () => {
-    const temp = [...products];
-    temp.sort(
-      (firstItem, secondItem) =>
-        parseFloat(firstItem.price) - parseFloat(secondItem.price)
-    );
-    setProducts(temp);
+    setProducts(sortProductsAscending());
   };
 
   const handleSortDescending = () => {
-    const temp = [...products];
-    temp.sort(
-      (firstItem, secondItem) =>
-        parseFloat(firstItem.price) - parseFloat(secondItem.price)
-    );
-    setProducts(temp.reverse());
+    setProducts(sortProductsAscending().reverse());
   };
 
   return (
