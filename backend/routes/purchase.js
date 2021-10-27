@@ -66,9 +66,10 @@ router.post("/", async (req, res) => {
       { username: youthUsername },
       {
         $set: {
-          credit_balance:
+          credit_balance: (
             retrievedYouth.credit_balance -
-            donationToCredit(retrievedProduct.price),
+            donationToCredit(retrievedProduct.price)
+          ).toFixed(2),
         },
       }
     );
