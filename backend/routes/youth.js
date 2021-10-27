@@ -4,15 +4,16 @@ import { StatusCodes } from "http-status-codes";
 import validateYouthSignup from "../middleware/signup/validateYouthSignup.js";
 import validateUserSignup from "../middleware/signup/validateUserSignup.js";
 
+import { decodeUserToken, createUserToken } from "../utils/jwtHelpers.js";
 import { createTextMessage } from "../utils/defaultMessages.js";
 import { createJwtMessage } from "../utils/defaultMessages.js";
-import { createUserToken } from "../utils/jwtHelpers.js";
 import userRoles from "../utils/userRoles.js";
 
 import Donation from "../models/Donation.js";
 import Youth from "../models/Youth.js";
 import Donor from "../models/Donor.js";
 import User from "../models/User.js";
+import verifyAuthHeader from "../middleware/security/verifyAuthHeader.js";
 
 const router = express.Router();
 
@@ -45,39 +46,51 @@ router.post("/signup", async (req, res) => {
   }
 });
 
-// api/v1/user/youth
-router.get("/", async (req, res) => {
-  const parseRetrievedYouth = async (youth) => {
-    const rawDonations = await Donation.find({
-      youth: youth.username,
-    });
+// Method to generate the API returned youth object based on a retrieved
+// youth object from database (isPrivate determines whether to return private
+// information)
+const parseRetrievedYouth = async (retrievedYouth, isPrivate) => {
+  const rawDonations = await Donation.find({
+    youth: retrievedYouth.username,
+  });
 
-    const parsedDonations = await Promise.all(
-      rawDonations.map(async (donation) => {
-        const retrievedDonor = await Donor.findOne({
-          username: donation.donor,
-        });
+  const parsedDonations = await Promise.all(
+    rawDonations.map(async (donation) => {
+      const retrievedDonor = await Donor.findOne({
+        username: donation.donor,
+      });
 
-        return {
-          donor: retrievedDonor.display_name,
-          youth: youth.name,
-          amount: donation.amount,
-          date: donation.date,
-        };
-      })
-    );
+      return {
+        donor: retrievedDonor.display_name,
+        youth: retrievedYouth.name,
+        amount: donation.amount,
+        date: donation.date,
+      };
+    })
+  );
 
-    return {
-      name: youth.name,
-      username: youth.username,
-      dateOfBirth: youth.date_of_birth,
-      profilePicture: youth.profile_picture,
-      savingPlan: youth.saving_plan,
-      story: youth.story,
-      donations: parsedDonations,
-    };
+  const publicInformation = {
+    name: retrievedYouth.name,
+    username: retrievedYouth.username,
+    dateOfBirth: retrievedYouth.date_of_birth,
+    profilePicture: retrievedYouth.profile_picture,
+    savingPlan: retrievedYouth.saving_plan,
+    story: retrievedYouth.story,
+    donations: parsedDonations,
   };
 
+  const privateInformation = {
+    credits: retrievedYouth.credit_balance,
+  };
+
+  return {
+    ...publicInformation,
+    ...(isPrivate && privateInformation),
+  };
+};
+
+// api/v1/user/youth
+router.get("/", async (req, res) => {
   // Request wants a specific youth
   if (req.query.username) {
     if (
@@ -120,6 +133,23 @@ router.get("/", async (req, res) => {
     return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .send(createTextMessage("Error retrieving youths from database"));
+  }
+});
+
+// api/v1/user/youth/private
+router.use("/private", verifyAuthHeader(userRoles.youth));
+router.post("/private", async (req, res) => {
+  const decoded = decodeUserToken(req.headers.authorization);
+
+  try {
+    const retrievedYouth = await Youth.findOne({ username: decoded.username });
+    const parsedYouth = await parseRetrievedYouth(retrievedYouth, true);
+    return res.send(parsedYouth);
+  } catch (err) {
+    console.log(err);
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .send(createTextMessage("Error retrieving youth from database"));
   }
 });
 
