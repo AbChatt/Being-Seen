@@ -13,7 +13,7 @@ import Box from "@mui/material/Box";
 
 import { Product } from "common/Types";
 import Layout from "components/Layout";
-import ProductCard from "components/ProductCard";
+import ProductCard from "components/Card/Product";
 
 import handleResponseError from "utils/handleResponseError";
 import { decodeAuthToken } from "utils/authHelpers";
