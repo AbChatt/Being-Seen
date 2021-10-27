@@ -1,7 +1,6 @@
 import { useHistory } from "react-router-dom";
 import { decodeAuthToken } from "utils/authHelpers";
 import UserRoles from "utils/UserRoles";
-import Layout from "components/Layout";
 import DonorProfile from "components/Profile/Donor";
 import YouthProfile from "components/Profile/Youth";
 import MerchantProfile from "components/Profile/Merchant";
@@ -12,10 +11,6 @@ const ProfilePage = () => {
   const history = useHistory();
   const account = decodeAuthToken();
 
-  if (!account || !(account.role in UserRoles)) {
-    history.push("/");
-  }
-
   switch (account && account.role) {
     case UserRoles.merchant:
       return <MerchantProfile />;
@@ -23,12 +18,9 @@ const ProfilePage = () => {
       return <DonorProfile />;
     case UserRoles.youth:
       return <YouthProfile />;
-    case null:
-      return (
-        <Layout title="Profile">
-          <h1>Profile Page</h1>
-        </Layout>
-      );
+    default:
+      history.push("/");
+      return null;
   }
 };
 
