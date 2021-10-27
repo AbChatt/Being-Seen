@@ -4,16 +4,38 @@ import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 
 import { Donor } from "common/Types";
-import { decodeAuthToken } from "utils/authHelpers";
+import axiosBase from "utils/axiosBase";
+import { decodeAuthToken, getAuthHeader } from "utils/authHelpers";
+import handleResponseError from "utils/handleResponseError";
 import DonationCard from "components/Card/Donation";
 import Layout from "components/Layout";
 
 const YouthProfile = () => {
   const account = decodeAuthToken();
-  const [loading] = useState(true);
-  const [donor] = useState<Donor | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [donor, setDonor] = useState<Donor | null>(null);
 
-  useEffect(() => {}, [account?.username]);
+  useEffect(() => {
+    axiosBase
+      .post("/user/donor/private", {}, getAuthHeader())
+      .then((response) => {
+        setDonor({
+          name: response.data.name,
+          username: response.data.username,
+          organization: response.data.organization,
+          image: response.data.profilePicture,
+          dob: response.data.dateOfBirth,
+          anonymize: response.data.anonymize,
+          donations: response.data.donations,
+        });
+      })
+      .catch(({ response }) => {
+        handleResponseError(response);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [account?.username]);
 
   return (
     <Layout title="Donor Profile" loading={loading}>
@@ -26,7 +48,7 @@ const YouthProfile = () => {
             {donor.donations.length === 0 ? (
               <Typography>No donations yet!</Typography>
             ) : (
-              <DonationCard donations={donor.donations} />
+              <DonationCard isDonating donations={donor.donations} />
             )}
           </>
         ) : (
