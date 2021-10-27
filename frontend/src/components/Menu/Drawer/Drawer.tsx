@@ -14,6 +14,7 @@ import LoginIcon from "@mui/icons-material/Login";
 import SignupIcon from "@mui/icons-material/ArrowForward";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import DashboardIcon from "@mui/icons-material/Dashboard";
+import ProfileIcon from "@mui/icons-material/AccountCircle";
 import StoreIcon from "@mui/icons-material/Store";
 import YouthIcon from "@mui/icons-material/Face";
 
@@ -74,6 +75,7 @@ const Drawer = ({ open, onClose, onLogout }: DrawerProps) => {
               path="/dashboard"
               icon={<DashboardIcon />}
             />
+            <DrawerRow text="Profile" path="/profile" icon={<ProfileIcon />} />
             <Divider />
             <ListItem button onClick={onLogout}>
               <ListItemIcon>
