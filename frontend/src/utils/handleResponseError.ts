@@ -1,8 +1,8 @@
+import { toast } from "react-toastify";
 import { AxiosResponse } from "axios";
 
-// A simple utility method to perform error handling on failed requests. The
-// toast parameter must be the toast function from "react-toastify" package.
-const handleResponseError = (response: AxiosResponse, toast: any) => {
+// A simple utility method to perform error handling on failed requests
+const handleResponseError = (response: AxiosResponse) => {
   if (response && response.data) {
     if (response.data.message) {
       toast.error(response.data.message);

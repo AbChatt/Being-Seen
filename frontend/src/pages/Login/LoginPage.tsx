@@ -14,11 +14,10 @@ import Container from "@mui/material/Container";
 
 import Layout from "components/Layout";
 import { decodeAuthToken, setAuthToken } from "utils/authHelpers";
+import handleResponseError from "utils/handleResponseError";
 import UserRoles from "utils/UserRoles";
 import axiosBase from "utils/axiosBase";
 
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import styles from "./LoginPage.module.scss";
 
 // Render the login page + login form of the application. If a user is already
@@ -61,13 +60,7 @@ const LoginPage = () => {
         }
       })
       .catch(({ response }) => {
-        // On failure, we determine whether the request itself was made. If so,
-        // we display the error message from the API to the user.
-        if (response) {
-          toast.error(response.data.message || "Unknown error");
-        } else {
-          toast.error("Request could not be made");
-        }
+        handleResponseError(response);
       });
   };
 

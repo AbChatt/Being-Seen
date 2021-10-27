@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
 
 import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
@@ -34,7 +33,7 @@ const HomePage = () => {
         );
       })
       .catch(({ response }) => {
-        handleResponseError(response, toast);
+        handleResponseError(response);
       })
       .finally(() => {
         setLoading(false);

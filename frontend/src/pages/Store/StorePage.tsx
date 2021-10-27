@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { toast } from "react-toastify";
 
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
@@ -51,7 +50,7 @@ const StorePage = () => {
         setRenderedProducts(retrievedProducts);
       })
       .catch(({ response }) => {
-        handleResponseError(response, toast);
+        handleResponseError(response);
       })
       .finally(() => {
         setLoading(false);

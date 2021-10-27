@@ -11,11 +11,9 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
 
+import handleResponseError from "utils/handleResponseError";
 import { setAuthToken } from "utils/authHelpers";
 import axiosBase from "utils/axiosBase";
-
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 // Render the donor signup form to be displayed on the signup page
 const DonorSignup = () => {
@@ -49,13 +47,7 @@ const DonorSignup = () => {
         history.push("/");
       })
       .catch(({ response }) => {
-        // On failure, we determine whether the request itself was made. If so,
-        // we display the error message from the API to the donor.
-        if (response) {
-          toast.error(response.data.message || "Unknown error");
-        } else {
-          toast.error("Request could not be made");
-        }
+        handleResponseError(response);
       });
   };
 

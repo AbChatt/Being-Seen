@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
 
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
@@ -35,7 +34,7 @@ const YouthProfile = () => {
         });
       })
       .catch(({ response }) => {
-        handleResponseError(response, toast);
+        handleResponseError(response);
       })
       .finally(() => {
         setLoading(false);
