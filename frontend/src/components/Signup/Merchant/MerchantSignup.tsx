@@ -42,9 +42,9 @@ const MerchantSignup = () => {
       })
       .then((response) => {
         // On success, we store the JWT token returned and redirect the new
-        // merchant to their profile page to manage their store and items
+        // merchant to their dashboard page to manage their store and items
         setAuthToken(response.data.jwt);
-        history.push("/profile");
+        history.push("/dashboard");
       })
       .catch(({ response }) => {
         handleResponseError(response);

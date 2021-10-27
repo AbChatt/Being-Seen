@@ -10,6 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 import HomePage from "pages/Home";
 import LoginPage from "pages/Login";
 import SignupPage from "pages/Signup";
+import DashboardPage from "pages/Dashboard";
 import ProfilePage from "pages/Profile";
 import StorePage from "pages/Store";
 import UserPage from "pages/User";
@@ -27,6 +28,9 @@ const App = () => (
       </Route>
       <Route exact path="/signup">
         <SignupPage />
+      </Route>
+      <Route exact path="/dashboard">
+        <DashboardPage />
       </Route>
       <Route exact path="/profile">
         <ProfilePage />

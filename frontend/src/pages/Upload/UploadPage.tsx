@@ -15,7 +15,7 @@ import handleResponseError from "utils/handleResponseError";
 import UserRoles from "utils/UserRoles";
 import axiosBase from "utils/axiosBase";
 
-// Render the profile page of the application. If a user is not logged in (or
+// Render the dashboard page of the application. If a user is not logged in (or
 // is not a merchant), we redirect them to the homepage.
 const UploadPage = () => {
   const history = useHistory();
@@ -44,9 +44,9 @@ const UploadPage = () => {
         getAuthHeader()
       )
       .then((response) => {
-        // On success, we redirect the merchant to their profile page
+        // On success, we redirect the merchant to their dashboard page
         // to manage their store and items
-        history.push("/profile");
+        history.push("/dashboard");
       })
       .catch(({ response }) => {
         handleResponseError(response);
