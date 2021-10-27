@@ -1,18 +1,18 @@
 import express from "express";
 import { StatusCodes } from "http-status-codes";
 
-import validateYouthSignup from "../../middleware/signup/validateYouthSignup.js";
-import validateUserSignup from "../../middleware/signup/validateUserSignup.js";
+import validateYouthSignup from "../middleware/signup/validateYouthSignup.js";
+import validateUserSignup from "../middleware/signup/validateUserSignup.js";
 
-import { createTextMessage } from "../../utils/defaultMessages.js";
-import { createJwtMessage } from "../../utils/defaultMessages.js";
-import { createUserToken } from "../../utils/jwtHelpers.js";
-import userRoles from "../../utils/userRoles.js";
+import { createTextMessage } from "../utils/defaultMessages.js";
+import { createJwtMessage } from "../utils/defaultMessages.js";
+import { createUserToken } from "../utils/jwtHelpers.js";
+import userRoles from "../utils/userRoles.js";
 
-import Donation from "../../models/Donation.js";
-import Youth from "../../models/Youth.js";
-import Donor from "../../models/Donor.js";
-import User from "../../models/User.js";
+import Donation from "../models/Donation.js";
+import Youth from "../models/Youth.js";
+import Donor from "../models/Donor.js";
+import User from "../models/User.js";
 
 const router = express.Router();
 

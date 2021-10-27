@@ -1,18 +1,18 @@
 import express from "express";
 import { StatusCodes } from "http-status-codes";
 
-import validateMerchantSignup from "../../middleware/signup/validateMerchantSignup.js";
-import validateUserSignup from "../../middleware/signup/validateUserSignup.js";
-import validateProductUpload from "../../middleware/upload/validateProductUpload.js";
+import validateMerchantSignup from "../middleware/signup/validateMerchantSignup.js";
+import validateUserSignup from "../middleware/signup/validateUserSignup.js";
+import validateProductUpload from "../middleware/upload/validateProductUpload.js";
 
-import { createTextMessage } from "../../utils/defaultMessages.js";
-import { createJwtMessage } from "../../utils/defaultMessages.js";
-import { createUserToken, decodeUserToken } from "../../utils/jwtHelpers.js";
-import userRoles from "../../utils/userRoles.js";
+import { createTextMessage } from "../utils/defaultMessages.js";
+import { createJwtMessage } from "../utils/defaultMessages.js";
+import { createUserToken, decodeUserToken } from "../utils/jwtHelpers.js";
+import userRoles from "../utils/userRoles.js";
 
-import Merchant from "../../models/Merchant.js";
-import User from "../../models/User.js";
-import Product from "../../models/Product.js";
+import Merchant from "../models/Merchant.js";
+import User from "../models/User.js";
+import Product from "../models/Product.js";
 
 const router = express.Router();
 
