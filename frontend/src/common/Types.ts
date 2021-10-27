@@ -5,6 +5,16 @@ export interface Donation {
   date: string;
 }
 
+export interface Donor {
+  name: string;
+  username: string;
+  organization: string;
+  image: string;
+  dob: string;
+  anonymize: boolean;
+  donations: Donation[];
+}
+
 export interface PublicYouth {
   name: string;
   username: string;
