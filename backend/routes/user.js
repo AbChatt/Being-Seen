@@ -8,9 +8,9 @@ import { createUserToken, decodeUserToken } from "../utils/jwtHelpers.js";
 import validateLogin from "../middleware/login/validateLogin.js";
 import hasAuthHeader from "../middleware/security/hasAuthHeader.js";
 
-import donorRoute from "./userTypes/donor.js";
-import merchantRoute from "./userTypes/merchant.js";
-import youthRoute from "./userTypes/youth.js";
+import donorRoute from "./donor.js";
+import merchantRoute from "./merchant.js";
+import youthRoute from "./youth.js";
 
 import User from "../models/User.js";
 

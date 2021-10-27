@@ -13,6 +13,7 @@ import DonationsTable from "components/DonationsTable";
 
 import axiosBase from "utils/axiosBase";
 import handleResponseError from "utils/handleResponseError";
+import { dollarToCredit } from "utils/creditDollarConvertion";
 import { ToggleButton, ToggleButtonGroup } from "@mui/material";
 
 interface StatisticProps {
@@ -31,12 +32,14 @@ const Statistic = ({ stat, label }: StatisticProps) => (
 );
 
 interface DonationCardProps {
+  inCredits?: boolean;
   donations: Donation[];
-  youthUsername: string;
+  youthUsername?: string;
   donorUsername?: string;
 }
 
 const DonationCard = ({
+  inCredits,
   donations,
   youthUsername,
   donorUsername,
@@ -61,7 +64,14 @@ const DonationCard = ({
       <CardContent>
         <Grid container sx={{ mb: 2.5 }}>
           <Grid item xs={4}>
-            <Statistic stat={`$${previousDonationsTotal}`} label="raised" />
+            <Statistic
+              stat={
+                inCredits
+                  ? `${dollarToCredit(previousDonationsTotal)} CR`
+                  : `$${previousDonationsTotal}`
+              }
+              label="raised"
+            />
           </Grid>
           <Grid item xs={4}>
             <Statistic stat={donations.length} label="donations" />
@@ -70,7 +80,9 @@ const DonationCard = ({
             <Statistic stat={0} label="followers" />
           </Grid>
         </Grid>
-        {donations.length !== 0 && <DonationsTable donations={donations} />}
+        {donations.length !== 0 && (
+          <DonationsTable inCredits={inCredits} donations={donations} />
+        )}
         {donorUsername && (
           <Box
             display="flex"

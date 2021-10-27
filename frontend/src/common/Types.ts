@@ -24,5 +24,5 @@ export interface Product {
   description: string;
   picture: string;
   owner: string;
-  price: string;
+  price: number;
 }

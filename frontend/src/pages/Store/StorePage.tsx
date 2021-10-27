@@ -13,7 +13,7 @@ import Box from "@mui/material/Box";
 
 import { Product } from "common/Types";
 import Layout from "components/Layout";
-import ProductCard from "components/ProductCard";
+import ProductCard from "components/Card/Product";
 
 import handleResponseError from "utils/handleResponseError";
 import { decodeAuthToken } from "utils/authHelpers";
@@ -70,22 +70,15 @@ const StorePage = () => {
     setSearch(event.target.value);
   };
 
+  const sortProductsAscending = () =>
+    [...products].sort((p1, p2) => p1.price - p2.price);
+
   const handleSortAscending = () => {
-    const temp = [...products];
-    temp.sort(
-      (firstItem, secondItem) =>
-        parseFloat(firstItem.price) - parseFloat(secondItem.price)
-    );
-    setProducts(temp);
+    setProducts(sortProductsAscending());
   };
 
   const handleSortDescending = () => {
-    const temp = [...products];
-    temp.sort(
-      (firstItem, secondItem) =>
-        parseFloat(firstItem.price) - parseFloat(secondItem.price)
-    );
-    setProducts(temp.reverse());
+    setProducts(sortProductsAscending().reverse());
   };
 
   return (

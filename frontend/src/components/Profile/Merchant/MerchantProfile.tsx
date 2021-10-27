@@ -10,7 +10,7 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 
 import { Product } from "common/Types";
-import ProductCard from "components/ProductCard";
+import ProductCard from "components/Card/Product";
 import { decodeAuthToken } from "utils/authHelpers";
 import handleResponseError from "utils/handleResponseError";
 import Layout from "components/Layout";

@@ -13,9 +13,10 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { styled } from "@mui/material/styles";
 
 import { Product } from "common/Types";
-import { getAuthHeader } from "utils/authHelpers";
 import axiosBase from "utils/axiosBase";
+import { getAuthHeader } from "utils/authHelpers";
 import handleResponseError from "utils/handleResponseError";
+import { dollarToCredit } from "utils/creditDollarConvertion";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -75,7 +76,7 @@ const ProductCard = ({
           {name}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          {isMerchant ? `$${price}` : `${(+price / 5).toFixed(2)} credits`}
+          {isMerchant ? `$${price}` : `${dollarToCredit(price)} credits`}
         </Typography>
       </CardContent>
       <CardActions disableSpacing>

@@ -6,7 +6,7 @@ import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 
 import Layout from "components/Layout";
-import YouthCard from "components/YouthCard";
+import YouthCard from "components/Card/Youth";
 
 import axiosBase from "utils/axiosBase";
 import handleResponseError from "utils/handleResponseError";
