@@ -67,7 +67,7 @@
 
     Your Mark: _
 
-  - Prioritized	(max 2 marks)
+  - Prioritized (max 2 marks)
     - 2 marks = all stories in Jira Backlog are prioritized in the order which matches the priority of their associated milestones
     - 1 mark  = two or more stories in Jira Backlog not are prioritized in the order which matches the priority of their associated milestones]
     - 0 marks = the majority of stories in Jira Backlog appear to be not prioritized in the order which matches the priority of their associated milestones
@@ -207,36 +207,46 @@ Tracking on Jira Total Mark: __ / 24
 ---
 
 ## Documentation (max 1 mark)
-	- 1 mark = documentation is updated, is concise & informative for contributors
+  - 1 mark = documentation is updated, is concise & informative for contributors
   - 0 marks = documentation has not been updated or is unclear & not maintained properly
    
   Your Mark: __ / 1
 
 ---
 
-## Sprint Demo (Max 10 marks) 
+## Sprint Demo (Max 14 marks) 
   - Attendance (max 2 marks)
     - 2 marks = full team is present
     - 1 mark = one member is not present
     - 0 marks = more than one member is not present
 
-    Your Mark: 2 marks
+    Your mark: 2
   
-  - Working software (max 8 marks)  
+  - Working software (max 2 marks)
     - 8 marks = features presented work flawlessly
-    - 1 mark removed for each error or missing records on Jira
+    - 1 mark removed for each bug/error identified or for missing records on Jira
 
-    Your Mark: 8 marks
+    Your mark: 8
 
-  Your Mark: 10 / 10
+  - Presentation (max 2 marks)
+    - 2 marks = UI demonstrated is visually appealing and intuitive for users
+    - 1 mark = one or more errors identified by the demo TA
+    - 0 marks = UI is visually unappealing
+
+    Your mark: 2
+
+  - Documentation (max 2 marks)
+
+  - 2 marks = documentation has been created for frontend and backend systems with great detail
+  - 1 mark = documentation has been created for frontend and backend systems with some errors
+  - 0 marks = documentation has not been created
+
+  Your mark: 2
+
+  Your Mark: 14 / 14
 
 ---
 
 ## Total Mark
 
-__ / 89
-
-
-
-
-Add a new game looks fully implemented
+__ / 93
