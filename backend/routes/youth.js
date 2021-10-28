@@ -3,6 +3,7 @@ import { StatusCodes } from "http-status-codes";
 
 import validateYouthSignup from "../middleware/signup/validateYouthSignup.js";
 import validateUserSignup from "../middleware/signup/validateUserSignup.js";
+import validateUpdateYouth from "../middleware/update/validateUpdateYouth.js";
 
 import { decodeUserToken, createUserToken } from "../utils/jwtHelpers.js";
 import { createTextMessage } from "../utils/defaultMessages.js";
@@ -150,6 +151,38 @@ router.post("/private", async (req, res) => {
     return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .send(createTextMessage("Error retrieving youth from database"));
+  }
+});
+
+// api/v1/user/youth/update
+router.use("/update", [verifyAuthHeader(userRoles.youth), validateUpdateYouth]);
+router.put("/update", async (req, res) => {
+  // get require JWT token that include youth username
+  const decoded = decodeUserToken(rep.headers.authorization);
+  const youthUsername = decoded.username;
+
+  // get require name, profile_picture, story, saving_plan
+  const name = req.body.name;
+  const profile_picture = req.body.profile_picture;
+  const story = req.body.story;
+  const saving_plan = req.body.saving_plan;
+
+  // find youth and update
+  try {
+    await Youth.findOneAndUpdate(
+      { username: youthUsername },
+      {
+        name: name,
+        profile_picture: profile_picture,
+        story: story,
+        saving_plan: saving_plan,
+      }
+    );
+    return res.send(createTextMessage("successfully update your profile"));
+  } catch (err) {
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .send(createTextMessage("Error update profile"));
   }
 });
 
