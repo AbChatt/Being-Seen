@@ -1,54 +1,41 @@
-import { Avatar, Button, TextField } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import { toast } from "react-toastify";
+
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
-
-import { Box } from "@mui/system";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import Avatar from "@mui/material/Avatar";
+import Box from "@mui/material/Box";
 
 import Layout from "components/Layout";
-import { useState, useEffect } from "react";
 import handleResponseError from "utils/handleResponseError";
 import { decodeAuthToken, getAuthHeader } from "utils/authHelpers";
 import axiosBase from "utils/axiosBase";
-import { toast } from "react-toastify";
 
 const YouthProfile = () => {
   const account = decodeAuthToken();
-  const username = account?.username;
   const [loading, setLoading] = useState(true);
-  const [youth, setYouth] = useState({
-    name: "",
-    username: "",
-    dob: "",
-    image: "",
-    savingPlan: "",
-    story: "",
-  });
+
   const [name, setName] = useState("");
-  const [pictureUrl, setPictureUrl] = useState("");
   const [story, setStory] = useState("");
   const [savingPlan, setSavingPlan] = useState("");
+  const [pictureUrl, setPictureUrl] = useState("");
+  const [userExists, setUserExists] = useState(false);
 
   useEffect(() => {
     axiosBase
       .get("/user/youth", {
         params: {
-          username: username,
+          username: account?.username,
         },
       })
       .then((response) => {
-        setYouth({
-          name: response.data.name,
-          username: response.data.username,
-          dob: response.data.dateOfBirth,
-          image: response.data.profilePicture,
-          savingPlan: response.data.savingPlan,
-          story: response.data.story,
-        });
         setName(response.data.name);
         setPictureUrl(response.data.profilePicture);
         setSavingPlan(response.data.savingPlan);
         setStory(response.data.story);
-        console.log(youth);
+        setUserExists(true);
       })
       .catch(({ response }) => {
         handleResponseError(response);
@@ -56,59 +43,42 @@ const YouthProfile = () => {
       .finally(() => {
         setLoading(false);
       });
-  }, []);
+  }, [account?.username]);
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.value) {
-      setName(event.target.value);
-    }
+    setName(event.target.value);
   };
 
   const handlePictureChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.value) {
-      setPictureUrl(event.target.value);
-      // setYouth({ ...youth, image: event.target.value });
-    }
+    setPictureUrl(event.target.value);
   };
 
   const handleStoryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.value) {
-      setStory(event.target.value);
-    }
+    setStory(event.target.value);
   };
 
   const handleSavingPlanChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    if (event.target.value) {
-      setSavingPlan(event.target.value);
-    }
+    setSavingPlan(event.target.value);
   };
 
   const handleUpdate = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log(name);
 
     axiosBase
       .put(
         "/user/youth/update",
         {
           name: name,
-          profile_picture: pictureUrl,
           story: story,
           saving_plan: savingPlan,
+          profile_picture: pictureUrl,
         },
         getAuthHeader()
       )
       .then((response) => {
         toast.success(response.data.message);
-        setYouth({
-          ...youth,
-          name: name,
-          image: pictureUrl,
-          story: story,
-          savingPlan: savingPlan,
-        });
       })
       .catch(({ response }) => {
         handleResponseError(response);
@@ -117,53 +87,55 @@ const YouthProfile = () => {
 
   return (
     <Layout title="Youth Profile" loading={loading}>
-      <Container maxWidth="xl" sx={{ py: 5 }}>
-        {youth ? (
+      <Container maxWidth="lg" sx={{ py: 5 }}>
+        {userExists ? (
           <Box
             noValidate
             component="form"
             onSubmit={handleUpdate}
-            sx={{ mt: 1 }}
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            mt={1}
           >
-            <Avatar src={youth.image} sx={{ width: 64, height: 64 }} />
-            <Typography mt={2} ml={2}>
-              Hello {youth.username}
+            <Avatar src={pictureUrl} sx={{ width: 96, height: 96 }} />
+            <Typography variant="h4" my={4}>
+              Hello {name}
             </Typography>
             <TextField
               autoFocus
-              // value={name}
-              label="name"
+              fullWidth
+              label="Name"
               margin="normal"
               onChange={handleNameChange}
-              placeholder={youth.name}
+              value={name}
             />
             {pictureUrl && (
               <TextField
                 fullWidth
-                // value={pictureUrl}
-                label="Profile Picture URL"
                 margin="normal"
+                label="Profile Picture URL"
                 onChange={handlePictureChange}
-                placeholder={youth.image}
+                value={pictureUrl}
               />
             )}
             <TextField
               fullWidth
-              label="story"
               multiline
               rows={4}
               margin="normal"
+              label="Story"
               onChange={handleStoryChange}
-              placeholder={youth.story}
+              value={story}
             />
             <TextField
               fullWidth
-              label="saving plan"
               multiline
               rows={4}
               margin="normal"
+              label="Saving Plan"
               onChange={handleSavingPlanChange}
-              placeholder={youth.savingPlan}
+              value={savingPlan}
             />
             <Button
               fullWidth
@@ -172,11 +144,11 @@ const YouthProfile = () => {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              UPDATE
+              Update Profile
             </Button>
           </Box>
         ) : (
-          <Typography variant="h3">Cannot find</Typography>
+          <Typography variant="h3">Cannot find {account?.username}</Typography>
         )}
       </Container>
     </Layout>
