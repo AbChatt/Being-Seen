@@ -158,7 +158,7 @@ router.post("/private", async (req, res) => {
 router.use("/update", [verifyAuthHeader(userRoles.youth), validateUpdateYouth]);
 router.put("/update", async (req, res) => {
   // get require JWT token that include youth username
-  const decoded = decodeUserToken(rep.headers.authorization);
+  const decoded = decodeUserToken(req.headers.authorization);
   const youthUsername = decoded.username;
 
   // get require name, profile_picture, story, saving_plan
