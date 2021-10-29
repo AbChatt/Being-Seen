@@ -50,6 +50,7 @@ router.post("/signup", async (req, res) => {
   }
 });
 
+// api/v1/user/merchant/upload
 router.use("/upload", [
   verifyAuthHeader(userRoles.merchant),
   validateProductUpload,
@@ -78,6 +79,7 @@ router.post("/upload", async (req, res) => {
   }
 });
 
+// api/v1/user/merchant/products
 router.get("/products", async (req, res) => {
   const parseRetrievedProducts = (product) => ({
     name: product.name,
@@ -121,17 +123,12 @@ router.get("/products", async (req, res) => {
   }
 });
 
+// api/v1/user/merchant/delete
 router.use("/delete", [
   verifyAuthHeader(userRoles.merchant),
   validateProductDelete,
 ]);
 router.post("/delete", async (req, res) => {
-  const retrieved = await Product.find({ name: req.body.product });
-  if (!retrieved) {
-    return res
-      .status(StatusCodes.NOT_FOUND)
-      .send(createTextMessage("Product does not exist"));
-  }
   try {
     await Product.deleteOne({ name: req.body.product });
     return res
