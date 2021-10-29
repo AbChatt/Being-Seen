@@ -63,6 +63,19 @@ const ProductCard = ({
       .catch(({ response }) => handleResponseError(response));
   };
 
+  const handleDelete = () => {
+    axiosBase
+      .post(
+        "/user/merchant/delete",
+        {
+          product: name,
+        },
+        getAuthHeader()
+      )
+      .then((response) => toast.success(response.data.message))
+      .catch(({ response }) => handleResponseError(response));
+  };
+
   return (
     <Card>
       <Avatar
@@ -85,7 +98,12 @@ const ProductCard = ({
             <Button size="small" variant="contained" sx={{ mr: 1 }}>
               Edit
             </Button>
-            <Button size="small" variant="contained" color="error">
+            <Button
+              size="small"
+              variant="contained"
+              color="error"
+              onClick={handleDelete}
+            >
               Delete
             </Button>
           </>
