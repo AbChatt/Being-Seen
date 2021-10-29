@@ -16,7 +16,6 @@ import axiosBase from "utils/axiosBase";
 const YouthProfile = () => {
   const account = decodeAuthToken();
   const [loading, setLoading] = useState(true);
-  const [update, setUpdate] = useState(false);
 
   const [oldName, setOldName] = useState("");
   const [name, setName] = useState("");
@@ -46,7 +45,7 @@ const YouthProfile = () => {
       .finally(() => {
         setLoading(false);
       });
-  }, [account?.username, update]);
+  }, [account?.username]);
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value);
@@ -82,11 +81,10 @@ const YouthProfile = () => {
       )
       .then((response) => {
         toast.success(response.data.message);
-        setUpdate(!update);
+        setOldName(name);
       })
       .catch(({ response }) => {
         handleResponseError(response);
-        setUpdate(!update);
       });
   };
 
