@@ -5,6 +5,7 @@ import verifyAuthHeader from "../middleware/security/verifyAuthHeader.js";
 import validateUserSignup from "../middleware/signup/validateUserSignup.js";
 import validateMerchantSignup from "../middleware/signup/validateMerchantSignup.js";
 import validateProductUpload from "../middleware/upload/validateProductUpload.js";
+import validateProductDelete from "../middleware/delete/validateProductDelete.js";
 
 import { createUserToken, decodeUserToken } from "../utils/jwtHelpers.js";
 import { createTextMessage } from "../utils/defaultMessages.js";
@@ -117,6 +118,30 @@ router.get("/products", async (req, res) => {
     return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .send(createTextMessage("Error retrieving products from database"));
+  }
+});
+
+router.use("/delete", [
+  verifyAuthHeader(userRoles.merchant),
+  validateProductDelete,
+]);
+router.post("/delete", async (req, res) => {
+  const retrieved = await Product.find({ name: req.body.product });
+  if (!retrieved) {
+    return res
+      .status(StatusCodes.NOT_FOUND)
+      .send(createTextMessage("Product does not exist"));
+  }
+  try {
+    await Product.deleteOne({ name: req.body.product });
+    return res
+      .status(StatusCodes.OK)
+      .send(createTextMessage("Product successfully deleted"));
+  } catch (err) {
+    console.log(err);
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .send(createTextMessage("Error deleting product from database"));
   }
 });
 
