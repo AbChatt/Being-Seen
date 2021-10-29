@@ -5,6 +5,7 @@ import verifyAuthHeader from "../middleware/security/verifyAuthHeader.js";
 import validateUserSignup from "../middleware/signup/validateUserSignup.js";
 import validateMerchantSignup from "../middleware/signup/validateMerchantSignup.js";
 import validateProductUpload from "../middleware/upload/validateProductUpload.js";
+import validateProductDelete from "../middleware/delete/validateProductDelete.js";
 
 import { createUserToken, decodeUserToken } from "../utils/jwtHelpers.js";
 import { createTextMessage } from "../utils/defaultMessages.js";
@@ -49,6 +50,7 @@ router.post("/signup", async (req, res) => {
   }
 });
 
+// api/v1/user/merchant/upload
 router.use("/upload", [
   verifyAuthHeader(userRoles.merchant),
   validateProductUpload,
@@ -77,6 +79,7 @@ router.post("/upload", async (req, res) => {
   }
 });
 
+// api/v1/user/merchant/products
 router.get("/products", async (req, res) => {
   const parseRetrievedProducts = (product) => ({
     name: product.name,
@@ -117,6 +120,25 @@ router.get("/products", async (req, res) => {
     return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .send(createTextMessage("Error retrieving products from database"));
+  }
+});
+
+// api/v1/user/merchant/delete
+router.use("/delete", [
+  verifyAuthHeader(userRoles.merchant),
+  validateProductDelete,
+]);
+router.post("/delete", async (req, res) => {
+  try {
+    await Product.deleteOne({ name: req.body.product });
+    return res
+      .status(StatusCodes.OK)
+      .send(createTextMessage("Product successfully deleted"));
+  } catch (err) {
+    console.log(err);
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .send(createTextMessage("Error deleting product from database"));
   }
 });
 
