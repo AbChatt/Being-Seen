@@ -35,6 +35,7 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 
 interface ProductCardProps extends Product {
   isMerchant?: boolean;
+  onDelete?: any;
 }
 
 const ProductCard = ({
@@ -43,6 +44,7 @@ const ProductCard = ({
   picture,
   price,
   isMerchant,
+  onDelete,
 }: ProductCardProps) => {
   const [expanded, setExpanded] = useState(false);
 
@@ -85,7 +87,12 @@ const ProductCard = ({
             <Button size="small" variant="contained" sx={{ mr: 1 }}>
               Edit
             </Button>
-            <Button size="small" variant="contained" color="error">
+            <Button
+              size="small"
+              variant="contained"
+              color="error"
+              onClick={() => onDelete(name)}
+            >
               Delete
             </Button>
           </>
