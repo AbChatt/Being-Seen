@@ -16,7 +16,9 @@ import axiosBase from "utils/axiosBase";
 const YouthProfile = () => {
   const account = decodeAuthToken();
   const [loading, setLoading] = useState(true);
+  const [update, setUpdate] = useState(false);
 
+  const [oldName, setOldName] = useState("");
   const [name, setName] = useState("");
   const [story, setStory] = useState("");
   const [savingPlan, setSavingPlan] = useState("");
@@ -31,6 +33,7 @@ const YouthProfile = () => {
         },
       })
       .then((response) => {
+        setOldName(response.data.name);
         setName(response.data.name);
         setPictureUrl(response.data.profilePicture);
         setSavingPlan(response.data.savingPlan);
@@ -43,7 +46,7 @@ const YouthProfile = () => {
       .finally(() => {
         setLoading(false);
       });
-  }, [account?.username]);
+  }, [account?.username, update]);
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value);
@@ -79,9 +82,11 @@ const YouthProfile = () => {
       )
       .then((response) => {
         toast.success(response.data.message);
+        setUpdate(!update);
       })
       .catch(({ response }) => {
         handleResponseError(response);
+        setUpdate(!update);
       });
   };
 
@@ -100,7 +105,7 @@ const YouthProfile = () => {
           >
             <Avatar src={pictureUrl} sx={{ width: 96, height: 96 }} />
             <Typography variant="h4" my={4}>
-              Hello {name}
+              Hello {oldName}
             </Typography>
             <TextField
               autoFocus
@@ -110,15 +115,14 @@ const YouthProfile = () => {
               onChange={handleNameChange}
               value={name}
             />
-            {pictureUrl && (
-              <TextField
-                fullWidth
-                margin="normal"
-                label="Profile Picture URL"
-                onChange={handlePictureChange}
-                value={pictureUrl}
-              />
-            )}
+            <TextField
+              autoFocus
+              fullWidth
+              margin="normal"
+              label="Profile Picture URL"
+              onChange={handlePictureChange}
+              value={pictureUrl}
+            />
             <TextField
               fullWidth
               multiline

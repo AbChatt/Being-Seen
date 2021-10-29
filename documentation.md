@@ -189,3 +189,15 @@
 - `200`: request was successful and purchase was successful.
 - `400`: bad request due to not enough credits in the youth account, or does not contain the required fields, etc.
 - `500`: unknown internal server error.
+
+### `PUT /api/v1/user/youth/update`: update youth endpoint
+
+**Description**: This is the update youth profile endpoint. <br />
+**Request Fields**: Request must pass name (cannot be empty), profile_picture, story, and saving_plan. <br />
+**Authentication**: No authentication required. <br />
+**Authorization**: Requests must pass their JWT token as an `Authorization` header (bearer format is preferable). <br />
+**Responses**:
+
+- `202`: request was successful and a successful message was sent back.
+- `404`: provided empty youth name
+- `500`: unknown internal server error.
