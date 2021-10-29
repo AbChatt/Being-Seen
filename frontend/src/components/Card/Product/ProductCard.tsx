@@ -35,6 +35,7 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 
 interface ProductCardProps extends Product {
   isMerchant?: boolean;
+  onDelete?: any;
 }
 
 const ProductCard = ({
@@ -43,6 +44,7 @@ const ProductCard = ({
   picture,
   price,
   isMerchant,
+  onDelete,
 }: ProductCardProps) => {
   const [expanded, setExpanded] = useState(false);
 
@@ -54,19 +56,6 @@ const ProductCard = ({
     axiosBase
       .post(
         "/payment/purchase",
-        {
-          product: name,
-        },
-        getAuthHeader()
-      )
-      .then((response) => toast.success(response.data.message))
-      .catch(({ response }) => handleResponseError(response));
-  };
-
-  const handleDelete = () => {
-    axiosBase
-      .post(
-        "/user/merchant/delete",
         {
           product: name,
         },
@@ -102,7 +91,7 @@ const ProductCard = ({
               size="small"
               variant="contained"
               color="error"
-              onClick={handleDelete}
+              onClick={() => onDelete(name)}
             >
               Delete
             </Button>

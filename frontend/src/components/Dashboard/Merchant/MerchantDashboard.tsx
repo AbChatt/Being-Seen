@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
@@ -13,6 +14,7 @@ import ProductCard from "components/Card/Product";
 import { decodeAuthToken } from "utils/authHelpers";
 import handleResponseError from "utils/handleResponseError";
 import Layout from "components/Layout";
+import { getAuthHeader } from "utils/authHelpers";
 
 const MerchantDashboard = () => {
   const account = decodeAuthToken();
@@ -45,6 +47,26 @@ const MerchantDashboard = () => {
       });
   }, [account?.username]);
 
+  const handleDelete = (name: string) => {
+    axiosBase
+      .post(
+        "/user/merchant/delete",
+        {
+          product: name,
+        },
+        getAuthHeader()
+      )
+      .then((response) => {
+        toast.success(response.data.message);
+        setProducts(
+          products.filter((product) => {
+            return product.name !== name;
+          })
+        );
+      })
+      .catch(({ response }) => handleResponseError(response));
+  };
+
   return (
     <Layout title="Merchant Dashboard" loading={loading}>
       <Container maxWidth="xl" sx={{ py: 5 }}>
@@ -63,7 +85,7 @@ const MerchantDashboard = () => {
           <Grid container spacing={2}>
             {products.map((product, idx) => (
               <Grid key={`p-${idx}`} item xs={12} sm={6} md={4} lg={3} xl={2}>
-                <ProductCard {...product} isMerchant />
+                <ProductCard {...product} isMerchant onDelete={handleDelete} />
               </Grid>
             ))}
           </Grid>
