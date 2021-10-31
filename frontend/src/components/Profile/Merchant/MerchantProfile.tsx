@@ -15,6 +15,7 @@ import axiosBase from "utils/axiosBase";
 
 const MerchantProfile = () => {
   const account = decodeAuthToken();
+  console.log(account?.username);
   const [loading, setLoading] = useState(true);
 
   const [name, setName] = useState("");
@@ -22,21 +23,22 @@ const MerchantProfile = () => {
   const [location, setLocation] = useState("");
   const [pictureUrl, setPictureUrl] = useState("");
   const [email, setEmail] = useState("");
+  const [update, setUpdate] = useState(false);
   const [userExists, setUserExists] = useState(false);
 
   useEffect(() => {
     axiosBase
       .get("/user/merchant", {
         params: {
-          username: account?.username,
+          name: account?.username,
         },
       })
       .then((response) => {
-        setOldName(response.data.name);
         setName(response.data.name);
-        setPictureUrl(response.data.profilePicture);
-        setSavingPlan(response.data.savingPlan);
-        setStory(response.data.story);
+        setPictureUrl(response.data.profile_picture);
+        setLocation(response.data.location);
+        setStoreName(response.data.store_name);
+        setEmail(response.data.email);
         setUserExists(true);
       })
       .catch(({ response }) => {
@@ -45,7 +47,7 @@ const MerchantProfile = () => {
       .finally(() => {
         setLoading(false);
       });
-  }, [account?.username]);
+  }, [account?.username, update]);
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value);
@@ -55,14 +57,18 @@ const MerchantProfile = () => {
     setPictureUrl(event.target.value);
   };
 
-  const handleStoryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setStory(event.target.value);
-  };
-
-  const handleSavingPlanChange = (
+  const handleStoreNameChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setSavingPlan(event.target.value);
+    setStoreName(event.target.value);
+  };
+
+  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(event.target.value);
+  };
+
+  const handleLocationChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setLocation(event.target.value);
   };
 
   const handleUpdate = (event: React.FormEvent<HTMLFormElement>) => {
@@ -70,26 +76,28 @@ const MerchantProfile = () => {
 
     axiosBase
       .put(
-        "/user/youth/update",
+        "/user/merchant/update",
         {
           name: name,
-          story: story,
-          saving_plan: savingPlan,
+          store_name: storeName,
+          location: location,
           profile_picture: pictureUrl,
+          email: email,
         },
         getAuthHeader()
       )
       .then((response) => {
         toast.success(response.data.message);
-        setOldName(name);
+        setUpdate(!update);
       })
       .catch(({ response }) => {
         handleResponseError(response);
+        setUpdate(!update);
       });
   };
 
   return (
-    <Layout title="Youth Profile" loading={loading}>
+    <Layout title="Merchant Profile" loading={loading}>
       <Container maxWidth="lg" sx={{ py: 5 }}>
         {userExists ? (
           <Box
@@ -103,7 +111,7 @@ const MerchantProfile = () => {
           >
             <Avatar src={pictureUrl} sx={{ width: 96, height: 96 }} />
             <Typography variant="h4" my={4}>
-              Hello {oldName}
+              Hello {name}
             </Typography>
             <TextField
               autoFocus
@@ -126,18 +134,27 @@ const MerchantProfile = () => {
               multiline
               rows={4}
               margin="normal"
-              label="Story"
-              onChange={handleStoryChange}
-              value={story}
+              label="store name"
+              onChange={handleStoreNameChange}
+              value={storeName}
             />
             <TextField
               fullWidth
               multiline
               rows={4}
               margin="normal"
-              label="Saving Plan"
-              onChange={handleSavingPlanChange}
-              value={savingPlan}
+              label="Email"
+              onChange={handleEmailChange}
+              value={email}
+            />
+            <TextField
+              fullWidth
+              multiline
+              rows={4}
+              margin="normal"
+              label="location"
+              onChange={handleLocationChange}
+              value={location}
             />
             <Button
               fullWidth

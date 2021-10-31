@@ -176,7 +176,7 @@ router.put("/update", async (req, res) => {
 // api/v1/user/merchant
 router.get("/", async (req, res) => {
   // check if merchant name is given
-  if (!req.body.name) {
+  if (!req.query.name) {
     return res
       .status(StatusCodes.BAD_REQUEST)
       .send(createTextMessage("no username is given"));
@@ -184,7 +184,7 @@ router.get("/", async (req, res) => {
 
   if (
     !(await User.exists({
-      username: req.body.name,
+      username: req.query.name,
       role: userRoles.merchant,
     }))
   ) {
@@ -195,7 +195,7 @@ router.get("/", async (req, res) => {
 
   try {
     const retrievedMerchant = await Merchant.findOne({
-      username: req.body.name,
+      username: req.query.name,
     });
     return res.send(retrievedMerchant);
   } catch (err) {
