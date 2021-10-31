@@ -173,4 +173,37 @@ router.put("/update", async (req, res) => {
   }
 });
 
+// api/v1/user/merchant
+router.get("/", async (req, res) => {
+  // check if merchant name is given
+  if (!req.body.name) {
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .send(createTextMessage("no username is given"));
+  }
+
+  if (
+    !(await User.exists({
+      username: req.body.name,
+      role: userRoles.merchant,
+    }))
+  ) {
+    return res
+      .status(StatusCodes.NOT_FOUND)
+      .send(createTextMessage("Cannot find given merchant"));
+  }
+
+  try {
+    const retrievedMerchant = await Merchant.findOne({
+      username: req.body.name,
+    });
+    return res.send(retrievedMerchant);
+  } catch (err) {
+    console.log(err);
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .send(createTextMessage("Error retrieving merchant from database"));
+  }
+});
+
 export default router;
