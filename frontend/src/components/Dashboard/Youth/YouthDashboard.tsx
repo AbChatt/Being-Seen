@@ -42,9 +42,13 @@ const YouthDashboard = () => {
       });
   }, [account?.username]);
 
+  const shareUrl = encodeURI(
+    document.location.host + "/u/" + account?.username
+  );
+
   return (
     <Layout title="Youth Dashboard" loading={loading}>
-      <ShareButtons shareUrl="" />
+      <ShareButtons shareUrl={shareUrl} />
       <Container maxWidth="xl" sx={{ py: 5, ml: 9 }}>
         {youth ? (
           <>
