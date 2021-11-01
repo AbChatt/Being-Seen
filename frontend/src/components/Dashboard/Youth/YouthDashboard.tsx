@@ -12,6 +12,7 @@ import handleResponseError from "utils/handleResponseError";
 import DonationCard from "components/Card/Donation";
 import axiosBase from "utils/axiosBase";
 import Layout from "components/Layout";
+import ShareButtons from "components/ShareButtons";
 
 const YouthDashboard = () => {
   const account = decodeAuthToken();
@@ -43,7 +44,8 @@ const YouthDashboard = () => {
 
   return (
     <Layout title="Youth Dashboard" loading={loading}>
-      <Container maxWidth="xl" sx={{ py: 5 }}>
+      <ShareButtons shareUrl="" />
+      <Container maxWidth="xl" sx={{ py: 5, ml: 9 }}>
         {youth ? (
           <>
             <Box
