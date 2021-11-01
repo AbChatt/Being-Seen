@@ -23,7 +23,7 @@ const MerchantProfile = () => {
   const [location, setLocation] = useState("");
   const [pictureUrl, setPictureUrl] = useState("");
   const [email, setEmail] = useState("");
-  const [update, setUpdate] = useState(false);
+  const [oldName, setOldName] = useState("");
   const [userExists, setUserExists] = useState(false);
 
   useEffect(() => {
@@ -35,6 +35,7 @@ const MerchantProfile = () => {
       })
       .then((response) => {
         setName(response.data.name);
+        setOldName(response.data.name);
         setPictureUrl(response.data.profile_picture);
         setLocation(response.data.location);
         setStoreName(response.data.store_name);
@@ -47,7 +48,7 @@ const MerchantProfile = () => {
       .finally(() => {
         setLoading(false);
       });
-  }, [account?.username, update]);
+  }, [account?.username]);
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value);
@@ -88,11 +89,10 @@ const MerchantProfile = () => {
       )
       .then((response) => {
         toast.success(response.data.message);
-        setUpdate(!update);
+        setOldName(name);
       })
       .catch(({ response }) => {
         handleResponseError(response);
-        setUpdate(!update);
       });
   };
 
@@ -111,7 +111,7 @@ const MerchantProfile = () => {
           >
             <Avatar src={pictureUrl} sx={{ width: 96, height: 96 }} />
             <Typography variant="h4" my={4}>
-              Hello {name}
+              Hello {oldName}
             </Typography>
             <TextField
               autoFocus
