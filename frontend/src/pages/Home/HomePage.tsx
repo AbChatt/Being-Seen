@@ -49,7 +49,10 @@ const HomePage = () => {
   useEffect(() => {
     setRenderedYouths(
       youths.filter((youth) => {
-        return youth.name.toLowerCase().includes(search.toLowerCase());
+        return (
+          youth.username.toLowerCase().includes(search.toLowerCase()) ||
+          youth.name.toLowerCase().includes(search.toLowerCase())
+        );
       })
     );
   }, [youths, search]);
@@ -61,39 +64,37 @@ const HomePage = () => {
   return (
     <Layout title="Home" loading={loading}>
       <Container maxWidth="xl" sx={{ py: 5 }}>
-        <Box mb={3}>
-          <Typography variant="h4" align="center" sx={{ mb: 5 }}>
-            Homeless Youths
-          </Typography>
-          <Box display="flex" alignItems="flex-end" mt={3} mb={3}>
-            <SearchIcon sx={{ mr: 1, my: 0.5 }} />
-            <TextField
-              label="Search"
-              variant="standard"
-              value={search}
-              onChange={handleSearchChange}
-            />
-          </Box>
-          {renderedYouths.length ? (
-            <Grid container spacing={2}>
-              {renderedYouths.map((youth, idx) => (
-                <Grid
-                  key={`youth-${idx}`}
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  xl={2}
-                >
-                  <YouthCard {...youth} />
-                </Grid>
-              ))}
-            </Grid>
-          ) : (
-            <Typography>Sorry, no youths found under this name</Typography>
-          )}
+        <Typography variant="h4" align="center" sx={{ mb: 5 }}>
+          Homeless Youths
+        </Typography>
+        <Box display="flex" alignItems="flex-end" mt={3} mb={3}>
+          <SearchIcon sx={{ mr: 1, my: 0.5 }} />
+          <TextField
+            label="Search"
+            variant="standard"
+            value={search}
+            onChange={handleSearchChange}
+          />
         </Box>
+        {renderedYouths.length ? (
+          <Grid container spacing={2}>
+            {renderedYouths.map((youth, idx) => (
+              <Grid
+                key={`youth-${idx}`}
+                item
+                xs={12}
+                sm={6}
+                md={4}
+                lg={3}
+                xl={2}
+              >
+                <YouthCard {...youth} />
+              </Grid>
+            ))}
+          </Grid>
+        ) : (
+          <Typography>Sorry, no youths found under this name</Typography>
+        )}
       </Container>
     </Layout>
   );
