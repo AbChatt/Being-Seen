@@ -6,6 +6,7 @@ import validateUserSignup from "../middleware/signup/validateUserSignup.js";
 import validateMerchantSignup from "../middleware/signup/validateMerchantSignup.js";
 import validateProductUpload from "../middleware/upload/validateProductUpload.js";
 import validateProductDelete from "../middleware/delete/validateProductDelete.js";
+import validateUpdateMerchant from "../middleware/update/validateUpdateMerchant.js";
 
 import { createUserToken, decodeUserToken } from "../utils/jwtHelpers.js";
 import { createTextMessage } from "../utils/defaultMessages.js";
@@ -139,6 +140,69 @@ router.post("/delete", async (req, res) => {
     return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .send(createTextMessage("Error deleting product from database"));
+  }
+});
+
+// api/v1/user/merchant/update
+router.use("/update", [
+  verifyAuthHeader(userRoles.merchant),
+  validateUpdateMerchant,
+]);
+router.put("/update", async (req, res) => {
+  // Get require JWT token that include merchant username
+  const decoded = decodeUserToken(req.headers.authorization);
+  const merchantUsername = decoded.username;
+
+  try {
+    // Find a merchant and update them
+    await Merchant.findOneAndUpdate(
+      { username: merchantUsername },
+      {
+        name: req.body.name,
+        profile_picture: req.body.profile_picture || "#",
+        store_name: req.body.store_name,
+        location: req.body.location,
+        email: req.body.email,
+      }
+    );
+    return res.send(createTextMessage("Successfully updated your profile"));
+  } catch (err) {
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .send(createTextMessage("Error update profile"));
+  }
+});
+
+// api/v1/user/merchant
+router.get("/", async (req, res) => {
+  // check if merchant name is given
+  if (!req.query.name) {
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .send(createTextMessage("no username is given"));
+  }
+
+  if (
+    !(await User.exists({
+      username: req.query.name,
+      role: userRoles.merchant,
+    }))
+  ) {
+    return res
+      .status(StatusCodes.NOT_FOUND)
+      .send(createTextMessage("Cannot find given merchant"));
+  }
+
+  try {
+    const retrievedMerchant = await Merchant.findOne({
+      username: req.query.name,
+    });
+    return res.send(retrievedMerchant);
+  } catch (err) {
+    console.log(err);
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .send(createTextMessage("Error retrieving merchant from database"));
   }
 });
 
