@@ -49,7 +49,7 @@ const YouthDashboard = () => {
   return (
     <Layout title="Youth Dashboard" loading={loading}>
       <ShareButtons shareUrl={shareUrl} />
-      <Container maxWidth="xl" sx={{ py: 5, ml: 9 }}>
+      <Container maxWidth="xl" sx={{ py: 5 }}>
         {youth ? (
           <>
             <Box
