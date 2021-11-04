@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 
 import Button from "@mui/material/Button";
@@ -20,6 +20,7 @@ const MerchantDashboard = () => {
   const account = decodeAuthToken();
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState<Product[]>([]);
+  const history = useHistory();
 
   useEffect(() => {
     axiosBase
@@ -67,6 +68,10 @@ const MerchantDashboard = () => {
       .catch(({ response }) => handleResponseError(response));
   };
 
+  const handleEdit = (name: string) => {
+    history.push({ pathname: "/edit", state: name });
+  };
+
   return (
     <Layout title="Merchant Dashboard" loading={loading}>
       <Container maxWidth="xl" sx={{ py: 5 }}>
@@ -85,7 +90,12 @@ const MerchantDashboard = () => {
           <Grid container spacing={2}>
             {products.map((product, idx) => (
               <Grid key={`p-${idx}`} item xs={12} sm={6} md={4} lg={3} xl={2}>
-                <ProductCard {...product} isMerchant onDelete={handleDelete} />
+                <ProductCard
+                  {...product}
+                  isMerchant
+                  onDelete={handleDelete}
+                  onEdit={handleEdit}
+                />
               </Grid>
             ))}
           </Grid>
