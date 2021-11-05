@@ -30,9 +30,9 @@ None
 
 1.  Create endpoint for edit youth schema (3 hours) (Shengsong)
 
-2.  Create frontend UI for youth to edit their profile (1hours) (Luowei)
+2.  Create frontend UI for youth to edit their profile (1hours) (Shengsong)
 
-3.  Connect backend to frontend for youth edit profile (2hours)(Luowei)
+3.  Connect backend to frontend for youth edit profile (2hours)(Shengsong)
 
 **TEA4-4**: As Mike (a homeless youth), I want to view donations that came in as credits so that I know how many credits I can use for further purchases.
 
