@@ -22,6 +22,15 @@ const validateProductUpdate = async (req, res, next) => {
     return res
       .status(StatusCodes.NOT_FOUND)
       .send(createTextMessage("Product does not exist"));
+  } else if (
+    req.body.name !== req.body.old_name &&
+    (await Product.exists({ name: req.body.name }))
+  ) {
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .send(
+        createTextMessage("Another product with the same name already exists")
+      );
   }
 
   // Validate product description
