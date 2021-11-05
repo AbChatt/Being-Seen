@@ -68,7 +68,8 @@ const EditPage = () => {
         getAuthHeader()
       )
       .then((response) => {
-        // On success, we show a success message
+        // On success, we redirect to dashboard and show a success message
+        history.push("/dashboard");
         toast.success(response.data.message);
       })
       .catch(({ response }) => {
