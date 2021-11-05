@@ -4,6 +4,7 @@ import { StatusCodes } from "http-status-codes";
 import validateDonorSignup from "../middleware/signup/validateDonorSignup.js";
 import validateUserSignup from "../middleware/signup/validateUserSignup.js";
 import verifyAuthHeader from "../middleware/security/verifyAuthHeader.js";
+import validateUpdateDonor from "../middleware/update/validateUpdateDonor.js";
 
 import { decodeUserToken, createUserToken } from "../utils/jwtHelpers.js";
 import { createTextMessage } from "../utils/defaultMessages.js";
@@ -86,7 +87,6 @@ const parseRetrievedDonor = async (retrievedDonor) => {
 router.use("/private", verifyAuthHeader(userRoles.donor));
 router.post("/private", async (req, res) => {
   const decoded = decodeUserToken(req.headers.authorization);
-
   try {
     const retrievedDonor = await Donor.findOne({ username: decoded.username });
     const parsedDonor = await parseRetrievedDonor(retrievedDonor);
@@ -96,6 +96,33 @@ router.post("/private", async (req, res) => {
     return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .send(createTextMessage("Error retrieving donor from database"));
+  }
+});
+
+// api/v1/user/donor/update
+router.use("/update", [verifyAuthHeader(userRoles.donor), validateUpdateDonor]);
+router.put("/update", async (req, res) => {
+  // Get require JWT token that include donor username
+  const decoded = decodeUserToken(req.headers.authorization);
+  const donorUsername = decoded.username;
+
+  try {
+    // Find a donor and update them
+    await Donor.findOneAndUpdate(
+      { username: donorUsername },
+      {
+        name: req.body.name,
+        organization: req.body.organization || "None",
+        profile_picture: req.body.profile_picture || "#",
+        display_name: Boolean(req.body.anonymize) ? "Anonymous" : req.body.name,
+        anonymize: Boolean(req.body.anonymize),
+      }
+    );
+    return res.send(createTextMessage("Successfully updated your profile"));
+  } catch (err) {
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .send(createTextMessage("Error update profile"));
   }
 });
 
