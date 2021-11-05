@@ -32,9 +32,9 @@
 - Users will have access to a link to `/signup` (in the header) if they are not logged in.
 - `POST` requests are used in order to securely transfer details to the backend `/api/v1/user/:user_type/signup` endpoint.
 - Error handling is done purely server side (for security) and toast notifications provide optimal user experience.
-- Successful signup will redirect users to their default page (donors -> `/`, youths -> `/store`, merchants -> `/profile`).
+- Successful signup will redirect users to their default page (donors -> `/`, youths -> `/store`, merchants -> `/dashboard`).
 
-### `/profile`: Profile page (NOT DONE FOR YOUTHS + DONORS)
+### `/profile`: Profile page
 
 **Description**: This is the profile page where all types of users will be able to edit details on their account. <br />
 **Authorization**: All logged in users are authorized to view this page (unregistered users are redirected to `/`). <br />
@@ -44,6 +44,16 @@
 - Users will be able to edit their respective profile information (e.g., youths may modify their story, saving plan, etc.).
 - Every user type will have a dynamically rendered page showing controls for their specific user type.
 - `POST` requests (or `PATCH` is also appropriate) will be used to send data to the backend.
+
+### `/dashboard`: Dashboard page (NOT DONE YET)
+
+**Description**: This is the dashboard page where all types of users will be able to access details regarding their accounts. <br />
+**Authorization**: All logged in users are authorized to view this page (unregistered users are redirected to `/`). <br />
+**Miscellaneous**:
+
+- Users will have access to a link to `/dashboard` (in the header) if they are logged in.
+- Users will be able to see an overview of their entire account and history (e.g., youths view their donations, merchants view their store, etc.)
+- Every user type will have a dynamically rendered page showing controls for their specific user type.
 
 ### `/store`: Store page
 
@@ -66,6 +76,18 @@
 - `POST` requests are used in order to securely transfer credentials to the backend `/api/v1/user/merchant/upload` endpoint.
 - Error handling is done purely server side (for security) and toast notifications provide optimal user experience.
 - Successful upload will redirect merchants to their profile.
+
+### `/edit`: Upload page
+
+**Description**: This is the edit page where merchants will be able to edit their products. <br />
+**Authorization**: Only merchant users are authorized to view this page (all other users are redirected to `/`). <br />
+**Miscellaneous**:
+
+- Merchants will be able to access this page by clicking `Edit` on a product card from their `/dashboard` page.
+- Details are filled in automatically and users can edit more details regarding that product.
+- `POST` requests are used in order to securely transfer credentials to the backend `/api/v1/user/merchant/update` endpoint.
+- Error handling is done purely server side (for security) and toast notifications provide optimal user experience.
+- Successful delete will remove product from frontend and backend.
 
 ### `/u/:username`: User page
 
@@ -175,7 +197,7 @@
 **Authorization**: Requests must pass their JWT token as an `Authorization` header (bearer format is preferable). <br />
 **Responses**:
 
-- `201`: request was successful and list of products is updated on profile page as well as store page.
+- `201`: request was successful and list of products is updated on dashboard page as well as store page.
 - `500`: unknown internal server error.
 
 ### `POST /api/v1/payment/purchase`: purchase product endpoint
