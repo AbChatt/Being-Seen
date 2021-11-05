@@ -29,11 +29,13 @@ const DonorProfile = () => {
 
   useEffect(() => {
     axiosBase
-      .get("/user/donor", {
+      .post("/user/donor/private", {
         params: {
           name: account?.username,
         },
-      })
+      },
+      getAuthHeader()
+      )
       .then((response) => {
         setName(response.data.name);
         setOldName(response.data.name);
@@ -64,7 +66,7 @@ const DonorProfile = () => {
       setStoreName(event.target.value);
     };
   */
-  const handleOrganzationChange = (
+  const handleOrganizationChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setOrganization(event.target.value);
@@ -131,7 +133,6 @@ const DonorProfile = () => {
               value={name}
             />
             <TextField
-              autoFocus
               fullWidth
               margin="normal"
               label="Profile Picture URL"
@@ -144,7 +145,7 @@ const DonorProfile = () => {
               rows={4}
               margin="normal"
               label="Organization"
-              onChange={handleOrganzationChange}
+              onChange={handleOrganizationChange}
               value={organization}
             />
             <FormControlLabel
