@@ -241,7 +241,7 @@ router.put("/products/update", async (req, res) => {
       {
         name: req.body.name,
         description: req.body.description,
-        profile_picture: req.body.picture || "#",
+        picture: req.body.picture || "#",
         store_owner_username: merchantUsername,
         price: (+req.body.price).toFixed(2),
       }
