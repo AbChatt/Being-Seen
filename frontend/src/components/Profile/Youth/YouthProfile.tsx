@@ -114,7 +114,6 @@ const YouthProfile = () => {
               value={name}
             />
             <TextField
-              autoFocus
               fullWidth
               margin="normal"
               label="Profile Picture URL"
