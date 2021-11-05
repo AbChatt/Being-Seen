@@ -101,7 +101,6 @@ router.post("/private", async (req, res) => {
 
 // api/v1/user/donor/update
 router.use("/update", [verifyAuthHeader(userRoles.donor), validateUpdateDonor]);
-
 router.put("/update", async (req, res) => {
   // Get require JWT token that include donor username
   const decoded = decodeUserToken(req.headers.authorization);
@@ -124,39 +123,6 @@ router.put("/update", async (req, res) => {
     return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .send(createTextMessage("Error update profile"));
-  }
-});
-
-// api/v1/user/donor
-router.get("/", async (req, res) => {
-  // check if donor name is given
-  if (!req.query.name) {
-    return res
-      .status(StatusCodes.BAD_REQUEST)
-      .send(createTextMessage("no username is given"));
-  }
-
-  if (
-    !(await User.exists({
-      username: req.query.name,
-      role: userRoles.donor,
-    }))
-  ) {
-    return res
-      .status(StatusCodes.NOT_FOUND)
-      .send(createTextMessage("Cannot find given donor"));
-  }
-
-  try {
-    const retrievedDonor = await Donor.findOne({
-      username: req.query.name,
-    });
-    return res.send(retrievedDonor);
-  } catch (err) {
-    console.log(err);
-    return res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .send(createTextMessage("Error retrieving donor from database"));
   }
 });
 
