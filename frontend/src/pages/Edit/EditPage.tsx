@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
+import { toast } from "react-toastify";
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -17,26 +18,49 @@ import axiosBase from "utils/axiosBase";
 
 // Render the dashboard page of the application. If a user is not logged in (or
 // is not a merchant), we redirect them to the homepage.
-const UploadPage = () => {
+const EditPage = () => {
   const history = useHistory();
   const account = decodeAuthToken();
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [pictureUrl, setPictureUrl] = useState("");
   const [description, setDescription] = useState("");
+  const [loading, setLoading] = useState(true);
 
   if (!account || account.role !== UserRoles.merchant) {
     history.push("/");
   }
 
-  // Sends a post request to backend API to signup a merchant
-  const handleUpload = (event: React.FormEvent<HTMLFormElement>) => {
+  useEffect(() => {
+    axiosBase
+      .get("/user/merchant/products", {
+        params: {
+          name: history.location.state,
+        },
+      })
+      .then((response) => {
+        setName(response.data.name);
+        setPictureUrl(response.data.picture);
+        setPrice(response.data.price);
+        setDescription(response.data.description);
+      })
+      .catch(({ response }) => {
+        handleResponseError(response);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [history.location.state]);
+
+  // Sends a post request to backend API to update product details
+  const handleEdit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     axiosBase
-      .post(
-        "/user/merchant/upload",
+      .put(
+        "/user/merchant/products/update",
         {
           name: name,
+          old_name: history.location.state,
           description: description,
           picture: pictureUrl,
           price: price,
@@ -44,9 +68,8 @@ const UploadPage = () => {
         getAuthHeader()
       )
       .then((response) => {
-        // On success, we redirect the merchant to their dashboard page
-        // to manage their store and items
-        history.push("/dashboard");
+        // On success, we show a success message
+        toast.success(response.data.message);
       })
       .catch(({ response }) => {
         handleResponseError(response);
@@ -70,12 +93,12 @@ const UploadPage = () => {
   };
 
   return (
-    <Layout title="Upload Page">
+    <Layout title="Edit Page" loading={loading}>
       <Container maxWidth="xl" sx={{ py: 5 }}>
         <Typography gutterBottom variant="h4">
-          Upload a new product
+          Edit product details
         </Typography>
-        <Box noValidate component="form" onSubmit={handleUpload} sx={{ mt: 1 }}>
+        <Box noValidate component="form" onSubmit={handleEdit} sx={{ mt: 1 }}>
           <TextField
             autoFocus
             required
@@ -98,7 +121,6 @@ const UploadPage = () => {
             fullWidth
             value={price}
             onChange={handlePriceChange}
-            autoComplete="price"
             label="Price"
             margin="normal"
             type="number"
@@ -122,7 +144,7 @@ const UploadPage = () => {
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
           >
-            Upload
+            Update product
           </Button>
         </Box>
       </Container>
@@ -130,4 +152,4 @@ const UploadPage = () => {
   );
 };
 
-export default UploadPage;
+export default EditPage;

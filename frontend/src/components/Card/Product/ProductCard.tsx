@@ -36,6 +36,7 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 interface ProductCardProps extends Product {
   isMerchant?: boolean;
   onDelete?: any;
+  onEdit?: any;
 }
 
 const ProductCard = ({
@@ -45,6 +46,7 @@ const ProductCard = ({
   price,
   isMerchant,
   onDelete,
+  onEdit,
 }: ProductCardProps) => {
   const [expanded, setExpanded] = useState(false);
 
@@ -84,7 +86,12 @@ const ProductCard = ({
       <CardActions disableSpacing>
         {isMerchant ? (
           <>
-            <Button size="small" variant="contained" sx={{ mr: 1 }}>
+            <Button
+              size="small"
+              variant="contained"
+              sx={{ mr: 1 }}
+              onClick={() => onEdit(name)}
+            >
               Edit
             </Button>
             <Button

@@ -15,6 +15,7 @@ import ProfilePage from "pages/Profile";
 import StorePage from "pages/Store";
 import UserPage from "pages/User";
 import UploadPage from "pages/Upload";
+import EditPage from "pages/Edit";
 
 const App = () => (
   <Router>
@@ -43,6 +44,9 @@ const App = () => (
       </Route>
       <Route exact path="/upload">
         <UploadPage />
+      </Route>
+      <Route exact path="/edit">
+        <EditPage />
       </Route>
       <Route path="*">
         <Redirect to="/" />

@@ -15,7 +15,6 @@ import axiosBase from "utils/axiosBase";
 
 const MerchantProfile = () => {
   const account = decodeAuthToken();
-  console.log(account?.username);
   const [loading, setLoading] = useState(true);
 
   const [name, setName] = useState("");
