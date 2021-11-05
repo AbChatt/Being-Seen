@@ -17,7 +17,6 @@ import axiosBase from "utils/axiosBase";
 
 const DonorProfile = () => {
   const account = decodeAuthToken();
-  console.log(account?.username);
   const [loading, setLoading] = useState(true);
 
   const [name, setName] = useState("");
@@ -29,15 +28,7 @@ const DonorProfile = () => {
 
   useEffect(() => {
     axiosBase
-      .post(
-        "/user/donor/private",
-        {
-          params: {
-            name: account?.username,
-          },
-        },
-        getAuthHeader()
-      )
+      .post("/user/donor/private", {}, getAuthHeader())
       .then((response) => {
         setName(response.data.name);
         setOldName(response.data.name);
