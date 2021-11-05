@@ -12,23 +12,6 @@ const validateUpdateDonor = async (req, res, next) => {
       .status(StatusCodes.BAD_REQUEST)
       .send(createTextMessage("Name field cannot be empty"));
   }
-
-  // Validate input organization
-
-  if (!req.body.organization) {
-    console.log(req.body.organization);
-    return res
-      .status(StatusCodes.BAD_REQUEST)
-      .send(createTextMessage("organzation field cannot be empty"));
-  }
-
-  // Validate pictureUrl
-  if (!req.body.profile_picture) {
-    return res
-      .status(StatusCodes.BAD_REQUEST)
-      .send(createTextMessage("profile picture field cannot be empty"));
-  }
-
   next();
 };
 
