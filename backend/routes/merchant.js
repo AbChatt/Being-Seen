@@ -7,6 +7,7 @@ import validateMerchantSignup from "../middleware/signup/validateMerchantSignup.
 import validateProductUpload from "../middleware/upload/validateProductUpload.js";
 import validateProductDelete from "../middleware/delete/validateProductDelete.js";
 import validateUpdateMerchant from "../middleware/update/validateUpdateMerchant.js";
+import validateProductUpdate from "../middleware/update/validateProductUpdate.js";
 
 import { createUserToken, decodeUserToken } from "../utils/jwtHelpers.js";
 import { createTextMessage } from "../utils/defaultMessages.js";
@@ -89,6 +90,23 @@ router.get("/products", async (req, res) => {
     owner: product.store_owner_username,
     price: product.price,
   });
+
+  // Request wants a specific product
+  if (req.query.name) {
+    try {
+      const retrievedProduct = await Product.findOne({
+        name: req.query.name,
+      });
+      const parsedProduct = parseRetrievedProducts(retrievedProduct);
+
+      return res.send(parsedProduct);
+    } catch (err) {
+      console.log(err);
+      return res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .send(createTextMessage("Error retrieving products from database"));
+    }
+  }
 
   // Request wants products from a specific merchant
   if (req.query.owner) {
@@ -203,6 +221,36 @@ router.get("/", async (req, res) => {
     return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .send(createTextMessage("Error retrieving merchant from database"));
+  }
+});
+
+// api/v1/user/merchant/products/update
+router.use("/products/update", [
+  verifyAuthHeader(userRoles.merchant),
+  validateProductUpdate,
+]);
+router.put("/products/update", async (req, res) => {
+  // Get require JWT token that include merchant username
+  const decoded = decodeUserToken(req.headers.authorization);
+  const merchantUsername = decoded.username;
+
+  try {
+    // Find product and update info
+    await Product.findOneAndUpdate(
+      { name: req.body.old_name },
+      {
+        name: req.body.name,
+        description: req.body.description,
+        profile_picture: req.body.picture || "#",
+        store_owner_username: merchantUsername,
+        price: (+req.body.price).toFixed(2),
+      }
+    );
+    return res.send(createTextMessage("Successfully updated product info"));
+  } catch (err) {
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .send(createTextMessage("Error updating product info"));
   }
 });
 
