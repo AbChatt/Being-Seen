@@ -5,9 +5,6 @@ import { createTextMessage } from "../../utils/defaultMessages.js";
 // Middleware to validate whether parameters associated with the validate
 // update endpoint (name) are present and valid
 const validateUpdateDonor = async (req, res, next) => {
-  console.log(req.body.name);
-  console.log(req.body.organization);
-
   // Validate input name
   if (!req.body.name) {
     console.log(req.body.name);
