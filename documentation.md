@@ -198,6 +198,78 @@
 **Authorization**: Requests must pass their JWT token as an `Authorization` header (bearer format is preferable). <br />
 **Responses**:
 
-- `202`: request was successful and a successful message was sent back.
-- `404`: provided empty youth name
+- `200`: request was successful and a successful message was sent back.
+- `404`: provided empty youth name.
+- `500`: unknown internal server error.
+
+### `POST /api/v1/user/youth/private`: get youth private information endpoint
+
+**Description**: This is the get youth private information endpoint. <br />
+**Request Fields**: Only authorization fields (detailed below) are required. <br />
+**Authentication**: No authentication required. <br />
+**Authorization**: Requests must pass their JWT token as an `Authorization` header (bearer format is preferable). <br />
+**Responses**:
+
+- `200`: request was successful and a successful message was sent back.
+- `500`: unknown internal server error.
+
+### `POST /api/v1/user/donor/private`: get donor information endpoint
+
+**Description**: This is the get donor information endpoint. <br />
+**Request Fields**: Only authorization fields (detailed below) are required. <br />
+**Authentication**: No authentication required. <br />
+**Authorization**: Requests must pass their JWT token as an `Authorization` header (bearer format is preferable). <br />
+**Responses**:
+
+- `200`: request was successful and a successful message was sent back.
+- `400`: bad request signal when request is malformed, does not contain the required fields, etc. (error sent as response)
+- `500`: unknown internal server error.
+
+### `PUT /api/v1/user/donor/update`: update donor endpoint
+
+**Description**: This is the update donor profile endpoint. <br />
+**Request Fields**: Request must pass name (cannot be empty), organization, profile_picture, and anonymize. <br />
+**Authentication**: No authentication required. <br />
+**Authorization**: Requests must pass their JWT token as an `Authorization` header (bearer format is preferable). <br />
+**Responses**:
+
+- `200`: request was successful and a successful message was sent back.
+- `400`: bad request signal when request is malformed, does not contain the required fields, etc. (error sent as response)
+- `500`: unknown internal server error.
+
+### `POST /api/v1/user/merchant/upload`: upload product endpoint
+
+**Description**: This is the upload product endpoint. <br />
+**Request Fields**: Request must pass name (cannot be empty), description (cannot be empty), price (cannot be empty), and picture. <br />
+**Authentication**: No authentication required. <br />
+**Authorization**: Requests must pass their JWT token as an `Authorization` header (bearer format is preferable). <br />
+**Responses**:
+
+- `200`: request was successful and a successful message was sent back.
+- `400`: bad request signal when request is malformed, does not contain the required fields, etc. (error sent as response)
+- `500`: unknown internal server error.
+
+### `POST /api/v1/user/merchant/delete`: delete product endpoint
+
+**Description**: This is the delete product endpoint. <br />
+**Request Fields**: Request must pass name (cannot be empty). <br />
+**Authentication**: No authentication required. <br />
+**Authorization**: Requests must pass their JWT token as an `Authorization` header (bearer format is preferable). <br />
+**Responses**:
+
+- `200`: request was successful and a successful message was sent back.
+- `400`: bad request signal when request is malformed, does not contain the required fields, etc. (error sent as response)
+- `500`: unknown internal server error.
+
+### `GET /api/v1/user/merchant`: get merchant details endpoint
+
+**Description**: This is the get merchant details endpoint. <br />
+**Request Fields**: Request must pass name (cannot be empty). <br />
+**Authentication**: No authentication required. <br />
+**Authorization**: No authorization is required. <br />
+**Responses**:
+
+- `200`: request was successful and details are sent back.
+- `400`: bad request signal when request is malformed, does not contain the required fields, etc. (error sent as response)
+- `404`: merchant does not exist. (error sent as response)
 - `500`: unknown internal server error.
