@@ -27,7 +27,7 @@ const EditPage = () => {
   const [description, setDescription] = useState("");
   const [loading, setLoading] = useState(true);
 
-  if (!account || !(account.role === UserRoles.merchant)) {
+  if (!account || account.role !== UserRoles.merchant) {
     history.push("/");
   }
 
@@ -121,7 +121,6 @@ const EditPage = () => {
             fullWidth
             value={price}
             onChange={handlePriceChange}
-            autoComplete="price"
             label="Price"
             margin="normal"
             type="number"

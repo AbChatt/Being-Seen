@@ -25,7 +25,7 @@ const UploadPage = () => {
   const [pictureUrl, setPictureUrl] = useState("");
   const [description, setDescription] = useState("");
 
-  if (!account || !(account.role === UserRoles.merchant)) {
+  if (!account || account.role !== UserRoles.merchant) {
     history.push("/");
   }
 
