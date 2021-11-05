@@ -29,12 +29,14 @@ const DonorProfile = () => {
 
   useEffect(() => {
     axiosBase
-      .post("/user/donor/private", {
-        params: {
-          name: account?.username,
+      .post(
+        "/user/donor/private",
+        {
+          params: {
+            name: account?.username,
+          },
         },
-      },
-      getAuthHeader()
+        getAuthHeader()
       )
       .then((response) => {
         setName(response.data.name);
@@ -59,27 +61,13 @@ const DonorProfile = () => {
   const handlePictureChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPictureUrl(event.target.value);
   };
-  /*
-    const handleStoreNameChange = (
-      event: React.ChangeEvent<HTMLInputElement>
-    ) => {
-      setStoreName(event.target.value);
-    };
-  */
+
   const handleOrganizationChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setOrganization(event.target.value);
   };
-  /*
-  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(event.target.value);
-  };
 
-  const handleLocationChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setLocation(event.target.value);
-  };
-*/
   const handleAnonymizeChange = (event: any, checked: boolean) => {
     setAnonymize(checked);
   };
@@ -108,7 +96,7 @@ const DonorProfile = () => {
   };
 
   return (
-    <Layout title="Merchant Profile" loading={loading}>
+    <Layout title="Donor Profile" loading={loading}>
       <Container maxWidth="lg" sx={{ py: 5 }}>
         {userExists ? (
           <Box
