@@ -10,10 +10,9 @@ import SvgIcon from "@mui/material/SvgIcon";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import UserIcon from "@mui/icons-material/Person";
-import { toast } from "react-toastify";
 
 import Layout from "components/Layout";
-import DonationCard from "components/DonationCard";
+import DonationCard from "components/Card/Donation";
 import { PublicYouth } from "common/Types";
 
 import UserRoles from "utils/UserRoles";
@@ -49,7 +48,7 @@ const UserPage = () => {
         });
       })
       .catch(({ response }) => {
-        handleResponseError(response, toast);
+        handleResponseError(response);
       })
       .finally(() => {
         setLoading(false);

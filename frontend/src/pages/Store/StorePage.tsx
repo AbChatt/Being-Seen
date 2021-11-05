@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { toast } from "react-toastify";
 
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
@@ -13,7 +12,7 @@ import Box from "@mui/material/Box";
 
 import { Product } from "common/Types";
 import Layout from "components/Layout";
-import ProductCard from "components/ProductCard";
+import ProductCard from "components/Card/Product";
 
 import handleResponseError from "utils/handleResponseError";
 import { decodeAuthToken } from "utils/authHelpers";
@@ -51,7 +50,7 @@ const StorePage = () => {
         setRenderedProducts(retrievedProducts);
       })
       .catch(({ response }) => {
-        handleResponseError(response, toast);
+        handleResponseError(response);
       })
       .finally(() => {
         setLoading(false);
@@ -70,22 +69,15 @@ const StorePage = () => {
     setSearch(event.target.value);
   };
 
+  const sortProductsAscending = () =>
+    [...products].sort((p1, p2) => p1.price - p2.price);
+
   const handleSortAscending = () => {
-    const temp = [...products];
-    temp.sort(
-      (firstItem, secondItem) =>
-        parseFloat(firstItem.price) - parseFloat(secondItem.price)
-    );
-    setProducts(temp);
+    setProducts(sortProductsAscending());
   };
 
   const handleSortDescending = () => {
-    const temp = [...products];
-    temp.sort(
-      (firstItem, secondItem) =>
-        parseFloat(firstItem.price) - parseFloat(secondItem.price)
-    );
-    setProducts(temp.reverse());
+    setProducts(sortProductsAscending().reverse());
   };
 
   return (

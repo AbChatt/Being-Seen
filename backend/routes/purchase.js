@@ -7,7 +7,10 @@ import client from "../utils/payPalClient.js";
 import { decodeUserToken } from "../utils/jwtHelpers.js";
 import { createTextMessage } from "../utils/defaultMessages.js";
 import { donationToCredit } from "../utils/creditConversion.js";
+import userRoles from "../utils/userRoles.js";
+
 import validatePurchase from "../middleware/payments/validatePurchase.js";
+import verifyAuthHeader from "../middleware/security/verifyAuthHeader.js";
 
 import Youth from "../models/Youth.js";
 import Product from "../models/Product.js";
@@ -16,7 +19,7 @@ import Merchant from "../models/Merchant.js";
 const router = express.Router();
 
 // api/v1/payment/purchase
-router.use("/", validatePurchase);
+router.use("/", [verifyAuthHeader(userRoles.youth), validatePurchase]);
 router.post("/", async (req, res) => {
   const decoded = decodeUserToken(req.headers.authorization);
   const youthUsername = decoded.username;
@@ -66,9 +69,10 @@ router.post("/", async (req, res) => {
       { username: youthUsername },
       {
         $set: {
-          credit_balance:
+          credit_balance: (
             retrievedYouth.credit_balance -
-            donationToCredit(retrievedProduct.price),
+            donationToCredit(retrievedProduct.price)
+          ).toFixed(2),
         },
       }
     );

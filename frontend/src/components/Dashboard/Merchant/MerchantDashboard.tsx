@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 
 import Button from "@mui/material/Button";
@@ -10,15 +10,17 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 
 import { Product } from "common/Types";
-import ProductCard from "components/ProductCard";
+import ProductCard from "components/Card/Product";
 import { decodeAuthToken } from "utils/authHelpers";
 import handleResponseError from "utils/handleResponseError";
 import Layout from "components/Layout";
+import { getAuthHeader } from "utils/authHelpers";
 
-const MerchantProfile = () => {
+const MerchantDashboard = () => {
   const account = decodeAuthToken();
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState<Product[]>([]);
+  const history = useHistory();
 
   useEffect(() => {
     axiosBase
@@ -39,15 +41,39 @@ const MerchantProfile = () => {
         );
       })
       .catch(({ response }) => {
-        handleResponseError(response, toast);
+        handleResponseError(response);
       })
       .finally(() => {
         setLoading(false);
       });
   }, [account?.username]);
 
+  const handleDelete = (name: string) => {
+    axiosBase
+      .post(
+        "/user/merchant/delete",
+        {
+          product: name,
+        },
+        getAuthHeader()
+      )
+      .then((response) => {
+        toast.success(response.data.message);
+        setProducts(
+          products.filter((product) => {
+            return product.name !== name;
+          })
+        );
+      })
+      .catch(({ response }) => handleResponseError(response));
+  };
+
+  const handleEdit = (name: string) => {
+    history.push({ pathname: "/edit", state: name });
+  };
+
   return (
-    <Layout title="Merchant Profile" loading={loading}>
+    <Layout title="Merchant Dashboard" loading={loading}>
       <Container maxWidth="xl" sx={{ py: 5 }}>
         <Box
           mb={3}
@@ -64,7 +90,12 @@ const MerchantProfile = () => {
           <Grid container spacing={2}>
             {products.map((product, idx) => (
               <Grid key={`p-${idx}`} item xs={12} sm={6} md={4} lg={3} xl={2}>
-                <ProductCard {...product} isMerchant />
+                <ProductCard
+                  {...product}
+                  isMerchant
+                  onDelete={handleDelete}
+                  onEdit={handleEdit}
+                />
               </Grid>
             ))}
           </Grid>
@@ -76,4 +107,4 @@ const MerchantProfile = () => {
   );
 };
 
-export default MerchantProfile;
+export default MerchantDashboard;

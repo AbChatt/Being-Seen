@@ -13,6 +13,7 @@ import DonationsTable from "components/DonationsTable";
 
 import axiosBase from "utils/axiosBase";
 import handleResponseError from "utils/handleResponseError";
+import { dollarToCredit } from "utils/creditDollarConvertion";
 import { ToggleButton, ToggleButtonGroup } from "@mui/material";
 
 interface StatisticProps {
@@ -31,15 +32,19 @@ const Statistic = ({ stat, label }: StatisticProps) => (
 );
 
 interface DonationCardProps {
+  inCredits?: boolean;
   donations: Donation[];
-  youthUsername: string;
+  youthUsername?: string;
   donorUsername?: string;
+  isDonating?: boolean;
 }
 
 const DonationCard = ({
+  inCredits,
   donations,
   youthUsername,
   donorUsername,
+  isDonating,
 }: DonationCardProps) => {
   const [donationAmount, setDonationAmount] = useState("5");
   const validDonationAmounts = ["5", "10", "25", "100"];
@@ -61,16 +66,28 @@ const DonationCard = ({
       <CardContent>
         <Grid container sx={{ mb: 2.5 }}>
           <Grid item xs={4}>
-            <Statistic stat={`$${previousDonationsTotal}`} label="raised" />
+            <Statistic
+              stat={
+                inCredits
+                  ? `${dollarToCredit(previousDonationsTotal)} CR`
+                  : `$${previousDonationsTotal}`
+              }
+              label={isDonating ? "donated" : "raised"}
+            />
           </Grid>
           <Grid item xs={4}>
             <Statistic stat={donations.length} label="donations" />
           </Grid>
           <Grid item xs={4}>
-            <Statistic stat={0} label="followers" />
+            <Statistic
+              stat={0}
+              label={isDonating ? "following" : "followers"}
+            />
           </Grid>
         </Grid>
-        {donations.length !== 0 && <DonationsTable donations={donations} />}
+        {donations.length !== 0 && (
+          <DonationsTable inCredits={inCredits} donations={donations} />
+        )}
         {donorUsername && (
           <Box
             display="flex"
@@ -100,16 +117,14 @@ const DonationCard = ({
                     donor: donorUsername,
                   })
                   .then((response) => response.data.message)
-                  .catch(({ response }) => handleResponseError(response, toast))
+                  .catch(({ response }) => handleResponseError(response))
               }
               onApprove={(data: any, actions: any) =>
                 actions.order.capture().then((details: { id: string }) => {
                   axiosBase
                     .post("/payment/donation/save", { orderId: details.id })
                     .then((response) => toast.success(response.data.message))
-                    .catch(({ response }) =>
-                      handleResponseError(response, toast)
-                    );
+                    .catch(({ response }) => handleResponseError(response));
                 })
               }
               options={{

@@ -9,15 +9,21 @@ import TableContainer from "@mui/material/TableContainer";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 
+import { dollarToCredit } from "utils/creditDollarConvertion";
 import { Donation } from "common/Types";
 
 interface DonationsTableProps {
+  inCredits?: boolean;
   donations: Donation[];
   maxHeight?: number;
 }
 
 // Renders a table showing a list of donations (donor, youth, amount, time)
-const DonationsTable = ({ donations, maxHeight }: DonationsTableProps) => {
+const DonationsTable = ({
+  inCredits,
+  donations,
+  maxHeight,
+}: DonationsTableProps) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
@@ -49,7 +55,11 @@ const DonationsTable = ({ donations, maxHeight }: DonationsTableProps) => {
                 <TableRow hover tabIndex={-1} key={`${row.donor}-${idx}`}>
                   <TableCell>{row.donor}</TableCell>
                   <TableCell>{row.youth}</TableCell>
-                  <TableCell>${row.amount}</TableCell>
+                  <TableCell>
+                    {inCredits
+                      ? `${dollarToCredit(row.amount)} CR`
+                      : `$${row.amount}`}
+                  </TableCell>
                   <TableCell>{row.date}</TableCell>
                 </TableRow>
               ))}

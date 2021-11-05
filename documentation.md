@@ -32,9 +32,9 @@
 - Users will have access to a link to `/signup` (in the header) if they are not logged in.
 - `POST` requests are used in order to securely transfer details to the backend `/api/v1/user/:user_type/signup` endpoint.
 - Error handling is done purely server side (for security) and toast notifications provide optimal user experience.
-- Successful signup will redirect users to their default page (donors -> `/`, youths -> `/store`, merchants -> `/profile`).
+- Successful signup will redirect users to their default page (donors -> `/`, youths -> `/store`, merchants -> `/dashboard`).
 
-### `/profile`: Profile page (NOT DONE FOR YOUTHS + DONORS)
+### `/profile`: Profile page
 
 **Description**: This is the profile page where all types of users will be able to edit details on their account. <br />
 **Authorization**: All logged in users are authorized to view this page (unregistered users are redirected to `/`). <br />
@@ -44,6 +44,16 @@
 - Users will be able to edit their respective profile information (e.g., youths may modify their story, saving plan, etc.).
 - Every user type will have a dynamically rendered page showing controls for their specific user type.
 - `POST` requests (or `PATCH` is also appropriate) will be used to send data to the backend.
+
+### `/dashboard`: Dashboard page (NOT DONE YET)
+
+**Description**: This is the dashboard page where all types of users will be able to access details regarding their accounts. <br />
+**Authorization**: All logged in users are authorized to view this page (unregistered users are redirected to `/`). <br />
+**Miscellaneous**:
+
+- Users will have access to a link to `/dashboard` (in the header) if they are logged in.
+- Users will be able to see an overview of their entire account and history (e.g., youths view their donations, merchants view their store, etc.)
+- Every user type will have a dynamically rendered page showing controls for their specific user type.
 
 ### `/store`: Store page
 
@@ -66,6 +76,18 @@
 - `POST` requests are used in order to securely transfer credentials to the backend `/api/v1/user/merchant/upload` endpoint.
 - Error handling is done purely server side (for security) and toast notifications provide optimal user experience.
 - Successful upload will redirect merchants to their profile.
+
+### `/edit`: Upload page
+
+**Description**: This is the edit page where merchants will be able to edit their products. <br />
+**Authorization**: Only merchant users are authorized to view this page (all other users are redirected to `/`). <br />
+**Miscellaneous**:
+
+- Merchants will be able to access this page by clicking `Edit` on a product card from their `/dashboard` page.
+- Details are filled in automatically and users can edit more details regarding that product.
+- `POST` requests are used in order to securely transfer credentials to the backend `/api/v1/user/merchant/update` endpoint.
+- Error handling is done purely server side (for security) and toast notifications provide optimal user experience.
+- Successful delete will remove product from frontend and backend.
 
 ### `/u/:username`: User page
 
@@ -175,7 +197,7 @@
 **Authorization**: Requests must pass their JWT token as an `Authorization` header (bearer format is preferable). <br />
 **Responses**:
 
-- `201`: request was successful and list of products is updated on profile page as well as store page.
+- `201`: request was successful and list of products is updated on dashboard page as well as store page.
 - `500`: unknown internal server error.
 
 ### `POST /api/v1/payment/purchase`: purchase product endpoint
@@ -188,4 +210,88 @@
 
 - `200`: request was successful and purchase was successful.
 - `400`: bad request due to not enough credits in the youth account, or does not contain the required fields, etc.
+- `500`: unknown internal server error.
+
+### `PUT /api/v1/user/youth/update`: update youth endpoint
+
+**Description**: This is the update youth profile endpoint. <br />
+**Request Fields**: Request must pass name (cannot be empty), profile_picture, story, and saving_plan. <br />
+**Authentication**: No authentication required. <br />
+**Authorization**: Requests must pass their JWT token as an `Authorization` header (bearer format is preferable). <br />
+**Responses**:
+
+- `200`: request was successful and a successful message was sent back.
+- `404`: provided empty youth name.
+- `500`: unknown internal server error.
+
+### `POST /api/v1/user/youth/private`: get youth private information endpoint
+
+**Description**: This is the get youth private information endpoint. <br />
+**Request Fields**: Only authorization fields (detailed below) are required. <br />
+**Authentication**: No authentication required. <br />
+**Authorization**: Requests must pass their JWT token as an `Authorization` header (bearer format is preferable). <br />
+**Responses**:
+
+- `200`: request was successful and a successful message was sent back.
+- `500`: unknown internal server error.
+
+### `POST /api/v1/user/donor/private`: get donor information endpoint
+
+**Description**: This is the get donor information endpoint. <br />
+**Request Fields**: Only authorization fields (detailed below) are required. <br />
+**Authentication**: No authentication required. <br />
+**Authorization**: Requests must pass their JWT token as an `Authorization` header (bearer format is preferable). <br />
+**Responses**:
+
+- `200`: request was successful and a successful message was sent back.
+- `400`: bad request signal when request is malformed, does not contain the required fields, etc. (error sent as response)
+- `500`: unknown internal server error.
+
+### `PUT /api/v1/user/donor/update`: update donor endpoint
+
+**Description**: This is the update donor profile endpoint. <br />
+**Request Fields**: Request must pass name (cannot be empty), organization, profile_picture, and anonymize. <br />
+**Authentication**: No authentication required. <br />
+**Authorization**: Requests must pass their JWT token as an `Authorization` header (bearer format is preferable). <br />
+**Responses**:
+
+- `200`: request was successful and a successful message was sent back.
+- `400`: bad request signal when request is malformed, does not contain the required fields, etc. (error sent as response)
+- `500`: unknown internal server error.
+
+### `POST /api/v1/user/merchant/upload`: upload product endpoint
+
+**Description**: This is the upload product endpoint. <br />
+**Request Fields**: Request must pass name (cannot be empty), description (cannot be empty), price (cannot be empty), and picture. <br />
+**Authentication**: No authentication required. <br />
+**Authorization**: Requests must pass their JWT token as an `Authorization` header (bearer format is preferable). <br />
+**Responses**:
+
+- `200`: request was successful and a successful message was sent back.
+- `400`: bad request signal when request is malformed, does not contain the required fields, etc. (error sent as response)
+- `500`: unknown internal server error.
+
+### `POST /api/v1/user/merchant/delete`: delete product endpoint
+
+**Description**: This is the delete product endpoint. <br />
+**Request Fields**: Request must pass name (cannot be empty). <br />
+**Authentication**: No authentication required. <br />
+**Authorization**: Requests must pass their JWT token as an `Authorization` header (bearer format is preferable). <br />
+**Responses**:
+
+- `200`: request was successful and a successful message was sent back.
+- `400`: bad request signal when request is malformed, does not contain the required fields, etc. (error sent as response)
+- `500`: unknown internal server error.
+
+### `GET /api/v1/user/merchant`: get merchant details endpoint
+
+**Description**: This is the get merchant details endpoint. <br />
+**Request Fields**: Request must pass name (cannot be empty). <br />
+**Authentication**: No authentication required. <br />
+**Authorization**: No authorization is required. <br />
+**Responses**:
+
+- `200`: request was successful and details are sent back.
+- `400`: bad request signal when request is malformed, does not contain the required fields, etc. (error sent as response)
+- `404`: merchant does not exist. (error sent as response)
 - `500`: unknown internal server error.

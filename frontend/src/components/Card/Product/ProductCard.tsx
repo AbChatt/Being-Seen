@@ -13,9 +13,10 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { styled } from "@mui/material/styles";
 
 import { Product } from "common/Types";
-import { getAuthHeader } from "utils/authHelpers";
 import axiosBase from "utils/axiosBase";
+import { getAuthHeader } from "utils/authHelpers";
 import handleResponseError from "utils/handleResponseError";
+import { dollarToCredit } from "utils/creditDollarConvertion";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -34,6 +35,8 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 
 interface ProductCardProps extends Product {
   isMerchant?: boolean;
+  onDelete?: any;
+  onEdit?: any;
 }
 
 const ProductCard = ({
@@ -42,6 +45,8 @@ const ProductCard = ({
   picture,
   price,
   isMerchant,
+  onDelete,
+  onEdit,
 }: ProductCardProps) => {
   const [expanded, setExpanded] = useState(false);
 
@@ -59,7 +64,7 @@ const ProductCard = ({
         getAuthHeader()
       )
       .then((response) => toast.success(response.data.message))
-      .catch(({ response }) => handleResponseError(response, toast));
+      .catch(({ response }) => handleResponseError(response));
   };
 
   return (
@@ -75,16 +80,26 @@ const ProductCard = ({
           {name}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          {isMerchant ? `$${price}` : `${(+price / 5).toFixed(2)} credits`}
+          {isMerchant ? `$${price}` : `${dollarToCredit(price)} credits`}
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
         {isMerchant ? (
           <>
-            <Button size="small" variant="contained" sx={{ mr: 1 }}>
+            <Button
+              size="small"
+              variant="contained"
+              sx={{ mr: 1 }}
+              onClick={() => onEdit(name)}
+            >
               Edit
             </Button>
-            <Button size="small" variant="contained" color="error">
+            <Button
+              size="small"
+              variant="contained"
+              color="error"
+              onClick={() => onDelete(name)}
+            >
               Delete
             </Button>
           </>

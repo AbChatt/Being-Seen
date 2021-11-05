@@ -31,6 +31,9 @@ const Navbar = ({ onLogout }: NavbarProps) => {
               Store
             </Button>
           )}
+          <Button to="/dashboard" component={Link} color="inherit">
+            Dashboard
+          </Button>
           <Button to="/profile" component={Link} color="inherit">
             Profile
           </Button>
