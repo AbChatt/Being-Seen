@@ -259,9 +259,9 @@
 - `400`: bad request signal when request is malformed, does not contain the required fields, etc. (error sent as response)
 - `500`: unknown internal server error.
 
-### `POST /api/v1/user/merchant/upload`: upload product endpoint
+### `POST /api/v1/user/merchant/update`: update product endpoint
 
-**Description**: This is the upload product endpoint. <br />
+**Description**: This is the update product endpoint. <br />
 **Request Fields**: Request must pass name (cannot be empty), description (cannot be empty), price (cannot be empty), and picture. <br />
 **Authentication**: No authentication required. <br />
 **Authorization**: Requests must pass their JWT token as an `Authorization` header (bearer format is preferable). <br />
