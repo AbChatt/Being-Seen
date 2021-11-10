@@ -2,37 +2,43 @@ import { StatusCodes } from "http-status-codes";
 import { createTextMessage } from "../../utils/defaultMessages.js";
 import Product from "../../models/Product.js";
 
-// Middleware to validate required parameters for product upload endpoint
+// Middleware to validate required parameters for the product upload endpoint
 // (product, description, price) are present and valid
 const validateProductUpload = async (req, res, next) => {
+  // Fields to validate
+  const productName = req.body.product;
+  const productDescription = req.body.description;
+  const productPriceString = req.body.price;
+  const productPrice = +productPriceString;
+
   // Validate product name
-  if (!req.body.name) {
+  if (!productName) {
     return res
       .status(StatusCodes.BAD_REQUEST)
-      .send(createTextMessage("Name field is empty"));
-  } else if (await Product.exists({ name: req.body.name })) {
+      .send(createTextMessage("Product name field is empty"));
+  } else if (await Product.exists({ product: productName })) {
     return res
       .status(StatusCodes.BAD_REQUEST)
       .send(createTextMessage("Another product with same name already exists"));
   }
 
   // Validate product description
-  if (!req.body.description) {
+  if (!productDescription) {
     return res
       .status(StatusCodes.BAD_REQUEST)
       .send(createTextMessage("Description field is empty"));
   }
 
   // Validate product price
-  if (!req.body.price) {
+  if (!productPriceString) {
     return res
       .status(StatusCodes.BAD_REQUEST)
       .send(createTextMessage("Price field is empty"));
-  } else if (isNaN(+req.body.price)) {
+  } else if (isNaN(productPrice)) {
     return res
       .status(StatusCodes.BAD_REQUEST)
       .send(createTextMessage("Price field must be a number"));
-  } else if (+req.body.price < 0) {
+  } else if (productPrice < 0) {
     return res
       .status(StatusCodes.BAD_REQUEST)
       .send(createTextMessage("Price field cannot be negative"));

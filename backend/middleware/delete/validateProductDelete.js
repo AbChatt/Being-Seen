@@ -3,20 +3,23 @@ import { createTextMessage } from "../../utils/defaultMessages.js";
 import { decodeUserToken } from "../../utils/jwtHelpers.js";
 import Product from "../../models/Product.js";
 
-// Middleware to validate required parameters for product delete endpoint
+// Middleware to validate required parameters for the product delete endpoint
 // (product) are present (note: token should be validated before calling this)
 const validateProductDelete = async (req, res, next) => {
-  const decoded = decodeUserToken(req.headers.authorization);
+  const decodedMerchant = decodeUserToken(req.headers.authorization);
+
+  // Fields to validate
+  const productName = req.body.product;
 
   // Validate product name
-  if (!req.body.product) {
+  if (!productName) {
     return res
       .status(StatusCodes.BAD_REQUEST)
-      .send(createTextMessage("Name field is empty"));
+      .send(createTextMessage("Product name field is empty"));
   } else if (
     !(await Product.exists({
-      name: req.body.product,
-      store_owner_username: decoded.username,
+      product: productName,
+      merchant: decodedMerchant.username,
     }))
   ) {
     return res
