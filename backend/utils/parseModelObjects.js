@@ -14,8 +14,8 @@ const parseRetrievedDonation = async (retrievedDonation) => {
   return {
     donor: retrievedDonor.display_name,
     youth: retrievedYouth.name,
-    amount: donation.amount,
-    date: donation.date,
+    amount: retrievedDonation.amount,
+    date: retrievedDonation.date,
   };
 };
 

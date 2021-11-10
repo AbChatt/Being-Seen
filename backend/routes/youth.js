@@ -125,7 +125,7 @@ router.post("/private", async (req, res) => {
 
 // api/v1/user/youth/update
 router.use("/update", [verifyAuthHeader(userRoles.youth), validateUpdateYouth]);
-router.put("/update", async (req, res) => {
+router.patch("/update", async (req, res) => {
   const decodedYouth = decodeUserToken(req.headers.authorization);
 
   // Required fields
@@ -133,7 +133,7 @@ router.put("/update", async (req, res) => {
   const profilePicture = req.body.profile_picture;
 
   // Optional fields
-  const savingPlan = req.body.savingPlan;
+  const savingPlan = req.body.saving_plan;
   const story = req.body.story;
 
   try {

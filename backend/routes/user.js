@@ -39,7 +39,7 @@ router.post("/login", async (req, res) => {
   const remember = req.body.remember;
 
   const retrievedUser = await User.findOne({ username: username });
-  if (!retrieveduser || !(await retrievedUser.comparePassword(password))) {
+  if (!retrievedUser || !(await retrievedUser.comparePassword(password))) {
     return res
       .status(StatusCodes.UNAUTHORIZED)
       .send(createTextMessage("Username or password is incorrect"));
