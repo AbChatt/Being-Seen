@@ -6,14 +6,14 @@ import Product from "../../models/Product.js";
 // (product) are present and valid
 const validatePurchase = async (req, res, next) => {
   // Fields to validate
-  const productName = req.body.product;
+  const productName = req.body.name;
 
   // Validate product name
   if (!productName) {
     return res
       .status(StatusCodes.BAD_REQUEST)
       .send(createTextMessage("Product name is empty"));
-  } else if (!(await Product.exists({ product: productName }))) {
+  } else if (!(await Product.exists({ name: productName }))) {
     return res
       .status(StatusCodes.NOT_FOUND)
       .send(createTextMessage("Product does not exist"));

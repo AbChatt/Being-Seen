@@ -75,7 +75,7 @@ router.post("/upload", async (req, res) => {
   const decodedMerchant = decodeUserToken(req.headers.authorization);
 
   // Required fields
-  const productName = req.body.product;
+  const productName = req.body.name;
   const productDescription = req.body.description;
   const productPrice = +req.body.price;
 
@@ -83,7 +83,7 @@ router.post("/upload", async (req, res) => {
   const productPicture = req.body.picture;
 
   const newProduct = new Product({
-    product: productName,
+    name: productName,
     description: productDescription,
     picture: productPicture || "#",
     merchant: decodedMerchant.username,
@@ -112,7 +112,7 @@ router.get("/products", async (req, res) => {
   // Request wants a specific product
   if (productName) {
     try {
-      const retrievedProduct = await Product.findOne({ product: productName });
+      const retrievedProduct = await Product.findOne({ name: productName });
       const parsedProduct = parseRetrievedProduct(retrievedProduct);
       return res.send(parsedProduct);
     } catch (err) {
@@ -164,10 +164,10 @@ router.use("/delete", [
 ]);
 router.post("/delete", async (req, res) => {
   // Required fields
-  const productName = req.body.product;
+  const productName = req.body.name;
 
   try {
-    await Product.deleteOne({ product: productName });
+    await Product.deleteOne({ name: productName });
     return res
       .status(StatusCodes.OK)
       .send(createTextMessage("Product successfully deleted"));
@@ -241,8 +241,8 @@ router.use("/products/update", [
 ]);
 router.patch("/products/update", async (req, res) => {
   // Required fields
-  const productName = req.body.product;
-  const newProductName = req.body.new_product;
+  const productName = req.body.old_name;
+  const newProductName = req.body.new_name;
   const productDescription = req.body.description;
   const productPrice = +req.body.price;
 
@@ -251,9 +251,9 @@ router.patch("/products/update", async (req, res) => {
 
   try {
     await Product.updateOne(
-      { product: productName },
+      { name: productName },
       {
-        product: newProductName,
+        name: newProductName,
         description: productDescription,
         picture: productPicture || "#",
         price: productPrice.toFixed(2),

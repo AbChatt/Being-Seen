@@ -4,26 +4,26 @@ import { decodeUserToken } from "../../utils/jwtHelpers.js";
 import Product from "../../models/Product.js";
 
 // Middleware to validate required parameters for the product update endpoint
-// (product, new_product, description, price) are present and valid (note: token
+// (old_name, new_name, description, price) are present and valid (note: token
 // must be validated before calling this)
 const validateProductUpdate = async (req, res, next) => {
   const decodedMerchant = decodeUserToken(req.headers.authorization);
 
   // Fields to validate
-  const productName = req.body.product;
-  const newProductName = req.body.new_product;
+  const oldProductName = req.body.old_name;
+  const newProductName = req.body.new_name;
   const productDescription = req.body.description;
   const productPriceString = req.body.price;
   const productPrice = +productPriceString;
 
   // Validate product name
-  if (!productName) {
+  if (!oldProductName || !newProductName) {
     return res
       .status(StatusCodes.BAD_REQUEST)
       .send(createTextMessage("Product name field is empty"));
   } else if (
     !(await Product.exists({
-      product: productName,
+      name: oldProductName,
       merchant: decodedMerchant.username,
     }))
   ) {
@@ -31,8 +31,8 @@ const validateProductUpdate = async (req, res, next) => {
       .status(StatusCodes.NOT_FOUND)
       .send(createTextMessage("Product does not exist"));
   } else if (
-    productName !== newProductName &&
-    (await Product.exists({ product: newProductName }))
+    oldProductName !== newProductName &&
+    (await Product.exists({ name: newProductName }))
   ) {
     return res
       .status(StatusCodes.BAD_REQUEST)

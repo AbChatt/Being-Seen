@@ -9,7 +9,7 @@ const validateProductDelete = async (req, res, next) => {
   const decodedMerchant = decodeUserToken(req.headers.authorization);
 
   // Fields to validate
-  const productName = req.body.product;
+  const productName = req.body.name;
 
   // Validate product name
   if (!productName) {
@@ -18,7 +18,7 @@ const validateProductDelete = async (req, res, next) => {
       .send(createTextMessage("Product name field is empty"));
   } else if (
     !(await Product.exists({
-      product: productName,
+      name: productName,
       merchant: decodedMerchant.username,
     }))
   ) {

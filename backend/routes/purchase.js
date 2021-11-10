@@ -24,9 +24,9 @@ router.post("/", async (req, res) => {
   const decodedYouth = decodeUserToken(req.headers.authorization);
 
   // Required fields
-  const productName = req.body.product;
+  const productName = req.body.name;
 
-  const retrievedProduct = await Product.findOne({ product: productName });
+  const retrievedProduct = await Product.findOne({ name: productName });
   const retrievedYouth = await Youth.findOne({
     username: decodedYouth.username,
   });

@@ -6,7 +6,7 @@ import Product from "../../models/Product.js";
 // (product, description, price) are present and valid
 const validateProductUpload = async (req, res, next) => {
   // Fields to validate
-  const productName = req.body.product;
+  const productName = req.body.name;
   const productDescription = req.body.description;
   const productPriceString = req.body.price;
   const productPrice = +productPriceString;
@@ -16,7 +16,7 @@ const validateProductUpload = async (req, res, next) => {
     return res
       .status(StatusCodes.BAD_REQUEST)
       .send(createTextMessage("Product name field is empty"));
-  } else if (await Product.exists({ product: productName })) {
+  } else if (await Product.exists({ name: productName })) {
     return res
       .status(StatusCodes.BAD_REQUEST)
       .send(createTextMessage("Another product with same name already exists"));
