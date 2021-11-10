@@ -19,4 +19,4 @@ const PendingDonationSchema = new mongoose.Schema({
   },
 });
 
-export default mongoose.model("pending_donations", PendingDonationSchema);
+export default mongoose.model("tmp_pending_donations", PendingDonationSchema);

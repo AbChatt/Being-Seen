@@ -31,4 +31,4 @@ const YouthSchema = new mongoose.Schema({
   },
 });
 
-export default mongoose.model("youths", YouthSchema);
+export default mongoose.model("tmp_youths", YouthSchema);

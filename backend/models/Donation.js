@@ -23,4 +23,4 @@ const DonationSchema = new mongoose.Schema({
   },
 });
 
-export default mongoose.model("donations", DonationSchema);
+export default mongoose.model("tmp_donations", DonationSchema);
