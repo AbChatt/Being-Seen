@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const ProductSchema = new mongoose.Schema({
-  name: {
+  product: {
     type: String,
     required: true,
   },
@@ -13,7 +13,7 @@ const ProductSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  store_owner_username: {
+  merchant: {
     type: String,
     required: true,
   },

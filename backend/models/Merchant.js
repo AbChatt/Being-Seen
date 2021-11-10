@@ -21,7 +21,7 @@ const MerchantSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  location: {
+  store_location: {
     type: String,
     required: true,
   },
