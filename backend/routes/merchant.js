@@ -66,12 +66,12 @@ router.post("/signup", async (req, res) => {
   }
 });
 
-// api/v1/user/merchant/upload
-router.use("/upload", [
+// api/v1/user/merchant/products/upload
+router.use("/products/upload", [
   verifyAuthHeader(userRoles.merchant),
   validateProductUpload,
 ]);
-router.post("/upload", async (req, res) => {
+router.post("/products/upload", async (req, res) => {
   const decodedMerchant = decodeUserToken(req.headers.authorization);
 
   // Required fields
@@ -157,12 +157,12 @@ router.get("/products", async (req, res) => {
   }
 });
 
-// api/v1/user/merchant/delete
-router.use("/delete", [
+// api/v1/user/merchant/products/delete
+router.use("/products/delete", [
   verifyAuthHeader(userRoles.merchant),
   validateProductDelete,
 ]);
-router.post("/delete", async (req, res) => {
+router.post("/products/delete", async (req, res) => {
   // Required fields
   const productName = req.body.name;
 
