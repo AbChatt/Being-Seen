@@ -65,7 +65,7 @@ const HomePage = () => {
     <Layout title="Home" loading={loading}>
       <Container maxWidth="xl" sx={{ py: 5 }}>
         <Typography variant="h4" align="center" sx={{ mb: 5 }}>
-          Homeless Youths
+          At-Risk Youths
         </Typography>
         <Box display="flex" alignItems="flex-end" mt={3} mb={3}>
           <SearchIcon sx={{ mr: 1, my: 0.5 }} />

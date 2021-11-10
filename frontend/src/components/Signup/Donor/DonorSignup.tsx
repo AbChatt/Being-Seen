@@ -42,7 +42,7 @@ const DonorSignup = () => {
       })
       .then((response) => {
         // On success, we store the JWT token returned and redirect the new
-        // donor to the homepage where they can view the homeless youths
+        // donor to the homepage where they can view the at-risk youths
         setAuthToken(response.data.jwt);
         history.push("/");
       })
