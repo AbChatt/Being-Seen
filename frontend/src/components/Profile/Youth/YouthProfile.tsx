@@ -18,7 +18,7 @@ const YouthProfile = () => {
   const [loading, setLoading] = useState(true);
 
   const [oldName, setOldName] = useState("");
-  const [name, setName] = useState("");
+  const [newName, setNewName] = useState("");
   const [story, setStory] = useState("");
   const [savingPlan, setSavingPlan] = useState("");
   const [pictureUrl, setPictureUrl] = useState("");
@@ -33,9 +33,9 @@ const YouthProfile = () => {
       })
       .then((response) => {
         setOldName(response.data.name);
-        setName(response.data.name);
-        setPictureUrl(response.data.profilePicture);
-        setSavingPlan(response.data.savingPlan);
+        setNewName(response.data.name);
+        setPictureUrl(response.data.profile_picture);
+        setSavingPlan(response.data.saving_plan);
         setStory(response.data.story);
         setUserExists(true);
       })
@@ -48,7 +48,7 @@ const YouthProfile = () => {
   }, [account?.username]);
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setName(event.target.value);
+    setNewName(event.target.value);
   };
 
   const handlePictureChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -69,10 +69,10 @@ const YouthProfile = () => {
     event.preventDefault();
 
     axiosBase
-      .put(
+      .patch(
         "/user/youth/update",
         {
-          name: name,
+          name: newName,
           story: story,
           saving_plan: savingPlan,
           profile_picture: pictureUrl,
@@ -81,7 +81,7 @@ const YouthProfile = () => {
       )
       .then((response) => {
         toast.success(response.data.message);
-        setOldName(name);
+        setOldName(newName);
       })
       .catch(({ response }) => {
         handleResponseError(response);
@@ -108,10 +108,11 @@ const YouthProfile = () => {
             <TextField
               autoFocus
               fullWidth
+              required
               label="Name"
               margin="normal"
               onChange={handleNameChange}
-              value={name}
+              value={newName}
             />
             <TextField
               fullWidth

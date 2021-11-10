@@ -122,7 +122,7 @@ const DonationCard = ({
               onApprove={(data: any, actions: any) =>
                 actions.order.capture().then((details: { id: string }) => {
                   axiosBase
-                    .post("/payment/donation/save", { orderId: details.id })
+                    .post("/payment/donation/save", { order_id: details.id })
                     .then((response) => toast.success(response.data.message))
                     .catch(({ response }) => handleResponseError(response));
                 })

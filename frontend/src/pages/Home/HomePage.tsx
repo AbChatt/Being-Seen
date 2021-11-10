@@ -28,9 +28,9 @@ const HomePage = () => {
         const retrievedYouths = response.data.map((data: any) => ({
           name: data.name,
           username: data.username,
-          dob: data.dateOfBirth,
-          image: data.profilePicture,
-          savingPlan: data.savingPlan,
+          dateOfBirth: data.date_of_birth,
+          profilePicture: data.profile_picture,
+          savingPlan: data.saving_plan,
           story: data.story,
           donations: data.donations,
         }));

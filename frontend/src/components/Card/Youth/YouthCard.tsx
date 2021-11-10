@@ -14,7 +14,13 @@ import { PublicYouth } from "common/Types";
 import styles from "./YouthCard.module.scss";
 
 // Renders a clickable card displaying a short preview of the youth
-const YouthCard = ({ name, story, username, image, dob }: PublicYouth) => {
+const YouthCard = ({
+  name,
+  story,
+  username,
+  profilePicture,
+  dateOfBirth,
+}: PublicYouth) => {
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
@@ -28,7 +34,7 @@ const YouthCard = ({ name, story, username, image, dob }: PublicYouth) => {
         <Card>
           <CardActionArea>
             <Avatar
-              src={image}
+              src={profilePicture}
               variant="square"
               sx={{ height: 200, width: "100%" }}
               imgProps={{
@@ -38,7 +44,7 @@ const YouthCard = ({ name, story, username, image, dob }: PublicYouth) => {
             />
             <CardContent>
               <Typography variant="h6">
-                {name} ({moment().diff(dob, "years")})
+                {name} ({moment().diff(dateOfBirth, "years")})
               </Typography>
               <Typography variant="body2" color="primary">
                 @{username}

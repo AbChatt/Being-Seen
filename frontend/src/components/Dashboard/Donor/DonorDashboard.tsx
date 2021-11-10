@@ -23,8 +23,8 @@ const DonorDashboard = () => {
           name: response.data.name,
           username: response.data.username,
           organization: response.data.organization,
-          image: response.data.profilePicture,
-          dob: response.data.dateOfBirth,
+          profilePicture: response.data.profile_picture,
+          dateOfBirth: response.data.date_of_birth,
           anonymize: response.data.anonymize,
           donations: response.data.donations,
         });

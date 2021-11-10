@@ -42,8 +42,8 @@ const StorePage = () => {
           name: data.name,
           description: data.description,
           picture: data.picture,
-          owner: data.owner,
-          price: String(data.price),
+          merchant: data.merchant,
+          price: data.price,
         }));
 
         setProducts(retrievedProducts);

@@ -26,7 +26,7 @@ const MerchantDashboard = () => {
     axiosBase
       .get("/user/merchant/products", {
         params: {
-          owner: account?.username,
+          merchant: account?.username,
         },
       })
       .then((response) => {
@@ -51,9 +51,9 @@ const MerchantDashboard = () => {
   const handleDelete = (name: string) => {
     axiosBase
       .post(
-        "/user/merchant/delete",
+        "/user/merchant/products/delete",
         {
-          product: name,
+          name: name,
         },
         getAuthHeader()
       )

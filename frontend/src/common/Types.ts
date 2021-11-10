@@ -5,12 +5,22 @@ export interface Donation {
   date: string;
 }
 
+export interface Merchant {
+  name: string;
+  username: string;
+  profilePicture: string;
+  dateOfBirth: string;
+  storeLocation: string;
+  storeName: string;
+  email: string;
+}
+
 export interface Donor {
   name: string;
   username: string;
   organization: string;
-  image: string;
-  dob: string;
+  profilePicture: string;
+  dateOfBirth: string;
   anonymize: boolean;
   donations: Donation[];
 }
@@ -18,21 +28,21 @@ export interface Donor {
 export interface PublicYouth {
   name: string;
   username: string;
-  image: string;
+  profilePicture: string;
   story: string;
   savingPlan: string;
+  dateOfBirth: string;
   donations: Donation[];
-  dob: string;
 }
 
 export interface PrivateYouth extends PublicYouth {
-  credits: number;
+  creditBalance: number;
 }
 
 export interface Product {
   name: string;
   description: string;
   picture: string;
-  owner: string;
+  merchant: string;
   price: number;
 }

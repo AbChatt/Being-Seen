@@ -34,7 +34,7 @@ const UploadPage = () => {
     event.preventDefault();
     axiosBase
       .post(
-        "/user/merchant/upload",
+        "/user/merchant/products/upload",
         {
           name: name,
           description: description,

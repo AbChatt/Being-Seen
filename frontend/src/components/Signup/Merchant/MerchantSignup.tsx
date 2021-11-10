@@ -21,7 +21,7 @@ const MerchantSignup = () => {
   const [password, setPassword] = useState("");
   const [pictureUrl, setPictureUrl] = useState("");
   const [storeName, setStoreName] = useState("");
-  const [location, setLocation] = useState("");
+  const [storeLocation, setStoreLocation] = useState("");
   const [email, setEmail] = useState("");
   const [dateOfBirth, setDateOfBirth] = useState<Date | null>(null);
 
@@ -36,7 +36,7 @@ const MerchantSignup = () => {
         password: password,
         date_of_birth: dateOfBirth,
         store_name: storeName,
-        location: location,
+        store_location: storeLocation,
         email: email,
         profile_picture: pictureUrl,
       })
@@ -74,7 +74,7 @@ const MerchantSignup = () => {
   };
 
   const handleLocationChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setLocation(event.target.value);
+    setStoreLocation(event.target.value);
   };
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -137,7 +137,7 @@ const MerchantSignup = () => {
       <TextField
         required
         fullWidth
-        value={location}
+        value={storeLocation}
         onChange={handleLocationChange}
         label="Store Location"
         margin="normal"

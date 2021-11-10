@@ -56,10 +56,10 @@ const EditPage = () => {
   const handleEdit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     axiosBase
-      .put(
+      .patch(
         "/user/merchant/products/update",
         {
-          name: name,
+          new_name: name,
           old_name: history.location.state,
           description: description,
           picture: pictureUrl,

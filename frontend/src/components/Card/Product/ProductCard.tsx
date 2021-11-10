@@ -59,7 +59,7 @@ const ProductCard = ({
       .post(
         "/payment/purchase",
         {
-          product: name,
+          name: name,
         },
         getAuthHeader()
       )
