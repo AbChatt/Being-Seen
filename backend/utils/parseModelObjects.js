@@ -39,7 +39,7 @@ const parseRetrievedYouth = async (retrievedYouth, onlyPublic) => {
   };
 
   const privateInformation = {
-    credits: retrievedYouth.credit_balance,
+    credit_balance: retrievedYouth.credit_balance,
   };
 
   return {
