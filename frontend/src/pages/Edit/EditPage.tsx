@@ -41,7 +41,7 @@ const EditPage = () => {
       .then((response) => {
         setName(response.data.name);
         setPictureUrl(response.data.picture);
-        setPrice(response.data.price);
+        setPrice(String(response.data.price));
         setDescription(response.data.description);
       })
       .catch(({ response }) => {
