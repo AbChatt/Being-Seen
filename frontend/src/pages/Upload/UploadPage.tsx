@@ -71,11 +71,19 @@ const UploadPage = () => {
 
   return (
     <Layout title="Upload Page">
-      <Container maxWidth="xl" sx={{ py: 5 }}>
-        <Typography gutterBottom variant="h4">
+      <Container maxWidth="md" sx={{ py: 5 }}>
+        <Typography gutterBottom align="center" variant="h4">
           Upload a new product
         </Typography>
-        <Box noValidate component="form" onSubmit={handleUpload} sx={{ mt: 1 }}>
+        <Box
+          noValidate
+          component="form"
+          onSubmit={handleUpload}
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          mt={1}
+        >
           <TextField
             autoFocus
             required
@@ -88,6 +96,8 @@ const UploadPage = () => {
           <TextField
             required
             fullWidth
+            multiline
+            rows={4}
             value={description}
             onChange={handleDescriptionChange}
             label="Description"
@@ -112,7 +122,7 @@ const UploadPage = () => {
           />
           {pictureUrl && (
             <Box display="flex" justifyContent="center" mt={2}>
-              <Avatar src={pictureUrl} sx={{ width: 64, height: 64 }} />
+              <Avatar src={pictureUrl} sx={{ width: 128, height: 128 }} />
             </Box>
           )}
           <Button

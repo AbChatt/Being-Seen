@@ -95,11 +95,19 @@ const EditPage = () => {
 
   return (
     <Layout title="Edit Page" loading={loading}>
-      <Container maxWidth="xl" sx={{ py: 5 }}>
-        <Typography gutterBottom variant="h4">
+      <Container maxWidth="md" sx={{ py: 5 }}>
+        <Typography gutterBottom align="center" variant="h4">
           Edit product details
         </Typography>
-        <Box noValidate component="form" onSubmit={handleEdit} sx={{ mt: 1 }}>
+        <Box
+          noValidate
+          component="form"
+          onSubmit={handleEdit}
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          mt={1}
+        >
           <TextField
             autoFocus
             required
@@ -112,6 +120,8 @@ const EditPage = () => {
           <TextField
             required
             fullWidth
+            multiline
+            rows={4}
             value={description}
             onChange={handleDescriptionChange}
             label="Description"
@@ -135,7 +145,11 @@ const EditPage = () => {
           />
           {pictureUrl && (
             <Box display="flex" justifyContent="center" mt={2}>
-              <Avatar src={pictureUrl} sx={{ width: 64, height: 64 }} />
+              <Avatar
+                src={pictureUrl}
+                sx={{ width: 128, height: 128 }}
+                alt={name}
+              />
             </Box>
           )}
           <Button
