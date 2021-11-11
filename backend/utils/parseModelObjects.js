@@ -29,6 +29,12 @@ const parseRetrievedYouth = async (retrievedYouth, onlyPublic) => {
     rawDonations.map((donation) => parseRetrievedDonation(donation))
   );
 
+  const followCount = (
+    await Follow.find({
+      youth: retrievedYouth.username,
+    })
+  ).length;
+
   const publicInformation = {
     name: retrievedYouth.name,
     username: retrievedYouth.username,
@@ -37,6 +43,7 @@ const parseRetrievedYouth = async (retrievedYouth, onlyPublic) => {
     saving_plan: retrievedYouth.saving_plan,
     story: retrievedYouth.story,
     donations: parsedDonations,
+    follow_count: followCount,
   };
 
   const privateInformation = {
