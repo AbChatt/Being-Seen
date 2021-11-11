@@ -34,4 +34,4 @@ UserSchema.methods.comparePassword = async function (plaintextPassword) {
   return bcrypt.compare(plaintextPassword, this.password);
 };
 
-export default mongoose.model("tmp_users", UserSchema);
+export default mongoose.model("users", UserSchema);

@@ -31,4 +31,4 @@ const DonorSchema = new mongoose.Schema({
   },
 });
 
-export default mongoose.model("tmp_donors", DonorSchema);
+export default mongoose.model("donors", DonorSchema);
