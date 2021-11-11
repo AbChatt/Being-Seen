@@ -8,6 +8,10 @@ const requestLogger = (req, res, next) => {
   const requestUrl = chalk.cyanBright(req.url);
   const requestMethod = chalk.magenta(req.method);
   console.log(`[${requestDate}] ${requestMethod}:${requestUrl}`);
+  if (Object.keys(req.body).length) {
+    console.log(req.body);
+  }
+
   next();
 };
 

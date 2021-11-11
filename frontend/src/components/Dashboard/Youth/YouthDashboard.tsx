@@ -26,12 +26,12 @@ const YouthDashboard = () => {
         setYouth({
           name: response.data.name,
           username: response.data.username,
-          dob: response.data.dateOfBirth,
-          image: response.data.profilePicture,
-          savingPlan: response.data.savingPlan,
+          dateOfBirth: response.data.date_of_birth,
+          profilePicture: response.data.profile_picture,
+          savingPlan: response.data.saving_plan,
           story: response.data.story,
           donations: response.data.donations,
-          credits: response.data.credits,
+          creditBalance: response.data.credit_balance,
         });
       })
       .catch(({ response }) => {
@@ -62,7 +62,7 @@ const YouthDashboard = () => {
               <Typography variant="h4">Welcome {youth.name}!</Typography>
               <Chip
                 icon={<MoneyIcon />}
-                label={`Balance: ${youth.credits} CR`}
+                label={`Balance: ${youth.creditBalance} CR`}
                 color="primary"
                 style={{
                   height: "2.5rem",

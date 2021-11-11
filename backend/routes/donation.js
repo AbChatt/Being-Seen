@@ -3,7 +3,7 @@ import paypal from "@paypal/checkout-server-sdk";
 import { StatusCodes } from "http-status-codes";
 
 import client from "../utils/payPalClient.js";
-import { donationToCredit } from "../utils/creditConversion.js";
+import { dollarToCredit } from "../utils/creditConversion.js";
 import { createTextMessage } from "../utils/defaultMessages.js";
 
 import validateCreateDonation from "../middleware/payments/validateCreateDonation.js";
@@ -18,9 +18,10 @@ const router = express.Router();
 // api/v1/payment/donation/create
 router.use("/create", validateCreateDonation);
 router.post("/create", async (req, res) => {
+  // Required fields
   const donorUsername = req.body.donor;
   const youthUsername = req.body.youth;
-  const donationAmount = req.body.amount;
+  const donationAmount = +req.body.amount;
 
   const request = new paypal.orders.OrdersCreateRequest();
   request.prefer("return=representation");
@@ -30,7 +31,7 @@ router.post("/create", async (req, res) => {
       {
         amount: {
           currency_code: "CAD",
-          value: +donationAmount,
+          value: donationAmount,
         },
       },
     ],
@@ -59,27 +60,28 @@ router.post("/create", async (req, res) => {
 // api/v1/payment/donation/save
 router.use("/save", validateSaveDonation);
 router.post("/save", async (req, res) => {
-  const orderId = req.body.orderId;
-  const request = new paypal.orders.OrdersGetRequest(orderId);
+  // Required fields
+  const orderId = req.body.order_id;
 
   try {
-    const order = await client().execute(request);
-    const pendingDonation = await PendingDonation.findOne({
-      order_id: orderId,
-    });
-
-    if (order.result.status !== "COMPLETED") {
+    const request = new paypal.orders.OrdersGetRequest(orderId);
+    const payPalOrder = await client().execute(request);
+    if (payPalOrder.result.status !== "COMPLETED") {
       return res
         .status(StatusCodes.BAD_REQUEST)
         .send(createTextMessage("Donation process has not been completed"));
     }
+
+    const pendingDonation = await PendingDonation.findOne({
+      order_id: orderId,
+    });
 
     const newDonation = new Donation({
       order_id: orderId,
       donor: pendingDonation.donor,
       youth: pendingDonation.youth,
       amount: pendingDonation.amount,
-      date: order.result.create_time,
+      date: payPalOrder.result.create_time,
     });
 
     await newDonation.save();
@@ -88,11 +90,8 @@ router.post("/save", async (req, res) => {
     await Youth.updateOne(
       { username: newDonation.youth },
       {
-        $set: {
-          credit_balance:
-            retrievedYouth.credit_balance +
-            donationToCredit(newDonation.amount),
-        },
+        credit_balance:
+          retrievedYouth.credit_balance + dollarToCredit(newDonation.amount),
       }
     );
 

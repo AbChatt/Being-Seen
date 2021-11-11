@@ -13,7 +13,7 @@ const ProductSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  store_owner_username: {
+  merchant: {
     type: String,
     required: true,
   },
@@ -23,4 +23,4 @@ const ProductSchema = new mongoose.Schema({
   },
 });
 
-export default mongoose.model("products", ProductSchema);
+export default mongoose.model("tmp_products", ProductSchema);

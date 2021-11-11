@@ -3,30 +3,34 @@ import { createTextMessage } from "../../utils/defaultMessages.js";
 import userRoles from "../../utils/userRoles.js";
 import User from "../../models/User.js";
 
-// Middleware to validate whether parameters associated with the create donation
-// endpoint (donation amount, youth, donor) are present and valid
+// Middleware to validate required parameters for the create donation endpoint
+// (amount, youth, donor) are present and valid
 const validateCreateDonation = async (req, res, next) => {
-  console.log(req.body);
+  const validAmounts = [5, 10, 25, 100];
+
+  // Fields to validate
+  const youthUsername = req.body.youth;
+  const donorUsername = req.body.donor;
+  const donationAmount = +req.body.amount;
 
   // Validate donation amount
-  const validAmounts = [5, 10, 25, 100];
-  if (!req.body.amount) {
+  if (!donationAmount) {
     return res
       .status(StatusCodes.BAD_REQUEST)
       .send(createTextMessage("Donation amount is empty"));
-  } else if (!validAmounts.includes(+req.body.amount)) {
+  } else if (!validAmounts.includes(donationAmount)) {
     return res
       .status(StatusCodes.BAD_REQUEST)
       .send(createTextMessage("Donation amount is invalid"));
   }
 
   // Validate youth username
-  if (!req.body.youth) {
+  if (!youthUsername) {
     return res
       .status(StatusCodes.BAD_REQUEST)
       .send(createTextMessage("Youth username is empty"));
   } else if (
-    !(await User.exists({ username: req.body.youth, role: userRoles.youth }))
+    !(await User.exists({ username: youthUsername, role: userRoles.youth }))
   ) {
     return res
       .status(StatusCodes.NOT_FOUND)
@@ -34,12 +38,12 @@ const validateCreateDonation = async (req, res, next) => {
   }
 
   // Validate donor username
-  if (!req.body.donor) {
+  if (!donorUsername) {
     return res
       .status(StatusCodes.BAD_REQUEST)
       .send(createTextMessage("Donor username is empty"));
   } else if (
-    !(await User.exists({ username: req.body.donor, role: userRoles.donor }))
+    !(await User.exists({ username: donorUsername, role: userRoles.donor }))
   ) {
     return res
       .status(StatusCodes.NOT_FOUND)

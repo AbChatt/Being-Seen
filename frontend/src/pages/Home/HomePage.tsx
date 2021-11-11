@@ -28,9 +28,9 @@ const HomePage = () => {
         const retrievedYouths = response.data.map((data: any) => ({
           name: data.name,
           username: data.username,
-          dob: data.dateOfBirth,
-          image: data.profilePicture,
-          savingPlan: data.savingPlan,
+          dateOfBirth: data.date_of_birth,
+          profilePicture: data.profile_picture,
+          savingPlan: data.saving_plan,
           story: data.story,
           donations: data.donations,
         }));
@@ -65,7 +65,7 @@ const HomePage = () => {
     <Layout title="Home" loading={loading}>
       <Container maxWidth="xl" sx={{ py: 5 }}>
         <Typography variant="h4" align="center" sx={{ mb: 5 }}>
-          Homeless Youths
+          At-Risk Youths
         </Typography>
         <Box display="flex" alignItems="flex-end" mt={3} mb={3}>
           <SearchIcon sx={{ mr: 1, my: 0.5 }} />

@@ -3,28 +3,36 @@ import { createTextMessage } from "../../utils/defaultMessages.js";
 import { decodeUserToken } from "../../utils/jwtHelpers.js";
 import Product from "../../models/Product.js";
 
-// Middleware to validate required parameters for product update endpoint
-// (product, description, price) are present and valid
+// Middleware to validate required parameters for the product update endpoint
+// (old_name, new_name, description, price) are present and valid (note: token
+// must be validated before calling this)
 const validateProductUpdate = async (req, res, next) => {
-  const decoded = decodeUserToken(req.headers.authorization);
+  const decodedMerchant = decodeUserToken(req.headers.authorization);
+
+  // Fields to validate
+  const oldProductName = req.body.old_name;
+  const newProductName = req.body.new_name;
+  const productDescription = req.body.description;
+  const productPriceString = req.body.price;
+  const productPrice = +productPriceString;
 
   // Validate product name
-  if (!req.body.name) {
+  if (!oldProductName || !newProductName) {
     return res
       .status(StatusCodes.BAD_REQUEST)
-      .send(createTextMessage("Name field is empty"));
+      .send(createTextMessage("Product name field is empty"));
   } else if (
     !(await Product.exists({
-      name: req.body.old_name,
-      store_owner_username: decoded.username,
+      name: oldProductName,
+      merchant: decodedMerchant.username,
     }))
   ) {
     return res
       .status(StatusCodes.NOT_FOUND)
       .send(createTextMessage("Product does not exist"));
   } else if (
-    req.body.name !== req.body.old_name &&
-    (await Product.exists({ name: req.body.name }))
+    oldProductName !== newProductName &&
+    (await Product.exists({ name: newProductName }))
   ) {
     return res
       .status(StatusCodes.BAD_REQUEST)
@@ -34,22 +42,22 @@ const validateProductUpdate = async (req, res, next) => {
   }
 
   // Validate product description
-  if (!req.body.description) {
+  if (!productDescription) {
     return res
       .status(StatusCodes.BAD_REQUEST)
       .send(createTextMessage("Description field is empty"));
   }
 
   // Validate product price
-  if (!req.body.price) {
+  if (!productPriceString) {
     return res
       .status(StatusCodes.BAD_REQUEST)
       .send(createTextMessage("Price field is empty"));
-  } else if (isNaN(+req.body.price)) {
+  } else if (isNaN(productPrice)) {
     return res
       .status(StatusCodes.BAD_REQUEST)
       .send(createTextMessage("Price field must be a number"));
-  } else if (+req.body.price < 0) {
+  } else if (productPrice < 0) {
     return res
       .status(StatusCodes.BAD_REQUEST)
       .send(createTextMessage("Price field cannot be negative"));

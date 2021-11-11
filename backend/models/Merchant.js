@@ -21,7 +21,7 @@ const MerchantSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  location: {
+  store_location: {
     type: String,
     required: true,
   },
@@ -31,4 +31,4 @@ const MerchantSchema = new mongoose.Schema({
   },
 });
 
-export default mongoose.model("merchants", MerchantSchema);
+export default mongoose.model("tmp_merchants", MerchantSchema);

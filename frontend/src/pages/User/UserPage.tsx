@@ -40,9 +40,9 @@ const UserPage = () => {
         setYouth({
           name: response.data.name,
           username: response.data.username,
-          dob: response.data.dateOfBirth,
-          image: response.data.profilePicture,
-          savingPlan: response.data.savingPlan,
+          dateOfBirth: response.data.date_of_birth,
+          profilePicture: response.data.profile_picture,
+          savingPlan: response.data.saving_plan,
           story: response.data.story,
           donations: response.data.donations,
         });
@@ -62,14 +62,14 @@ const UserPage = () => {
           <Grid container spacing={6}>
             <Grid item xs={12} md={4}>
               <Avatar
-                src={youth.image}
+                src={youth.profilePicture}
                 sx={{ height: "auto", width: "100%" }}
                 variant="rounded"
               />
               <div className={styles.chipContainer}>
                 <Chip color="primary" label={`@${youth.username}`} />
                 <Chip color="primary" label={youth.name} />
-                <Chip color="primary" label={youth.dob} />
+                <Chip color="primary" label={youth.dateOfBirth} />
               </div>
               <Typography variant="h5" sx={{ mt: 2.5 }}>
                 {youth.name}'s Saving Plan
