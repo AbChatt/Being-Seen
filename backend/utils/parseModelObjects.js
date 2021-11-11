@@ -1,6 +1,7 @@
 import Donation from "../models/Donation.js";
 import Youth from "../models/Youth.js";
 import Donor from "../models/Donor.js";
+import Follow from "../models/Follow.js";
 
 const parseRetrievedDonation = async (retrievedDonation) => {
   const retrievedDonor = await Donor.findOne({
@@ -57,6 +58,12 @@ const parseRetrievedDonor = async (retrievedDonor) => {
     rawDonations.map((donation) => parseRetrievedDonation(donation))
   );
 
+  const following = (
+    await Follow.find({
+      donor: retrievedDonor.username,
+    })
+  ).map((follow) => follow.youth);
+
   return {
     name: retrievedDonor.name,
     username: retrievedDonor.username,
@@ -65,6 +72,7 @@ const parseRetrievedDonor = async (retrievedDonor) => {
     organization: retrievedDonor.organization,
     anonymize: retrievedDonor.anonymize,
     donations: parsedDonations,
+    following: following,
   };
 };
 
