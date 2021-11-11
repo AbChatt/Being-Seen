@@ -1,6 +1,7 @@
 import Donation from "../models/Donation.js";
 import Youth from "../models/Youth.js";
 import Donor from "../models/Donor.js";
+import Follow from "../models/Follow.js";
 
 const parseRetrievedDonation = async (retrievedDonation) => {
   const retrievedDonor = await Donor.findOne({
@@ -28,6 +29,12 @@ const parseRetrievedYouth = async (retrievedYouth, onlyPublic) => {
     rawDonations.map((donation) => parseRetrievedDonation(donation))
   );
 
+  const followCount = (
+    await Follow.find({
+      youth: retrievedYouth.username,
+    })
+  ).length;
+
   const publicInformation = {
     name: retrievedYouth.name,
     username: retrievedYouth.username,
@@ -36,6 +43,7 @@ const parseRetrievedYouth = async (retrievedYouth, onlyPublic) => {
     saving_plan: retrievedYouth.saving_plan,
     story: retrievedYouth.story,
     donations: parsedDonations,
+    follow_count: followCount,
   };
 
   const privateInformation = {
@@ -57,6 +65,12 @@ const parseRetrievedDonor = async (retrievedDonor) => {
     rawDonations.map((donation) => parseRetrievedDonation(donation))
   );
 
+  const following = (
+    await Follow.find({
+      donor: retrievedDonor.username,
+    })
+  ).map((follow) => follow.youth);
+
   return {
     name: retrievedDonor.name,
     username: retrievedDonor.username,
@@ -65,6 +79,7 @@ const parseRetrievedDonor = async (retrievedDonor) => {
     organization: retrievedDonor.organization,
     anonymize: retrievedDonor.anonymize,
     donations: parsedDonations,
+    following: following,
   };
 };
 
