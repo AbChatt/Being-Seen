@@ -4,6 +4,7 @@ import { StatusCodes } from "http-status-codes";
 import validateDonorSignup from "../middleware/signup/validateDonorSignup.js";
 import validateUserSignup from "../middleware/signup/validateUserSignup.js";
 import verifyAuthHeader from "../middleware/security/verifyAuthHeader.js";
+import validateFollowing from "../middleware/follow/validateFollowing.js";
 import validateUpdateDonor from "../middleware/update/validateUpdateDonor.js";
 
 import { decodeUserToken, createUserToken } from "../utils/jwtHelpers.js";
@@ -14,6 +15,7 @@ import userRoles from "../utils/userRoles.js";
 
 import Donor from "../models/Donor.js";
 import User from "../models/User.js";
+import Follow from "../models/Follow.js";
 
 const router = express.Router();
 
@@ -109,6 +111,78 @@ router.patch("/update", async (req, res) => {
     return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .send(createTextMessage("Error updating your profile"));
+  }
+});
+
+router.use("/follow", [verifyAuthHeader(userRoles.donor), validateFollowing]);
+
+// api/v1/user/donor/follow
+router.put("/follow", async (req, res) => {
+  const decodedDonor = decodeUserToken(req.headers.authorization);
+
+  // Required fields
+  const youthUsername = req.body.youth;
+
+  if (
+    await Follow.exists({
+      donor: decodedDonor.username,
+      youth: youthUsername,
+    })
+  ) {
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .send(createTextMessage(`You are already following @${youthUsername}`));
+  }
+
+  const newFollow = new Follow({
+    donor: decodedDonor.username,
+    youth: youthUsername,
+  });
+
+  try {
+    await newFollow.save();
+    return res
+      .status(StatusCodes.CREATED)
+      .send(createTextMessage(`Successfully followed @${youthUsername}`));
+  } catch (err) {
+    console.log(err);
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .send(createTextMessage("Error creating following relationship"));
+  }
+});
+
+// api/v1/user/donor/follow
+router.delete("/follow", async (req, res) => {
+  const decodedDonor = decodeUserToken(req.headers.authorization);
+
+  // Required fields
+  const youthUsername = req.body.youth;
+
+  if (
+    !(await Follow.exists({
+      donor: decodedDonor.username,
+      youth: youthUsername,
+    }))
+  ) {
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .send(createTextMessage(`You are not following @${youthUsername}`));
+  }
+
+  try {
+    await Follow.findOneAndDelete({
+      donor: decodedDonor.username,
+      youth: youthUsername,
+    });
+    return res.send(
+      createTextMessage(`Successfully unfollowed @${youthUsername}`)
+    );
+  } catch (err) {
+    console.log(err);
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .send(createTextMessage("Error deleting following relationship"));
   }
 });
 
