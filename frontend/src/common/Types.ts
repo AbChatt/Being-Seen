@@ -1,5 +1,3 @@
-import { OverridesStyleRules } from "@mui/material/styles/overrides";
-
 export interface Donation {
   donor: string;
   youth: string;

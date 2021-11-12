@@ -156,20 +156,4 @@ router.patch("/update", async (req, res) => {
   }
 });
 
-// // api/v1/user/youth/transaction
-// router.use("/transaction", verifyAuthHeader(userRoles.youth));
-// router.get("/transaction", async (req, res) => {
-//   const decodedYouth = decodeUserToken(req.headers.authorization);
-
-//   try {
-//     // Find transactions for the youth
-//     const parsedOrders = await Order.find({ youth: decodedYouth.username });
-//     return res.send(parsedOrders);
-//   } catch (err) {
-//     return res
-//       .status(StatusCodes.INTERNAL_SERVER_ERROR)
-//       .send(createTextMessage("error retrieve transaction table"));
-//   }
-// });
-
 export default router;
