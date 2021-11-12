@@ -1,3 +1,5 @@
+import { OverridesStyleRules } from "@mui/material/styles/overrides";
+
 export interface Donation {
   donor: string;
   youth: string;
@@ -37,6 +39,7 @@ export interface PublicYouth {
 
 export interface PrivateYouth extends PublicYouth {
   creditBalance: number;
+  orders: Order[];
 }
 
 export interface Product {
@@ -45,4 +48,12 @@ export interface Product {
   picture: string;
   merchant: string;
   price: number;
+}
+
+export interface Order {
+  youth: string;
+  merchant: string;
+  product: string;
+  price: number;
+  date: string;
 }

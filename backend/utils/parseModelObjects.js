@@ -2,6 +2,7 @@ import Donation from "../models/Donation.js";
 import Youth from "../models/Youth.js";
 import Donor from "../models/Donor.js";
 import Follow from "../models/Follow.js";
+import Order from "../models/Order.js";
 
 const parseRetrievedDonation = async (retrievedDonation) => {
   const retrievedDonor = await Donor.findOne({
@@ -46,8 +47,11 @@ const parseRetrievedYouth = async (retrievedYouth, onlyPublic) => {
     follow_count: followCount,
   };
 
+  const parsedOrders = await Order.find({ youth: retrievedYouth.username });
+
   const privateInformation = {
     credit_balance: retrievedYouth.credit_balance,
+    orders: parsedOrders,
   };
 
   return {
