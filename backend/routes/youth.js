@@ -14,6 +14,7 @@ import userRoles from "../utils/userRoles.js";
 
 import Youth from "../models/Youth.js";
 import User from "../models/User.js";
+import Order from "../models/Order.js";
 
 const router = express.Router();
 
@@ -152,6 +153,22 @@ router.patch("/update", async (req, res) => {
     return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .send(createTextMessage("Error updating your profile"));
+  }
+});
+
+// api/v1/user/youth/transaction
+router.use("/transaction", verifyAuthHeader(userRoles.youth));
+router.get("/transaction", async (req, res) => {
+  const decodedYouth = decodeUserToken(req.headers.authorization);
+
+  try {
+    // Find transactions for the youth
+    const parsedOrders = await Order.find({ youth: decodedYouth.username });
+    return res.send(parsedOrders);
+  } catch (err) {
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .send(createTextMessage("error retrieve transaction table"));
   }
 });
 

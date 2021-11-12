@@ -15,6 +15,7 @@ import verifyAuthHeader from "../middleware/security/verifyAuthHeader.js";
 import Youth from "../models/Youth.js";
 import Product from "../models/Product.js";
 import Merchant from "../models/Merchant.js";
+import Order from "../models/Order.js";
 
 const router = express.Router();
 
@@ -64,7 +65,7 @@ router.post("/", async (req, res) => {
   try {
     let request = new paypal.payouts.PayoutsPostRequest();
     request.requestBody(requestBody);
-    await client().execute(request);
+    const payOutOrder = await client().execute(request);
     await Youth.updateOne(
       { username: decodedYouth.username },
       {
@@ -76,6 +77,16 @@ router.post("/", async (req, res) => {
         },
       }
     );
+
+    const newOrder = new Order({
+      youth: decodedYouth.username,
+      merchant: retrievedMerchant.username,
+      product: retrievedProduct.name,
+      price: retrievedProduct.price,
+      date: payOutOrder.headers.date,
+    });
+
+    await newOrder.save();
 
     return res.send(createTextMessage("Successfully processed payment"));
   } catch (err) {
