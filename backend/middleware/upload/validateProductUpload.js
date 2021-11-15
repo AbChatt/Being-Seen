@@ -12,6 +12,8 @@ const validateProductUpload = async (req, res, next) => {
   const productPrice = +productPriceString;
   const productCategory = req.body.category;
 
+  const Categories = ["goods", "food", "service", "education"];
+
   // Validate product name
   if (!productName) {
     return res
@@ -50,11 +52,13 @@ const validateProductUpload = async (req, res, next) => {
     return res
       .status(StatusCodes.BAD_REQUEST)
       .send(createTextMessage("Category field is empty"));
-  } else if (productCategory != "goods" || productCategory != "service") {
+  } else if (!Categories.includes(productCategory)) {
     return res
       .status(StatusCodes.BAD_REQUEST)
       .send(
-        createTextMessage("Category field must be either goods or service")
+        createTextMessage(
+          "Category field must be goods, food, education or service"
+        )
       );
   }
   next();
