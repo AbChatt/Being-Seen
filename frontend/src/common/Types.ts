@@ -37,6 +37,7 @@ export interface PublicYouth {
 
 export interface PrivateYouth extends PublicYouth {
   creditBalance: number;
+  orders: Order[];
 }
 
 export interface Product {
@@ -45,4 +46,12 @@ export interface Product {
   picture: string;
   merchant: string;
   price: number;
+}
+
+export interface Order {
+  youth: string;
+  merchant: string;
+  product: string;
+  price: number;
+  date: string;
 }

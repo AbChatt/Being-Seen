@@ -10,6 +10,7 @@ import { PrivateYouth } from "common/Types";
 import { decodeAuthToken, getAuthHeader } from "utils/authHelpers";
 import handleResponseError from "utils/handleResponseError";
 import DonationCard from "components/Card/Donation";
+import OrderCard from "components/Card/Orders/OrderCard";
 import axiosBase from "utils/axiosBase";
 import Layout from "components/Layout";
 import ShareButtons from "components/ShareButtons";
@@ -32,6 +33,7 @@ const YouthDashboard = () => {
           story: response.data.story,
           donations: response.data.donations,
           creditBalance: response.data.credit_balance,
+          orders: response.data.orders,
         });
       })
       .catch(({ response }) => {
@@ -76,6 +78,12 @@ const YouthDashboard = () => {
               <Typography>No donations yet!</Typography>
             ) : (
               <DonationCard inCredits donations={youth.donations} />
+            )}
+
+            {youth.orders.length === 0 ? (
+              <Typography>No orders yet!</Typography>
+            ) : (
+              <OrderCard inCredits orders={youth.orders} />
             )}
           </>
         ) : (
