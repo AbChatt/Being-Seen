@@ -19,6 +19,7 @@ import userRoles from "../utils/userRoles.js";
 import Merchant from "../models/Merchant.js";
 import User from "../models/User.js";
 import Product from "../models/Product.js";
+import Order from "../models/Order.js";
 
 const router = express.Router();
 
