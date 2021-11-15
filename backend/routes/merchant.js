@@ -267,4 +267,22 @@ router.patch("/products/update", async (req, res) => {
   }
 });
 
+// api/v1/user/merchant/orders
+router.use("/orders", verifyAuthHeader(userRoles.merchant));
+router.post("/orders", async (req, res) => {
+  const decodedMerchant = decodeUserToken(req.headers.authorization);
+
+  try {
+    // Find orders from this merchant
+    const parsedOrders = await Order.find({
+      merchant: decodedMerchant.username,
+    });
+    return res.send(parsedOrders);
+  } catch (err) {
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .send(createTextMessage("Error retrieving orders from database"));
+  }
+});
+
 export default router;
