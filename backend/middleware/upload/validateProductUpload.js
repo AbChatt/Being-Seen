@@ -10,6 +10,7 @@ const validateProductUpload = async (req, res, next) => {
   const productDescription = req.body.description;
   const productPriceString = req.body.price;
   const productPrice = +productPriceString;
+  const productCategory = req.body.category;
 
   // Validate product name
   if (!productName) {
@@ -44,6 +45,18 @@ const validateProductUpload = async (req, res, next) => {
       .send(createTextMessage("Price field cannot be negative"));
   }
 
+  // Validate product price
+  if (!productCategory) {
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .send(createTextMessage("Category field is empty"));
+  } else if (productCategory != "goods" || productCategory != "service") {
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .send(
+        createTextMessage("Category field must be either goods or service")
+      );
+  }
   next();
 };
 
