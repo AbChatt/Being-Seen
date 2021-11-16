@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 
 import Grid from "@mui/material/Grid";
+import Button from "@mui/material/Button";
+
 import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
 import Avatar from "@mui/material/Avatar";
@@ -16,8 +19,9 @@ import DonationCard from "components/Card/Donation";
 import { PublicYouth } from "common/Types";
 
 import UserRoles from "utils/UserRoles";
-import { decodeAuthToken } from "utils/authHelpers";
+import { decodeAuthToken, getAuthHeader } from "utils/authHelpers";
 import handleResponseError from "utils/handleResponseError";
+
 import axiosBase from "utils/axiosBase";
 
 import styles from "./UserPage.module.scss";
@@ -27,6 +31,7 @@ const UserPage = () => {
   const account = decodeAuthToken();
   const [loading, setLoading] = useState(true);
   const [youth, setYouth] = useState<PublicYouth | null>(null);
+  const [follow, setFollow] = useState(false);
   const { username } = useParams<{ username: string }>();
 
   useEffect(() => {
@@ -54,6 +59,47 @@ const UserPage = () => {
         setLoading(false);
       });
   }, [username]);
+
+  useEffect(() => {
+    axiosBase
+      .post("/user/donor/private", {}, getAuthHeader())
+      .then((response) => {
+        const following = response.data.following;
+        if (following.indexOf(username) > -1) {
+          //following this youth
+          setFollow(true);
+        } else {
+          setFollow(false);
+        }
+      });
+  }, [follow, username]);
+
+  const handleFollow = () => {
+    if (follow === false) {
+      axiosBase
+        .put("/user/donor/follow", { youth: username }, getAuthHeader())
+        .then((response) => {
+          toast.success(response.data.message);
+          setFollow(true);
+        })
+        .catch(({ response }) => {
+          handleResponseError(response);
+        });
+    } else {
+      axiosBase
+        .delete("/user/donor/follow", {
+          ...getAuthHeader(),
+          data: { youth: username },
+        })
+        .then((response) => {
+          toast.success(response.data.message);
+          setFollow(false);
+        })
+        .catch(({ response }) => {
+          handleResponseError(response);
+        });
+    }
+  };
 
   return (
     <Layout title="User page" loading={loading}>
@@ -88,11 +134,17 @@ const UserPage = () => {
                   <UserIcon />
                 </SvgIcon>
                 <Typography variant="h3">{youth.name}</Typography>
+                {follow ? (
+                  <Button onClick={handleFollow}>Unfollow</Button>
+                ) : (
+                  <Button onClick={handleFollow}>Follow</Button>
+                )}
               </Box>
               <Divider />
               <Typography sx={{ mt: 2.5 }} style={{ whiteSpace: "pre-wrap" }}>
                 {youth.story}
               </Typography>
+
               <Box sx={{ mt: 5 }}>
                 {account && account.role === UserRoles.donor ? (
                   <DonationCard
