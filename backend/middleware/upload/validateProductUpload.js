@@ -1,5 +1,6 @@
 import { StatusCodes } from "http-status-codes";
 import { createTextMessage } from "../../utils/defaultMessages.js";
+import productCategories from "../../utils/productCategories.js";
 import Product from "../../models/Product.js";
 
 // Middleware to validate required parameters for the product upload endpoint
@@ -11,8 +12,6 @@ const validateProductUpload = async (req, res, next) => {
   const productPriceString = req.body.price;
   const productPrice = +productPriceString;
   const productCategory = req.body.category;
-
-  const Categories = ["goods", "food", "service", "education"];
 
   // Validate product name
   if (!productName) {
