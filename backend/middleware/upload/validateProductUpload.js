@@ -46,13 +46,19 @@ const validateProductUpload = async (req, res, next) => {
       .send(createTextMessage("Price field cannot be negative"));
   }
 
-  // Validate product price
+  // Validate product category
   if (!productCategory) {
     return res
       .status(StatusCodes.BAD_REQUEST)
       .send(createTextMessage("Category field is empty"));
+  } else if (!productCategories.includes(productCategory)) {
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .send(createTextMessage("Category field is not acceptable"));
   }
+
   next();
 };
 
+productCategories;
 export default validateProductUpload;
