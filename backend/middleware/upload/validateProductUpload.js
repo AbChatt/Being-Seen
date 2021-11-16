@@ -52,14 +52,6 @@ const validateProductUpload = async (req, res, next) => {
     return res
       .status(StatusCodes.BAD_REQUEST)
       .send(createTextMessage("Category field is empty"));
-  } else if (!Categories.includes(productCategory)) {
-    return res
-      .status(StatusCodes.BAD_REQUEST)
-      .send(
-        createTextMessage(
-          "Category field must be goods, food, education or service"
-        )
-      );
   }
   next();
 };
