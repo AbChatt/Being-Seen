@@ -25,6 +25,7 @@ const DonorDashboard = () => {
           organization: response.data.organization,
           profilePicture: response.data.profile_picture,
           dateOfBirth: response.data.date_of_birth,
+          following: response.data.following,
           anonymize: response.data.anonymize,
           donations: response.data.donations,
         });
@@ -48,7 +49,11 @@ const DonorDashboard = () => {
             {donor.donations.length === 0 ? (
               <Typography>No donations yet!</Typography>
             ) : (
-              <DonationCard isDonating donations={donor.donations} />
+              <DonationCard
+                isDonating
+                donations={donor.donations}
+                followCount={donor.following.length}
+              />
             )}
           </>
         ) : (

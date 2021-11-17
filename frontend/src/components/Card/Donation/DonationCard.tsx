@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { PayPalButton } from "react-paypal-button-v2";
 import { toast } from "react-toastify";
 
@@ -15,7 +15,6 @@ import axiosBase from "utils/axiosBase";
 import handleResponseError from "utils/handleResponseError";
 import { dollarToCredit } from "utils/creditDollarConvertion";
 import { ToggleButton, ToggleButtonGroup } from "@mui/material";
-import { getAuthHeader } from "utils/authHelpers";
 
 interface StatisticProps {
   stat: string | number;
@@ -38,7 +37,7 @@ interface DonationCardProps {
   youthUsername?: string;
   donorUsername?: string;
   isDonating?: boolean;
-  followers_count?: string;
+  followCount: number;
 }
 
 const DonationCard = ({
@@ -47,7 +46,7 @@ const DonationCard = ({
   youthUsername,
   donorUsername,
   isDonating,
-  followers_count,
+  followCount,
 }: DonationCardProps) => {
   const [donationAmount, setDonationAmount] = useState("5");
   const validDonationAmounts = ["5", "10", "25", "100"];
@@ -83,7 +82,7 @@ const DonationCard = ({
           </Grid>
           <Grid item xs={4}>
             <Statistic
-              stat={Number(followers_count)}
+              stat={followCount}
               label={isDonating ? "following" : "followers"}
             />
           </Grid>
