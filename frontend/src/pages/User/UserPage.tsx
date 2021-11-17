@@ -25,6 +25,8 @@ import styles from "./UserPage.module.scss";
 // Renders page to view a user's page (currently only supports youths)
 const UserPage = () => {
   const account = decodeAuthToken();
+  const [followers, setFollowers] = useState("0");
+
   const [loading, setLoading] = useState(true);
   const [youth, setYouth] = useState<PublicYouth | null>(null);
   const { username } = useParams<{ username: string }>();
@@ -46,6 +48,7 @@ const UserPage = () => {
           story: response.data.story,
           donations: response.data.donations,
         });
+        setFollowers(response.data.follow_count);
       })
       .catch(({ response }) => {
         handleResponseError(response);
@@ -99,11 +102,14 @@ const UserPage = () => {
                     youthUsername={username}
                     donations={youth.donations}
                     donorUsername={account.username}
+                    followers_count={followers}
                   />
                 ) : (
                   <DonationCard
                     donations={youth.donations}
                     youthUsername={youth.username}
+                    followers_count={followers}
+
                   />
                 )}
               </Box>

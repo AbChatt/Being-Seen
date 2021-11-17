@@ -38,6 +38,7 @@ interface DonationCardProps {
   youthUsername?: string;
   donorUsername?: string;
   isDonating?: boolean;
+  followers_count?: string;
 }
 
 const DonationCard = ({
@@ -46,20 +47,10 @@ const DonationCard = ({
   youthUsername,
   donorUsername,
   isDonating,
+  followers_count,
 }: DonationCardProps) => {
   const [donationAmount, setDonationAmount] = useState("5");
-  const [followers, setFollowers] = useState("0");
   const validDonationAmounts = ["5", "10", "25", "100"];
-  useEffect(() => {
-    axiosBase
-      .get("user/youth/", { params: { username: youthUsername } })
-      .then((response) => {
-        setFollowers(response.data.follow_count);
-      })
-      .catch(({ response }) => {
-        handleResponseError(response);
-      });
-  }, [followers]);
 
   let previousDonationsTotal = 0;
   donations.forEach((donation) => (previousDonationsTotal += donation.amount));
@@ -92,7 +83,7 @@ const DonationCard = ({
           </Grid>
           <Grid item xs={4}>
             <Statistic
-              stat={followers}
+              stat={Number(followers_count)}
               label={isDonating ? "following" : "followers"}
             />
           </Grid>
