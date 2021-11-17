@@ -13,6 +13,8 @@ import SvgIcon from "@mui/material/SvgIcon";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import UserIcon from "@mui/icons-material/Person";
+import FollowIcon from "@mui/icons-material/PersonAdd";
+import UnfollowIcon from "@mui/icons-material/PersonRemove";
 
 import Layout from "components/Layout";
 import DonationCard from "components/Card/Donation";
@@ -21,7 +23,6 @@ import { PublicYouth } from "common/Types";
 import UserRoles from "utils/UserRoles";
 import { decodeAuthToken, getAuthHeader } from "utils/authHelpers";
 import handleResponseError from "utils/handleResponseError";
-
 import axiosBase from "utils/axiosBase";
 
 import styles from "./UserPage.module.scss";
@@ -65,12 +66,7 @@ const UserPage = () => {
       .post("/user/donor/private", {}, getAuthHeader())
       .then((response) => {
         const following = response.data.following;
-        if (following.indexOf(username) > -1) {
-          //following this youth
-          setFollow(true);
-        } else {
-          setFollow(false);
-        }
+        setFollow(following.indexOf(username) !== -1);
       });
   }, [follow, username]);
 
@@ -134,11 +130,25 @@ const UserPage = () => {
                   <UserIcon />
                 </SvgIcon>
                 <Typography variant="h3">{youth.name}</Typography>
-                {follow ? (
-                  <Button onClick={handleFollow}>Unfollow</Button>
-                ) : (
-                  <Button onClick={handleFollow}>Follow</Button>
-                )}
+                <Box ml={4}>
+                  {follow ? (
+                    <Button
+                      onClick={handleFollow}
+                      variant="contained"
+                      endIcon={<UnfollowIcon />}
+                    >
+                      Unfollow
+                    </Button>
+                  ) : (
+                    <Button
+                      onClick={handleFollow}
+                      variant="contained"
+                      endIcon={<FollowIcon />}
+                    >
+                      Follow
+                    </Button>
+                  )}
+                </Box>
               </Box>
               <Divider />
               <Typography sx={{ mt: 2.5 }} style={{ whiteSpace: "pre-wrap" }}>
