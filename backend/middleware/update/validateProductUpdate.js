@@ -2,10 +2,11 @@ import { StatusCodes } from "http-status-codes";
 import { createTextMessage } from "../../utils/defaultMessages.js";
 import { decodeUserToken } from "../../utils/jwtHelpers.js";
 import Product from "../../models/Product.js";
+import productCategories from "../../utils/productCategories.js";
 
 // Middleware to validate required parameters for the product update endpoint
-// (old_name, new_name, description, price) are present and valid (note: token
-// must be validated before calling this)
+// (old_name, new_name, description, price, category) are present and valid
+// (note: token must be validated before calling this)
 const validateProductUpdate = async (req, res, next) => {
   const decodedMerchant = decodeUserToken(req.headers.authorization);
 
@@ -15,6 +16,7 @@ const validateProductUpdate = async (req, res, next) => {
   const productDescription = req.body.description;
   const productPriceString = req.body.price;
   const productPrice = +productPriceString;
+  const productCategory = req.body.category;
 
   // Validate product name
   if (!oldProductName || !newProductName) {
@@ -61,6 +63,17 @@ const validateProductUpdate = async (req, res, next) => {
     return res
       .status(StatusCodes.BAD_REQUEST)
       .send(createTextMessage("Price field cannot be negative"));
+  }
+
+  // Validate product category
+  if (!productCategory) {
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .send(createTextMessage("Category field is empty"));
+  } else if (!productCategories.includes(productCategory)) {
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .send(createTextMessage("Category field is not acceptable"));
   }
 
   next();
