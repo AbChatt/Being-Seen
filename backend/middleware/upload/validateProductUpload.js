@@ -4,7 +4,7 @@ import productCategories from "../../utils/productCategories.js";
 import Product from "../../models/Product.js";
 
 // Middleware to validate required parameters for the product upload endpoint
-// (product, description, price) are present and valid
+// (name, description, price, category) are present and valid
 const validateProductUpload = async (req, res, next) => {
   // Fields to validate
   const productName = req.body.name;
@@ -60,5 +60,4 @@ const validateProductUpload = async (req, res, next) => {
   next();
 };
 
-productCategories;
 export default validateProductUpload;

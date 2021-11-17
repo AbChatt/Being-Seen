@@ -5,8 +5,8 @@ import Product from "../../models/Product.js";
 import productCategories from "../../utils/productCategories.js";
 
 // Middleware to validate required parameters for the product update endpoint
-// (old_name, new_name, description, price) are present and valid (note: token
-// must be validated before calling this)
+// (old_name, new_name, description, price, category) are present and valid
+// (note: token must be validated before calling this)
 const validateProductUpdate = async (req, res, next) => {
   const decodedMerchant = decodeUserToken(req.headers.authorization);
 
