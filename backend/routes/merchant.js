@@ -247,6 +247,7 @@ router.patch("/products/update", async (req, res) => {
   const newProductName = req.body.new_name;
   const productDescription = req.body.description;
   const productPrice = +req.body.price;
+  const productCategory = req.body.category;
 
   // Optional fields
   const productPicture = req.body.picture;
@@ -259,6 +260,7 @@ router.patch("/products/update", async (req, res) => {
         description: productDescription,
         picture: productPicture || "#",
         price: productPrice.toFixed(2),
+        category: productCategory,
       }
     );
     return res.send(createTextMessage("Successfully updated product"));
