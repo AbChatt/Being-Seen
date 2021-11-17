@@ -70,7 +70,7 @@ const UserPage = () => {
           setFollow(following.indexOf(username) !== -1);
         });
     }
-  }, [follow, username]);
+  }, [account, username]);
 
   const handleUnfollow = () => {
     axiosBase
@@ -158,7 +158,6 @@ const UserPage = () => {
               <Typography sx={{ mt: 2.5 }} style={{ whiteSpace: "pre-wrap" }}>
                 {youth.story}
               </Typography>
-
               <Box sx={{ mt: 5 }}>
                 {account && account.role === UserRoles.donor ? (
                   <DonationCard
