@@ -62,39 +62,41 @@ const UserPage = () => {
   }, [username]);
 
   useEffect(() => {
-    axiosBase
-      .post("/user/donor/private", {}, getAuthHeader())
-      .then((response) => {
-        const following = response.data.following;
-        setFollow(following.indexOf(username) !== -1);
-      });
-  }, [follow, username]);
-
-  const handleFollow = () => {
-    if (follow === false) {
+    if (account && account.role === UserRoles.donor) {
       axiosBase
-        .put("/user/donor/follow", { youth: username }, getAuthHeader())
+        .post("/user/donor/private", {}, getAuthHeader())
         .then((response) => {
-          toast.success(response.data.message);
-          setFollow(true);
-        })
-        .catch(({ response }) => {
-          handleResponseError(response);
-        });
-    } else {
-      axiosBase
-        .delete("/user/donor/follow", {
-          ...getAuthHeader(),
-          data: { youth: username },
-        })
-        .then((response) => {
-          toast.success(response.data.message);
-          setFollow(false);
-        })
-        .catch(({ response }) => {
-          handleResponseError(response);
+          const following = response.data.following;
+          setFollow(following.indexOf(username) !== -1);
         });
     }
+  }, [follow, username]);
+
+  const handleUnfollow = () => {
+    axiosBase
+      .delete("/user/donor/follow", {
+        ...getAuthHeader(),
+        data: { youth: username },
+      })
+      .then((response) => {
+        toast.success(response.data.message);
+        setFollow(false);
+      })
+      .catch(({ response }) => {
+        handleResponseError(response);
+      });
+  };
+
+  const handleFollow = () => {
+    axiosBase
+      .put("/user/donor/follow", { youth: username }, getAuthHeader())
+      .then((response) => {
+        toast.success(response.data.message);
+        setFollow(true);
+      })
+      .catch(({ response }) => {
+        handleResponseError(response);
+      });
   };
 
   return (
@@ -131,23 +133,25 @@ const UserPage = () => {
                 </SvgIcon>
                 <Typography variant="h3">{youth.name}</Typography>
                 <Box ml={4}>
-                  {follow ? (
-                    <Button
-                      onClick={handleFollow}
-                      variant="contained"
-                      endIcon={<UnfollowIcon />}
-                    >
-                      Unfollow
-                    </Button>
-                  ) : (
-                    <Button
-                      onClick={handleFollow}
-                      variant="contained"
-                      endIcon={<FollowIcon />}
-                    >
-                      Follow
-                    </Button>
-                  )}
+                  {account &&
+                    account.role === UserRoles.donor &&
+                    (follow ? (
+                      <Button
+                        onClick={handleUnfollow}
+                        variant="contained"
+                        endIcon={<UnfollowIcon />}
+                      >
+                        Unfollow
+                      </Button>
+                    ) : (
+                      <Button
+                        onClick={handleFollow}
+                        variant="contained"
+                        endIcon={<FollowIcon />}
+                      >
+                        Follow
+                      </Button>
+                    ))}
                 </Box>
               </Box>
               <Divider />
