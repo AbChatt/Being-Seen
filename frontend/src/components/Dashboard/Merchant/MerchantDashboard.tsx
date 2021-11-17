@@ -35,6 +35,7 @@ const MerchantDashboard = () => {
             name: data.name,
             description: data.description,
             picture: data.picture,
+            category: data.category,
             owner: data.owner,
             price: String(data.price),
           }))

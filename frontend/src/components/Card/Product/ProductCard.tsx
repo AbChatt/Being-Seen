@@ -50,6 +50,7 @@ const ProductCard = ({
   description,
   picture,
   price,
+  category,
   isMerchant,
   onDelete,
   onEdit,
@@ -131,8 +132,9 @@ const ProductCard = ({
           alt={name}
         />
         <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
-            {name}
+          <Typography variant="h5">{name}</Typography>
+          <Typography gutterBottom variant="body2">
+            {category}
           </Typography>
           <Typography variant="body2" color="text.secondary">
             {isMerchant ? `$${price}` : `${dollarToCredit(price)} credits`}
