@@ -65,11 +65,15 @@ const StorePage = () => {
 
   useEffect(() => {
     setRenderedProducts(
-      products.filter((product) => {
-        return product.name.toLowerCase().includes(search.toLowerCase());
-      })
+      products
+        .filter((product) => {
+          return product.name.toLowerCase().includes(search.toLowerCase());
+        })
+        .filter((product) => {
+          return category === "All" || product.category === category;
+        })
     );
-  }, [products, search]);
+  }, [products, search, category]);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value);
