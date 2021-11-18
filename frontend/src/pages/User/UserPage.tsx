@@ -73,10 +73,6 @@ const UserPage = () => {
     }
   }, [account, username]);
 
-  function spreadYouth<PublicYouth>(t: PublicYouth): PublicYouth {
-    return Object.assign({}, t);
-  }
-
   const handleUnfollow = () => {
     axiosBase
       .delete("/user/donor/follow", {
@@ -84,13 +80,10 @@ const UserPage = () => {
         data: { youth: username },
       })
       .then((response) => {
-        let ayouth: PublicYouth | null = spreadYouth(youth);
-        if (ayouth) {
-          ayouth.followCount -= 1;
-        }
-
-        setYouth(ayouth);
         setFollow(false);
+        let youthCopy = { ...youth } as PublicYouth;
+        youthCopy.followCount--;
+        setYouth(youthCopy);
         toast.success(response.data.message);
       })
       .catch(({ response }) => {
@@ -102,13 +95,10 @@ const UserPage = () => {
     axiosBase
       .put("/user/donor/follow", { youth: username }, getAuthHeader())
       .then((response) => {
-        let ayouth: PublicYouth | null = spreadYouth(youth);
-        if (ayouth) {
-          ayouth.followCount += 1;
-        }
-
         setFollow(true);
-        setYouth(ayouth);
+        let youthCopy = { ...youth } as PublicYouth;
+        youthCopy.followCount++;
+        setYouth(youthCopy);
         toast.success(response.data.message);
       })
       .catch(({ response }) => {
