@@ -26,13 +26,7 @@ const MerchantDashboard = () => {
 
   useEffect(() => {
     axiosBase
-      .post(
-        "/user/merchant/private/dashboard",
-        {
-          merchant: account?.username,
-        },
-        getAuthHeader()
-      )
+      .post("/user/merchant/private/dashboard", {}, getAuthHeader())
       .then((response) => {
         setProducts(
           response.data.products.map((data: any) => ({
