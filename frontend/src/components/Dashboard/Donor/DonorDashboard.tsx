@@ -18,7 +18,8 @@ const DonorDashboard = () => {
   const account = decodeAuthToken();
   const [loading, setLoading] = useState(true);
   const [donor, setDonor] = useState<Donor | null>(null);
-  const [renderedYouths, setRenderedYouths] = useState<PublicYouth[]>([]);
+  const [followingYouths, setFollowingYouths] = useState<PublicYouth[]>([]);
+
   useEffect(() => {
     axiosBase
       .post("/user/donor/private", {}, getAuthHeader())
@@ -43,34 +44,30 @@ const DonorDashboard = () => {
   }, [account?.username]);
 
   useEffect(() => {
-    axiosBase
-      .get("/user/youth")
-      .then((response) => {
-        const retrievedYouths = response.data.map((data: any) => ({
-          name: data.name,
-          username: data.username,
-          dateOfBirth: data.date_of_birth,
-          profilePicture: data.profile_picture,
-          savingPlan: data.saving_plan,
-          story: data.story,
-          donations: data.donations,
-        }));
+    if (donor) {
+      axiosBase
+        .get("/user/youth")
+        .then((response) => {
+          const retrievedYouths = response.data.map((data: any) => ({
+            name: data.name,
+            username: data.username,
+            dateOfBirth: data.date_of_birth,
+            profilePicture: data.profile_picture,
+            savingPlan: data.saving_plan,
+            story: data.story,
+            donations: data.donations,
+          }));
 
-        let followingYouths: PublicYouth[] = [];
-        retrievedYouths.forEach((youth: any) => {
-          if (donor && donor.following.indexOf(youth.username) > -1) {
-            followingYouths.push(youth);
-          }
+          const followingYouths = retrievedYouths.filter((youth: any) => {
+            return donor.following.includes(youth.username);
+          });
+
+          setFollowingYouths(followingYouths);
+        })
+        .catch(({ response }) => {
+          handleResponseError(response);
         });
-
-        setRenderedYouths(followingYouths);
-      })
-      .catch(({ response }) => {
-        handleResponseError(response);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    }
   }, [donor]);
 
   return (
@@ -90,33 +87,33 @@ const DonorDashboard = () => {
                 followCount={donor.following.length}
               />
             )}
+            <Typography variant="h4" mt={7} mb={3}>
+              Youths Following
+            </Typography>
+            {followingYouths.length ? (
+              <Grid container spacing={3}>
+                {followingYouths.map((youth, idx) => (
+                  <Grid
+                    key={`youth-${idx}`}
+                    item
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    lg={3}
+                    xl={2}
+                  >
+                    <YouthCard {...youth} />
+                  </Grid>
+                ))}
+              </Grid>
+            ) : (
+              <Typography>You are not following any youths</Typography>
+            )}
           </>
         ) : (
           <Typography variant="h4">
             Issue loading {account?.username}
           </Typography>
-        )}
-        <Typography variant="h4" mt={7} mb={3}>
-          Youths Following
-        </Typography>
-        {renderedYouths.length ? (
-          <Grid container spacing={3}>
-            {renderedYouths.map((youth, idx) => (
-              <Grid
-                key={`youth-${idx}`}
-                item
-                xs={12}
-                sm={6}
-                md={4}
-                lg={3}
-                xl={2}
-              >
-                <YouthCard {...youth} />
-              </Grid>
-            ))}
-          </Grid>
-        ) : (
-          <Typography>You are not following any youths</Typography>
         )}
       </Container>
     </Layout>
