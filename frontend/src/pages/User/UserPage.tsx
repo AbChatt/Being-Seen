@@ -46,6 +46,7 @@ const UserPage = () => {
         setYouth({
           name: response.data.name,
           username: response.data.username,
+          followCount: response.data.follow_count,
           dateOfBirth: response.data.date_of_birth,
           profilePicture: response.data.profile_picture,
           savingPlan: response.data.saving_plan,
@@ -164,11 +165,13 @@ const UserPage = () => {
                     youthUsername={username}
                     donations={youth.donations}
                     donorUsername={account.username}
+                    followCount={youth.followCount}
                   />
                 ) : (
                   <DonationCard
                     donations={youth.donations}
                     youthUsername={youth.username}
+                    followCount={youth.followCount}
                   />
                 )}
               </Box>
