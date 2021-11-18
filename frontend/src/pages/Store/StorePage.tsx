@@ -93,7 +93,7 @@ const StorePage = () => {
   const handleSortFood = () => {
     setRenderedProducts(
       products.filter((product) => {
-        return product.category == "Food";
+        return product.category === "Food";
       })
     );
   };
@@ -101,7 +101,7 @@ const StorePage = () => {
   const handleSortGoods = () => {
     setRenderedProducts(
       products.filter((product) => {
-        return product.category == "Goods";
+        return product.category === "Goods";
       })
     );
   };
@@ -109,7 +109,7 @@ const StorePage = () => {
   const handleSortService = () => {
     setRenderedProducts(
       products.filter((product) => {
-        return product.category == "Services";
+        return product.category === "Services";
       })
     );
   };
@@ -117,7 +117,7 @@ const StorePage = () => {
   const handleSortEducation = () => {
     setRenderedProducts(
       products.filter((product) => {
-        return product.category == "Education";
+        return product.category === "Education";
       })
     );
   };
@@ -125,7 +125,7 @@ const StorePage = () => {
   const handleSortHygiene = () => {
     setRenderedProducts(
       products.filter((product) => {
-        return product.category == "Hygiene";
+        return product.category === "Hygiene";
       })
     );
   };
@@ -133,7 +133,7 @@ const StorePage = () => {
   const handleSortEntertainment = () => {
     setRenderedProducts(
       products.filter((product) => {
-        return product.category == "Entertainment";
+        return product.category === "Entertainment";
       })
     );
   };
