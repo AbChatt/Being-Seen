@@ -37,6 +37,7 @@ interface DonationCardProps {
   youthUsername?: string;
   donorUsername?: string;
   isDonating?: boolean;
+  isDonor?: boolean;
 }
 
 const DonationCard = ({
@@ -45,6 +46,7 @@ const DonationCard = ({
   youthUsername,
   donorUsername,
   isDonating,
+  isDonor,
 }: DonationCardProps) => {
   const [donationAmount, setDonationAmount] = useState("5");
   const validDonationAmounts = ["5", "10", "25", "100"];
@@ -85,9 +87,16 @@ const DonationCard = ({
             />
           </Grid>
         </Grid>
-        {donations.length !== 0 && (
-          <DonationsTable inCredits={inCredits} donations={donations} />
-        )}
+        {donations.length !== 0 &&
+          (isDonor ? (
+            <DonationsTable
+              inCredits={inCredits}
+              donations={donations}
+              isDonor
+            />
+          ) : (
+            <DonationsTable inCredits={inCredits} donations={donations} />
+          ))}
         {donorUsername && (
           <Box
             display="flex"

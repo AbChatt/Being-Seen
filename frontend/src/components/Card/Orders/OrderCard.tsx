@@ -83,8 +83,9 @@ const OrderCard = ({
               <Table stickyHeader>
                 <TableHead>
                   <TableRow>
-                    <TableCell sx={{ fontWeight: 700 }}>Youth</TableCell>
-                    {isMerchant ? null : (
+                    {isMerchant ? (
+                      <TableCell sx={{ fontWeight: 700 }}>Youth</TableCell>
+                    ) : (
                       <TableCell sx={{ fontWeight: 700 }}>Merchant</TableCell>
                     )}
                     <TableCell sx={{ fontWeight: 700 }}>Product</TableCell>
@@ -98,8 +99,9 @@ const OrderCard = ({
                     .reverse()
                     .map((row, idx) => (
                       <TableRow hover tabIndex={-1} key={`${row.youth}-${idx}`}>
-                        <TableCell>{row.youth}</TableCell>
-                        {isMerchant ? null : (
+                        {isMerchant ? (
+                          <TableCell>{row.youth}</TableCell>
+                        ) : (
                           <TableCell>{row.merchant}</TableCell>
                         )}
                         <TableCell>{row.product}</TableCell>

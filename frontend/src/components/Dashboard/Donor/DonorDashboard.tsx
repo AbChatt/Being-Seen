@@ -48,7 +48,7 @@ const DonorDashboard = () => {
             {donor.donations.length === 0 ? (
               <Typography>No donations yet!</Typography>
             ) : (
-              <DonationCard isDonating donations={donor.donations} />
+              <DonationCard isDonating donations={donor.donations} isDonor />
             )}
           </>
         ) : (
