@@ -75,15 +75,11 @@ const YouthDashboard = () => {
               />
             </Box>
 
-            {youth.donations.length === 0 ? (
-              <Typography>No donations yet!</Typography>
-            ) : (
-              <DonationCard
-                inCredits
-                donations={youth.donations}
-                followCount={youth.followCount}
-              />
-            )}
+            <DonationCard
+              inCredits
+              donations={youth.donations}
+              followCount={youth.followCount}
+            />
 
             {youth.orders.length === 0 ? (
               <Typography>No orders yet!</Typography>
