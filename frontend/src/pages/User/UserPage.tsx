@@ -73,7 +73,7 @@ const UserPage = () => {
     }
   }, [account, username]);
 
-  function foo<PublicYouth>(t: PublicYouth): PublicYouth {
+  function spreadYouth<PublicYouth>(t: PublicYouth): PublicYouth {
     return Object.assign({}, t);
   }
 
@@ -84,7 +84,7 @@ const UserPage = () => {
         data: { youth: username },
       })
       .then((response) => {
-        let ayouth: PublicYouth | null = foo(youth);
+        let ayouth: PublicYouth | null = spreadYouth(youth);
         if (ayouth) {
           ayouth.followCount -= 1;
         }
@@ -102,7 +102,7 @@ const UserPage = () => {
     axiosBase
       .put("/user/donor/follow", { youth: username }, getAuthHeader())
       .then((response) => {
-        let ayouth: PublicYouth | null = foo(youth);
+        let ayouth: PublicYouth | null = spreadYouth(youth);
         if (ayouth) {
           ayouth.followCount += 1;
         }
