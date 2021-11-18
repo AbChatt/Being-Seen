@@ -80,8 +80,11 @@ const UserPage = () => {
         data: { youth: username },
       })
       .then((response) => {
-        toast.success(response.data.message);
         setFollow(false);
+        let youthCopy = { ...youth } as PublicYouth;
+        youthCopy.followCount--;
+        setYouth(youthCopy);
+        toast.success(response.data.message);
       })
       .catch(({ response }) => {
         handleResponseError(response);
@@ -92,8 +95,11 @@ const UserPage = () => {
     axiosBase
       .put("/user/donor/follow", { youth: username }, getAuthHeader())
       .then((response) => {
-        toast.success(response.data.message);
         setFollow(true);
+        let youthCopy = { ...youth } as PublicYouth;
+        youthCopy.followCount++;
+        setYouth(youthCopy);
+        toast.success(response.data.message);
       })
       .catch(({ response }) => {
         handleResponseError(response);
