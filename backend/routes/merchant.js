@@ -268,17 +268,32 @@ router.patch("/products/update", async (req, res) => {
   }
 });
 
-// api/v1/user/merchant/orders
-router.use("/orders", verifyAuthHeader(userRoles.merchant));
-router.post("/orders", async (req, res) => {
+// api/v1/user/merchant/private/dashboard
+router.use("/private/dashboard", verifyAuthHeader(userRoles.merchant));
+router.post("/private/dashboard", async (req, res) => {
   const decodedMerchant = decodeUserToken(req.headers.authorization);
 
   try {
+    // Request wants products from a specific merchant
+    const retrievedProducts = await Product.find({
+      merchant: decodedMerchant.username,
+    });
+
+    const parsedProducts = retrievedProducts.map((product) =>
+      parseRetrievedProduct(product)
+    );
+
     // Find orders from this merchant
     const parsedOrders = await Order.find({
       merchant: decodedMerchant.username,
     });
-    return res.send(parsedOrders);
+
+    const privateInformation = {
+      products: parsedProducts,
+      orders: parsedOrders,
+    };
+
+    return res.send(privateInformation);
   } catch (err) {
     return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
