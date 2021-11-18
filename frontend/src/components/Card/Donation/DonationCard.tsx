@@ -66,7 +66,7 @@ const DonationCard = ({
   return (
     <Card style={{ background: "rgba(0 0 0 / 2%)" }}>
       <CardContent>
-        <Grid container sx={{ mb: 2.5 }}>
+        <Grid container>
           <Grid item xs={4}>
             <Statistic
               stat={
@@ -88,7 +88,9 @@ const DonationCard = ({
           </Grid>
         </Grid>
         {donations.length !== 0 && (
-          <DonationsTable inCredits={inCredits} donations={donations} />
+          <Box sx={{ mt: 2.5 }}>
+            <DonationsTable inCredits={inCredits} donations={donations} />
+          </Box>
         )}
         {donorUsername && (
           <Box
