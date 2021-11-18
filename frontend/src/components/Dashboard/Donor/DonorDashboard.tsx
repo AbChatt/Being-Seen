@@ -16,7 +16,8 @@ import { PublicYouth } from "common/Types";
 
 const DonorDashboard = () => {
   const account = decodeAuthToken();
-  const [loading, setLoading] = useState(true);
+  const [loadingDonor, setLoadingDonor] = useState(true);
+  const [loadingFollowingYouths, setLoadingFollowingYouths] = useState(true);
   const [donor, setDonor] = useState<Donor | null>(null);
   const [followingYouths, setFollowingYouths] = useState<PublicYouth[]>([]);
 
@@ -39,7 +40,7 @@ const DonorDashboard = () => {
         handleResponseError(response);
       })
       .finally(() => {
-        setLoading(false);
+        setLoadingDonor(false);
       });
   }, [account?.username]);
 
@@ -66,12 +67,18 @@ const DonorDashboard = () => {
         })
         .catch(({ response }) => {
           handleResponseError(response);
+        })
+        .finally(() => {
+          setLoadingFollowingYouths(false);
         });
     }
   }, [donor]);
 
   return (
-    <Layout title="Donor Dashboard" loading={loading}>
+    <Layout
+      title="Donor Dashboard"
+      loading={loadingDonor || loadingFollowingYouths}
+    >
       <Container maxWidth="xl" sx={{ py: 5 }}>
         {donor ? (
           <>
