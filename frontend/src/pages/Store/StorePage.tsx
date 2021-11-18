@@ -9,6 +9,9 @@ import DownArrowIcon from "@mui/icons-material/ArrowDownward";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
 import { Product } from "common/Types";
 import Layout from "components/Layout";
@@ -81,6 +84,70 @@ const StorePage = () => {
     setProducts(sortProductsAscending().reverse());
   };
 
+  // Handle sort by category
+
+  const handleDisableFilter = () => {
+    setRenderedProducts(products);
+  };
+
+  const handleSortFood = () => {
+    setRenderedProducts(
+      products.filter((product) => {
+        return product.category == "Food";
+      })
+    );
+  };
+
+  const handleSortGoods = () => {
+    setRenderedProducts(
+      products.filter((product) => {
+        return product.category == "Goods";
+      })
+    );
+  };
+
+  const handleSortService = () => {
+    setRenderedProducts(
+      products.filter((product) => {
+        return product.category == "Services";
+      })
+    );
+  };
+
+  const handleSortEducation = () => {
+    setRenderedProducts(
+      products.filter((product) => {
+        return product.category == "Education";
+      })
+    );
+  };
+
+  const handleSortHygiene = () => {
+    setRenderedProducts(
+      products.filter((product) => {
+        return product.category == "Hygiene";
+      })
+    );
+  };
+
+  const handleSortEntertainment = () => {
+    setRenderedProducts(
+      products.filter((product) => {
+        return product.category == "Entertainment";
+      })
+    );
+  };
+
+  // Handle sort button
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   return (
     <Layout title="Store" loading={loading}>
       <Container maxWidth="xl" sx={{ py: 5 }}>
@@ -95,6 +162,37 @@ const StorePage = () => {
               value={search}
               onChange={handleSearchChange}
             />
+            <Button
+              id="sort-button"
+              aria-controls="sort-menu"
+              aria-haspopup="true"
+              aria-expanded={open ? "true" : undefined}
+              onClick={handleClick}
+              variant="outlined"
+              sx={{ ml: 2 }}
+              endIcon={<KeyboardArrowDownIcon />}
+            >
+              Filter By
+            </Button>
+            <Menu
+              id="sort-menu"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              MenuListProps={{
+                "aria-labelledby": "basic-button",
+              }}
+            >
+              <MenuItem onClick={handleDisableFilter}>All</MenuItem>
+              <MenuItem onClick={handleSortFood}>Food</MenuItem>
+              <MenuItem onClick={handleSortGoods}>Goods</MenuItem>
+              <MenuItem onClick={handleSortService}>Services</MenuItem>
+              <MenuItem onClick={handleSortEducation}>Education</MenuItem>
+              <MenuItem onClick={handleSortHygiene}>Hygiene</MenuItem>
+              <MenuItem onClick={handleSortEntertainment}>
+                Entertainment
+              </MenuItem>
+            </Menu>
             <Button
               variant="outlined"
               sx={{ ml: 2 }}
