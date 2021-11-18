@@ -60,7 +60,7 @@ const UserPage = () => {
       .finally(() => {
         setLoading(false);
       });
-  }, [username]);
+  }, [username, follow]);
 
   useEffect(() => {
     if (account && account.role === UserRoles.donor) {
