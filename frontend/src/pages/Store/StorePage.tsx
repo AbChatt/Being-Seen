@@ -42,6 +42,7 @@ const StorePage = () => {
           name: data.name,
           description: data.description,
           picture: data.picture,
+          category: data.category,
           merchant: data.merchant,
           price: data.price,
         }));

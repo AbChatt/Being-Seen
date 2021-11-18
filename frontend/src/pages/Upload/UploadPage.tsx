@@ -7,6 +7,7 @@ import Avatar from "@mui/material/Avatar";
 import TextField from "@mui/material/TextField";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
+import MenuItem from "@mui/material/MenuItem";
 
 import Layout from "components/Layout";
 import { getAuthHeader } from "utils/authHelpers";
@@ -14,6 +15,7 @@ import { decodeAuthToken } from "utils/authHelpers";
 import handleResponseError from "utils/handleResponseError";
 import UserRoles from "utils/UserRoles";
 import axiosBase from "utils/axiosBase";
+import productCategories from "../../utils/productCategories";
 
 // Render the dashboard page of the application. If a user is not logged in (or
 // is not a merchant), we redirect them to the homepage.
@@ -24,6 +26,7 @@ const UploadPage = () => {
   const [price, setPrice] = useState("");
   const [pictureUrl, setPictureUrl] = useState("");
   const [description, setDescription] = useState("");
+  const [category, setCategory] = useState("");
 
   if (!account || account.role !== UserRoles.merchant) {
     history.push("/");
@@ -40,6 +43,7 @@ const UploadPage = () => {
           description: description,
           picture: pictureUrl,
           price: price,
+          category: category,
         },
         getAuthHeader()
       )
@@ -67,6 +71,10 @@ const UploadPage = () => {
 
   const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPrice(e.target.value);
+  };
+
+  const handleCategoryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCategory(e.target.value);
   };
 
   return (
@@ -103,6 +111,21 @@ const UploadPage = () => {
             label="Description"
             margin="normal"
           />
+          <TextField
+            required
+            fullWidth
+            select
+            value={category}
+            onChange={handleCategoryChange}
+            label="Category"
+            margin="normal"
+          >
+            {productCategories.map((option) => (
+              <MenuItem key={option} value={option}>
+                {option}
+              </MenuItem>
+            ))}
+          </TextField>
           <TextField
             required
             fullWidth
