@@ -60,7 +60,7 @@ const UserPage = () => {
       .finally(() => {
         setLoading(false);
       });
-  }, [username, follow]);
+  }, [username]);
 
   useEffect(() => {
     if (account && account.role === UserRoles.donor) {
@@ -73,6 +73,10 @@ const UserPage = () => {
     }
   }, [account, username]);
 
+  function foo<PublicYouth>(t: PublicYouth): PublicYouth {
+    return Object.assign({}, t);
+  }
+
   const handleUnfollow = () => {
     axiosBase
       .delete("/user/donor/follow", {
@@ -80,8 +84,14 @@ const UserPage = () => {
         data: { youth: username },
       })
       .then((response) => {
-        toast.success(response.data.message);
+        let ayouth: PublicYouth | null = foo(youth);
+        if (ayouth) {
+          ayouth.followCount -= 1;
+        }
+
+        setYouth(ayouth);
         setFollow(false);
+        toast.success(response.data.message);
       })
       .catch(({ response }) => {
         handleResponseError(response);
@@ -92,8 +102,14 @@ const UserPage = () => {
     axiosBase
       .put("/user/donor/follow", { youth: username }, getAuthHeader())
       .then((response) => {
-        toast.success(response.data.message);
+        let ayouth: PublicYouth | null = foo(youth);
+        if (ayouth) {
+          ayouth.followCount += 1;
+        }
+
         setFollow(true);
+        setYouth(ayouth);
+        toast.success(response.data.message);
       })
       .catch(({ response }) => {
         handleResponseError(response);
