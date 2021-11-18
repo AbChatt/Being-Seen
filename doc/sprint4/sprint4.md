@@ -38,7 +38,7 @@ None
 
 2.  Update product uploading and editing frontend ui with the category field (2 hour) (Luowei)
 
-3.  Implement a sort button in the store to sort products by its category (3 hour) (Luowei)
+3.  Implement a filter button in the store to enable youth to filter products by its category (3 hour) (Luowei)
 
 **TEA4-19**: As Dorothy (a donor), I want to access a homeless youth’s page by their username so that I can find a specific individual I meet.
 
