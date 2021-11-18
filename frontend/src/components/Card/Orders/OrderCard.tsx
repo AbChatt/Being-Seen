@@ -32,10 +32,16 @@ interface OrdersTableProps {
   inCredits?: boolean;
   orders: Order[];
   maxHeight?: number;
+  isMerchant?: boolean;
 }
 
 // Renders a table showing a list of orders (youth, merchant, product, Cost, date)
-const OrderCard = ({ inCredits, orders, maxHeight }: OrdersTableProps) => {
+const OrderCard = ({
+  inCredits,
+  orders,
+  maxHeight,
+  isMerchant,
+}: OrdersTableProps) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
@@ -78,7 +84,9 @@ const OrderCard = ({ inCredits, orders, maxHeight }: OrdersTableProps) => {
                 <TableHead>
                   <TableRow>
                     <TableCell sx={{ fontWeight: 700 }}>Youth</TableCell>
-                    <TableCell sx={{ fontWeight: 700 }}>Merchant</TableCell>
+                    {isMerchant ? null : (
+                      <TableCell sx={{ fontWeight: 700 }}>Merchant</TableCell>
+                    )}
                     <TableCell sx={{ fontWeight: 700 }}>Product</TableCell>
                     <TableCell sx={{ fontWeight: 700 }}>Cost</TableCell>
                     <TableCell sx={{ fontWeight: 700 }}>Date</TableCell>
@@ -91,7 +99,9 @@ const OrderCard = ({ inCredits, orders, maxHeight }: OrdersTableProps) => {
                     .map((row, idx) => (
                       <TableRow hover tabIndex={-1} key={`${row.youth}-${idx}`}>
                         <TableCell>{row.youth}</TableCell>
-                        <TableCell>{row.merchant}</TableCell>
+                        {isMerchant ? null : (
+                          <TableCell>{row.merchant}</TableCell>
+                        )}
                         <TableCell>{row.product}</TableCell>
                         <TableCell>
                           {inCredits

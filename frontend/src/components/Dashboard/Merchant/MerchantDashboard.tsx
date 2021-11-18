@@ -112,7 +112,7 @@ const MerchantDashboard = () => {
         {orders.length === 0 ? (
           <Typography>No orders yet!</Typography>
         ) : (
-          <OrderCard orders={orders} />
+          <OrderCard orders={orders} isMerchant />
         )}
       </Container>
     </Layout>
