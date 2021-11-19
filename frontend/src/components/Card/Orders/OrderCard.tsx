@@ -61,7 +61,7 @@ const OrderCard = ({
     <Card style={{ background: "rgba(0 0 0 / 2%)" }}>
       <CardContent>
         <Grid container sx={{ mb: 2.5 }}>
-          <Grid item xs={4}>
+          <Grid item xs={6}>
             <Statistic
               stat={
                 inCredits
@@ -71,7 +71,7 @@ const OrderCard = ({
               label={inCredits ? "spent" : "total"}
             />
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={6}>
             <Statistic stat={orders.length} label="orders" />
           </Grid>
         </Grid>
