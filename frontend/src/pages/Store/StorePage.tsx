@@ -9,16 +9,20 @@ import DownArrowIcon from "@mui/icons-material/ArrowDownward";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
 
 import { Product } from "common/Types";
 import Layout from "components/Layout";
 import ProductCard from "components/Card/Product";
 
+import productCategories from "utils/productCategories";
 import handleResponseError from "utils/handleResponseError";
 import { decodeAuthToken } from "utils/authHelpers";
 import UserRoles from "utils/UserRoles";
 import axiosBase from "utils/axiosBase";
-import Button from "@mui/material/Button";
 
 // Render the store page of the application. If a user is not logged in (or does
 // not have the youth role), we redirect them to the homepage.
@@ -27,6 +31,7 @@ const StorePage = () => {
   const account = decodeAuthToken();
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
+  const [category, setCategory] = useState("All");
   const [products, setProducts] = useState<Product[]>([]);
   const [renderedProducts, setRenderedProducts] = useState<Product[]>([]);
 
@@ -51,11 +56,15 @@ const StorePage = () => {
 
   useEffect(() => {
     setRenderedProducts(
-      products.filter((product) => {
-        return product.name.toLowerCase().includes(search.toLowerCase());
-      })
+      products
+        .filter((product) => {
+          return product.name.toLowerCase().includes(search.toLowerCase());
+        })
+        .filter((product) => {
+          return category === "All" || product.category === category;
+        })
     );
-  }, [products, search]);
+  }, [products, search, category]);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value);
@@ -72,12 +81,15 @@ const StorePage = () => {
     setProducts(sortProductsAscending().reverse());
   };
 
+  const handleCategoryChange = (event: SelectChangeEvent) => {
+    setCategory(event.target.value);
+  };
+
   return (
     <Layout title="Store" loading={loading}>
       <Container maxWidth="xl" sx={{ py: 5 }}>
         <Box mb={3}>
           <Typography variant="h4">Store</Typography>
-
           <Box display="flex" alignItems="flex-end" mt={3}>
             <SearchIcon sx={{ mr: 1, my: 0.5 }} />
             <TextField
@@ -102,6 +114,19 @@ const StorePage = () => {
             >
               Sort Price
             </Button>
+            <FormControl sx={{ ml: 2, width: 235 }}>
+              <Select
+                size="small"
+                onChange={handleCategoryChange}
+                value={category}
+              >
+                {["All", ...productCategories].map((product) => (
+                  <MenuItem key={`select-${product}`} value={product}>
+                    Category: {product}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           </Box>
         </Box>
         {renderedProducts.length ? (

@@ -32,6 +32,7 @@ const YouthDashboard = () => {
           savingPlan: response.data.saving_plan,
           story: response.data.story,
           donations: response.data.donations,
+          followCount: response.data.follow_count,
           creditBalance: response.data.credit_balance,
           orders: response.data.orders,
         });
@@ -74,11 +75,11 @@ const YouthDashboard = () => {
               />
             </Box>
 
-            {youth.donations.length === 0 ? (
-              <Typography>No donations yet!</Typography>
-            ) : (
-              <DonationCard inCredits donations={youth.donations} />
-            )}
+            <DonationCard
+              inCredits
+              donations={youth.donations}
+              followCount={youth.followCount}
+            />
 
             <Typography variant="h4" mt={5} mb={3}>
               Past Orders

@@ -22,6 +22,7 @@ export interface Donor {
   profilePicture: string;
   dateOfBirth: string;
   anonymize: boolean;
+  following: string[];
   donations: Donation[];
 }
 
@@ -30,6 +31,7 @@ export interface PublicYouth {
   username: string;
   profilePicture: string;
   story: string;
+  followCount: number;
   savingPlan: string;
   dateOfBirth: string;
   donations: Donation[];
@@ -44,6 +46,7 @@ export interface Product {
   name: string;
   description: string;
   picture: string;
+  category: string;
   merchant: string;
   price: number;
 }

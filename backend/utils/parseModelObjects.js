@@ -128,6 +128,7 @@ const parseRetrievedProduct = (retrievedProduct) => ({
   picture: retrievedProduct.picture,
   merchant: retrievedProduct.merchant,
   price: retrievedProduct.price,
+  category: retrievedProduct.category,
 });
 
 const parseRetrievedOrder = (retrievedOrder) => ({
