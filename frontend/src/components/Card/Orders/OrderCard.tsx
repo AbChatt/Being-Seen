@@ -60,7 +60,7 @@ const OrderCard = ({
   return (
     <Card style={{ background: "rgba(0 0 0 / 2%)" }}>
       <CardContent>
-        <Grid container sx={{ mb: 2.5 }}>
+        <Grid container>
           <Grid item xs={6}>
             <Statistic
               stat={
@@ -75,10 +75,8 @@ const OrderCard = ({
             <Statistic stat={orders.length} label="orders" />
           </Grid>
         </Grid>
-        {orders.length === 0 ? (
-          <Typography>No order yet!</Typography>
-        ) : (
-          <Paper sx={{ width: "100%", overflow: "hidden" }}>
+        {orders.length !== 0 && (
+          <Paper sx={{ width: "100%", overflow: "hidden", mt: 3 }}>
             <TableContainer sx={{ maxHeight: maxHeight || 400 }}>
               <Table stickyHeader>
                 <TableHead>
