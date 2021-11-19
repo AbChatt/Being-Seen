@@ -77,7 +77,7 @@
 - Error handling is done purely server side (for security) and toast notifications provide optimal user experience.
 - Successful upload will redirect merchants to their profile.
 
-### `/edit`: Upload page
+### `/edit`: Edit page
 
 **Description**: This is the edit page where merchants will be able to edit their products. <br />
 **Authorization**: Only merchant users are authorized to view this page (all other users are redirected to `/`). <br />
