@@ -92,16 +92,16 @@ const DonationCard = ({
         {donations.length !== 0 &&
           (isDonor ? (
             <Box sx={{ mt: 2.5 }}>
-            <DonationsTable
-              inCredits={inCredits}
-              donations={donations}
-              isDonor
-            />
-              </Box>
+              <DonationsTable
+                inCredits={inCredits}
+                donations={donations}
+                isDonor
+              />
+            </Box>
           ) : (
             <Box sx={{ mt: 2.5 }}>
-            <DonationsTable inCredits={inCredits} donations={donations} />
-              </Box>
+              <DonationsTable inCredits={inCredits} donations={donations} />
+            </Box>
           ))}
         {donorUsername && (
           <Box
