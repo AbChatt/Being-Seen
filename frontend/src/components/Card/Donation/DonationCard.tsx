@@ -39,6 +39,7 @@ interface DonationCardProps {
   isDonating?: boolean;
   isDonor?: boolean;
   followCount: number;
+  updateDonations?: () => any;
 }
 
 const DonationCard = ({
@@ -49,6 +50,7 @@ const DonationCard = ({
   isDonating,
   isDonor,
   followCount,
+  updateDonations,
 }: DonationCardProps) => {
   const [donationAmount, setDonationAmount] = useState("5");
   const validDonationAmounts = ["5", "10", "25", "100"];
@@ -103,7 +105,7 @@ const DonationCard = ({
               <DonationsTable inCredits={inCredits} donations={donations} />
             </Box>
           ))}
-        {donorUsername && (
+        {donorUsername && youthUsername && (
           <Box
             display="flex"
             flexDirection="column"
@@ -138,7 +140,10 @@ const DonationCard = ({
                 actions.order.capture().then((details: { id: string }) => {
                   axiosBase
                     .post("/payment/donation/save", { order_id: details.id })
-                    .then((response) => toast.success(response.data.message))
+                    .then((response) => {
+                      toast.success(response.data.message);
+                      updateDonations && updateDonations();
+                    })
                     .catch(({ response }) => handleResponseError(response));
                 })
               }

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
@@ -35,7 +35,7 @@ const UserPage = () => {
   const [follow, setFollow] = useState(false);
   const { username } = useParams<{ username: string }>();
 
-  useEffect(() => {
+  const fetchYouth = useCallback(() => {
     axiosBase
       .get("/user/youth", {
         params: {
@@ -61,6 +61,10 @@ const UserPage = () => {
         setLoading(false);
       });
   }, [username]);
+
+  useEffect(() => {
+    fetchYouth();
+  }, [fetchYouth]);
 
   useEffect(() => {
     if (account && account.role === UserRoles.donor) {
@@ -104,6 +108,10 @@ const UserPage = () => {
       .catch(({ response }) => {
         handleResponseError(response);
       });
+  };
+
+  const handleUpdateDonations = () => {
+    fetchYouth();
   };
 
   return (
@@ -172,6 +180,7 @@ const UserPage = () => {
                     donations={youth.donations}
                     donorUsername={account.username}
                     followCount={youth.followCount}
+                    updateDonations={handleUpdateDonations}
                   />
                 ) : (
                   <DonationCard
