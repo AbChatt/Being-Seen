@@ -85,16 +85,12 @@ const DonorDashboard = () => {
             <Typography variant="h4" mb={4}>
               Welcome {donor.name}!
             </Typography>
-            {donor.donations.length === 0 ? (
-              <Typography>No donations yet!</Typography>
-            ) : (
-              <DonationCard
-                isDonating
-                donations={donor.donations}
-                isDonor
-                followCount={donor.following.length}
-              />
-            )}
+            <DonationCard
+              isDonating
+              donations={donor.donations}
+              isDonor
+              followCount={donor.following.length}
+            />
             <Typography variant="h4" mt={7} mb={3}>
               Youths Following
             </Typography>
