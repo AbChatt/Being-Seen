@@ -7,6 +7,7 @@ import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
+import BeingSeenLogo from "images/being-seen-logo.svg";
 
 import Drawer from "components/Menu/Drawer";
 import Navbar from "components/Menu/Navbar";
@@ -32,10 +33,7 @@ const Header = () => {
     <AppBar position="sticky">
       <Toolbar className={styles.wrapper}>
         <MuiLink to="/" component={Link} className={styles.logoLink}>
-          <img
-            src="https://dummyimage.com/320x128&text=Logo"
-            alt="Being Seen"
-          />
+          <img src={BeingSeenLogo} alt="Being Seen" />
         </MuiLink>
         <div>
           <Box sx={{ display: { xs: "none", md: "block" } }}>
