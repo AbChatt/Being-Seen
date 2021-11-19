@@ -93,13 +93,10 @@ const MerchantDashboard = () => {
         ) : (
           <Typography>No products uploaded yet</Typography>
         )}
-      </Container>
-      <Container maxWidth="xl" sx={{ py: 5 }}>
-        {orders.length === 0 ? (
-          <Typography>No orders yet!</Typography>
-        ) : (
-          <OrderCard orders={orders} isMerchant />
-        )}
+        <Typography variant="h4" mt={7} mb={3}>
+          Past Orders
+        </Typography>
+        <OrderCard orders={orders} isMerchant />
       </Container>
     </Layout>
   );

@@ -84,11 +84,7 @@ const YouthDashboard = () => {
             <Typography variant="h4" mt={5} mb={3}>
               Past Orders
             </Typography>
-            {youth.orders.length === 0 ? (
-              <Typography>No orders yet!</Typography>
-            ) : (
-              <OrderCard inCredits orders={youth.orders} />
-            )}
+            <OrderCard inCredits orders={youth.orders} />
           </>
         ) : (
           <Typography variant="h4">
