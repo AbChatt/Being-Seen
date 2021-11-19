@@ -11,7 +11,7 @@
   - James can see the categories for each of his products on his dashboard.
   - Mike(youths) can see the categories and filter products by category
 - As James (a merchant), I want to see the orders history so that I can track the past transactions:
-  - James can see a clickable item on the website that says “order history”.
+  - James can see the past orders in his dashboard.
   - James should be able to see a list of orders with information of product, date, credits(price).
 
 ### Donors
