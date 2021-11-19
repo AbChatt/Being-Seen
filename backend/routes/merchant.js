@@ -19,7 +19,6 @@ import userRoles from "../utils/userRoles.js";
 import Merchant from "../models/Merchant.js";
 import User from "../models/User.js";
 import Product from "../models/Product.js";
-import Order from "../models/Order.js";
 
 const router = express.Router();
 
@@ -221,45 +220,11 @@ router.use("/private", verifyAuthHeader(userRoles.merchant));
 router.post("/private", async (req, res) => {
   const decodedMerchant = decodeUserToken(req.headers.authorization);
 
-  if (req.body.dashboard) {
-    try {
-      // Only want product and order info
-      const retrievedProducts = await Product.find({
-        merchant: decodedMerchant.username,
-      });
-
-      const parsedProducts = retrievedProducts.map((product) =>
-        parseRetrievedProduct(product)
-      );
-
-      // Find orders from this merchant
-      const parsedOrders = await Order.find({
-        merchant: decodedMerchant.username,
-      });
-
-      const privateInformation = {
-        products: parsedProducts,
-        orders: parsedOrders,
-      };
-
-      return res.send(privateInformation);
-    } catch (err) {
-      return res
-        .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .send(
-          createTextMessage(
-            "Error retrieving products and orders from database"
-          )
-        );
-    }
-  }
-
-  // want merchant profile info
   try {
     const retrievedMerchant = await Merchant.findOne({
       username: decodedMerchant.username,
     });
-    const parsedMerchant = parseRetrievedMerchant(retrievedMerchant);
+    const parsedMerchant = await parseRetrievedMerchant(retrievedMerchant);
     return res.send(parsedMerchant);
   } catch (err) {
     console.log(err);
