@@ -9,8 +9,9 @@ import axiosBase from "utils/axiosBase";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 
-import { Product } from "common/Types";
+import { Product, Order } from "common/Types";
 import ProductCard from "components/Card/Product";
+import OrderCard from "components/Card/Orders";
 import { decodeAuthToken } from "utils/authHelpers";
 import handleResponseError from "utils/handleResponseError";
 import Layout from "components/Layout";
@@ -20,26 +21,15 @@ const MerchantDashboard = () => {
   const account = decodeAuthToken();
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState<Product[]>([]);
+  const [orders, setOrders] = useState<Order[]>([]);
   const history = useHistory();
 
   useEffect(() => {
     axiosBase
-      .get("/user/merchant/products", {
-        params: {
-          merchant: account?.username,
-        },
-      })
+      .post("/user/merchant/private", {}, getAuthHeader())
       .then((response) => {
-        setProducts(
-          response.data.map((data: any) => ({
-            name: data.name,
-            description: data.description,
-            picture: data.picture,
-            category: data.category,
-            owner: data.owner,
-            price: String(data.price),
-          }))
-        );
+        setProducts(response.data.products);
+        setOrders(response.data.orders);
       })
       .catch(({ response }) => {
         handleResponseError(response);
@@ -102,6 +92,13 @@ const MerchantDashboard = () => {
           </Grid>
         ) : (
           <Typography>No products uploaded yet</Typography>
+        )}
+      </Container>
+      <Container maxWidth="xl" sx={{ py: 5 }}>
+        {orders.length === 0 ? (
+          <Typography>No orders yet!</Typography>
+        ) : (
+          <OrderCard orders={orders} isMerchant />
         )}
       </Container>
     </Layout>

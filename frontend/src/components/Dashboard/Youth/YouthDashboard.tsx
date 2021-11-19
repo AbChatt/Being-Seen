@@ -81,6 +81,9 @@ const YouthDashboard = () => {
               followCount={youth.followCount}
             />
 
+            <Typography variant="h4" mt={5} mb={3}>
+              Past Orders
+            </Typography>
             {youth.orders.length === 0 ? (
               <Typography>No orders yet!</Typography>
             ) : (

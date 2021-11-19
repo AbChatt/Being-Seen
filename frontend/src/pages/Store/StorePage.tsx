@@ -43,17 +43,8 @@ const StorePage = () => {
     axiosBase
       .get("/user/merchant/products")
       .then((response) => {
-        const retrievedProducts = response.data.map((data: any) => ({
-          name: data.name,
-          description: data.description,
-          picture: data.picture,
-          category: data.category,
-          merchant: data.merchant,
-          price: data.price,
-        }));
-
-        setProducts(retrievedProducts);
-        setRenderedProducts(retrievedProducts);
+        setProducts(response.data);
+        setRenderedProducts(response.data);
       })
       .catch(({ response }) => {
         handleResponseError(response);

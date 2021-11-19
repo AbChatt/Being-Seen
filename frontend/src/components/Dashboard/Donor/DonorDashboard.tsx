@@ -91,6 +91,7 @@ const DonorDashboard = () => {
               <DonationCard
                 isDonating
                 donations={donor.donations}
+                isDonor
                 followCount={donor.following.length}
               />
             )}

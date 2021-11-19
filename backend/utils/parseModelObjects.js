@@ -1,4 +1,5 @@
 import Donation from "../models/Donation.js";
+import Product from "../models/Product.js";
 import Youth from "../models/Youth.js";
 import Donor from "../models/Donor.js";
 import Follow from "../models/Follow.js";
@@ -47,7 +48,11 @@ const parseRetrievedYouth = async (retrievedYouth, onlyPublic) => {
     follow_count: followCount,
   };
 
-  const parsedOrders = await Order.find({ youth: retrievedYouth.username });
+  const retrievedOrders = await Order.find({ youth: retrievedYouth.username });
+
+  const parsedOrders = retrievedOrders.map((order) =>
+    parseRetrievedOrder(order)
+  );
 
   const privateInformation = {
     credit_balance: retrievedYouth.credit_balance,
@@ -87,15 +92,35 @@ const parseRetrievedDonor = async (retrievedDonor) => {
   };
 };
 
-const parseRetrievedMerchant = (retrievedMerchant) => ({
-  name: retrievedMerchant.name,
-  username: retrievedMerchant.username,
-  date_of_birth: retrievedMerchant.date_of_birth,
-  profile_picture: retrievedMerchant.profile_picture,
-  store_location: retrievedMerchant.store_location,
-  store_name: retrievedMerchant.store_name,
-  email: retrievedMerchant.email,
-});
+const parseRetrievedMerchant = async (retrievedMerchant) => {
+  const retrievedProducts = await Product.find({
+    merchant: retrievedMerchant.username,
+  });
+
+  const parsedProducts = retrievedProducts.map((product) =>
+    parseRetrievedProduct(product)
+  );
+
+  const retrievedOrders = await Order.find({
+    merchant: retrievedMerchant.username,
+  });
+
+  const parsedOrders = retrievedOrders.map((order) =>
+    parseRetrievedOrder(order)
+  );
+
+  return {
+    name: retrievedMerchant.name,
+    username: retrievedMerchant.username,
+    date_of_birth: retrievedMerchant.date_of_birth,
+    profile_picture: retrievedMerchant.profile_picture,
+    store_location: retrievedMerchant.store_location,
+    store_name: retrievedMerchant.store_name,
+    email: retrievedMerchant.email,
+    products: parsedProducts,
+    orders: parsedOrders,
+  };
+};
 
 const parseRetrievedProduct = (retrievedProduct) => ({
   name: retrievedProduct.name,
@@ -104,6 +129,14 @@ const parseRetrievedProduct = (retrievedProduct) => ({
   merchant: retrievedProduct.merchant,
   price: retrievedProduct.price,
   category: retrievedProduct.category,
+});
+
+const parseRetrievedOrder = (retrievedOrder) => ({
+  youth: retrievedOrder.youth,
+  merchant: retrievedOrder.merchant,
+  product: retrievedOrder.product,
+  price: retrievedOrder.price,
+  date: retrievedOrder.date,
 });
 
 export {
