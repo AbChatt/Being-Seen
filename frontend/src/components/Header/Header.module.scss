@@ -4,9 +4,12 @@
 }
 
 .logoLink {
+  height: 50px;
+  overflow: hidden;
+
   img {
     width: auto;
-    height: 40px;
-    display: block;
+    height: 70px;
+    transform: translateY(-7%);
   }
 }
