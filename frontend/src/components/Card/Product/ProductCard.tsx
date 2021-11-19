@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 import Avatar from "@mui/material/Avatar";
 import Card from "@mui/material/Card";
+import Grow from "@mui/material/Grow";
 import Button from "@mui/material/Button";
 import Collapse from "@mui/material/Collapse";
 import Typography from "@mui/material/Typography";
@@ -55,9 +56,15 @@ const ProductCard = ({
   onDelete,
   onEdit,
 }: ProductCardProps) => {
+  const [loaded, setLoaded] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [purchaseDialogOpen, setPurchaseDialogOpen] = useState(false);
+
+  useEffect(() => {
+    // Required when initial image onLoad does not fire
+    setTimeout(() => setLoaded(true), 300);
+  }, []);
 
   const closeDeleteDialog = () => setDeleteDialogOpen(false);
   const openDeleteDialog = () => setDeleteDialogOpen(true);
@@ -124,61 +131,63 @@ const ProductCard = ({
           </Button>
         </DialogActions>
       </Dialog>
-      <Card>
-        <Avatar
-          src={picture}
-          variant="square"
-          sx={{ height: 200, width: "100%" }}
-          alt={name}
-        />
-        <CardContent>
-          <Typography variant="h5">{name}</Typography>
-          <Typography gutterBottom variant="body2">
-            {category}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            {isMerchant ? `$${price}` : `${dollarToCredit(price)} credits`}
-          </Typography>
-        </CardContent>
-        <CardActions disableSpacing>
-          {isMerchant ? (
-            <>
-              <Button
-                size="small"
-                variant="contained"
-                sx={{ mr: 1 }}
-                onClick={() => onEdit(name)}
-              >
-                Edit
-              </Button>
-              <Button
-                size="small"
-                variant="contained"
-                color="error"
-                onClick={openDeleteDialog}
-              >
-                Delete
-              </Button>
-            </>
-          ) : (
-            <Button
-              size="small"
-              variant="contained"
-              onClick={openPurchaseDialog}
-            >
-              Buy
-            </Button>
-          )}
-          <ExpandMore expand={expanded} onClick={handleExpandClick}>
-            <ExpandMoreIcon />
-          </ExpandMore>
-        </CardActions>
-        <Collapse in={expanded} timeout="auto" unmountOnExit>
+      <Grow in={loaded}>
+        <Card>
+          <Avatar
+            src={picture}
+            variant="square"
+            sx={{ height: 200, width: "100%" }}
+            alt={name}
+          />
           <CardContent>
-            <Typography paragraph>{description}</Typography>
+            <Typography variant="h5">{name}</Typography>
+            <Typography gutterBottom variant="body2">
+              {category}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              {isMerchant ? `$${price}` : `${dollarToCredit(price)} credits`}
+            </Typography>
           </CardContent>
-        </Collapse>
-      </Card>
+          <CardActions disableSpacing>
+            {isMerchant ? (
+              <>
+                <Button
+                  size="small"
+                  variant="contained"
+                  sx={{ mr: 1 }}
+                  onClick={() => onEdit(name)}
+                >
+                  Edit
+                </Button>
+                <Button
+                  size="small"
+                  variant="contained"
+                  color="error"
+                  onClick={openDeleteDialog}
+                >
+                  Delete
+                </Button>
+              </>
+            ) : (
+              <Button
+                size="small"
+                variant="contained"
+                onClick={openPurchaseDialog}
+              >
+                Buy
+              </Button>
+            )}
+            <ExpandMore expand={expanded} onClick={handleExpandClick}>
+              <ExpandMoreIcon />
+            </ExpandMore>
+          </CardActions>
+          <Collapse in={expanded} timeout="auto" unmountOnExit>
+            <CardContent>
+              <Typography paragraph>{description}</Typography>
+            </CardContent>
+          </Collapse>
+        </Card>
+      </Grow>
     </>
   );
 };
