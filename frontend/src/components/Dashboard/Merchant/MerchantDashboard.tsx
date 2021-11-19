@@ -26,17 +26,9 @@ const MerchantDashboard = () => {
 
   useEffect(() => {
     axiosBase
-      .post("/user/merchant/private", { dashboard: true }, getAuthHeader())
+      .post("/user/merchant/private", {}, getAuthHeader())
       .then((response) => {
-        setProducts(
-          response.data.products.map((data: any) => ({
-            name: data.name,
-            description: data.description,
-            picture: data.picture,
-            owner: data.owner,
-            price: String(data.price),
-          }))
-        );
+        setProducts(response.data.products);
         setOrders(response.data.orders);
       })
       .catch(({ response }) => {
