@@ -16,6 +16,7 @@ interface DonationsTableProps {
   inCredits?: boolean;
   donations: Donation[];
   maxHeight?: number;
+  isDonor?: boolean;
 }
 
 // Renders a table showing a list of donations (donor, youth, amount, time)
@@ -23,6 +24,7 @@ const DonationsTable = ({
   inCredits,
   donations,
   maxHeight,
+  isDonor,
 }: DonationsTableProps) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -42,8 +44,11 @@ const DonationsTable = ({
         <Table stickyHeader>
           <TableHead>
             <TableRow>
-              <TableCell sx={{ fontWeight: 700 }}>Donor</TableCell>
-              <TableCell sx={{ fontWeight: 700 }}>Youth</TableCell>
+              {isDonor ? (
+                <TableCell sx={{ fontWeight: 700 }}>Youth</TableCell>
+              ) : (
+                <TableCell sx={{ fontWeight: 700 }}>Donor</TableCell>
+              )}
               <TableCell sx={{ fontWeight: 700 }}>Amount</TableCell>
               <TableCell sx={{ fontWeight: 700 }}>Date</TableCell>
             </TableRow>
@@ -53,8 +58,11 @@ const DonationsTable = ({
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row, idx) => (
                 <TableRow hover tabIndex={-1} key={`${row.donor}-${idx}`}>
-                  <TableCell>{row.donor}</TableCell>
-                  <TableCell>{row.youth}</TableCell>
+                  {isDonor ? (
+                    <TableCell>{row.youth}</TableCell>
+                  ) : (
+                    <TableCell>{row.donor}</TableCell>
+                  )}
                   <TableCell>
                     {inCredits
                       ? `${dollarToCredit(row.amount)} CR`

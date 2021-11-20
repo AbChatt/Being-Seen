@@ -10,6 +10,8 @@ import validateUpdateMerchant from "../middleware/update/validateUpdateMerchant.
 import validateProductUpdate from "../middleware/update/validateProductUpdate.js";
 
 import { createUserToken, decodeUserToken } from "../utils/jwtHelpers.js";
+import { parseRetrievedMerchant } from "../utils/parseModelObjects.js";
+import { parseRetrievedProduct } from "../utils/parseModelObjects.js";
 import { createTextMessage } from "../utils/defaultMessages.js";
 import { createJwtMessage } from "../utils/defaultMessages.js";
 import userRoles from "../utils/userRoles.js";
@@ -23,26 +25,38 @@ const router = express.Router();
 // api/v1/user/merchant/signup
 router.use("/signup", [validateUserSignup, validateMerchantSignup]);
 router.post("/signup", async (req, res) => {
+  // Required fields
+  const name = req.body.name;
+  const username = req.body.username;
+  const password = req.body.password;
+  const dateOfBirth = req.body.date_of_birth;
+  const storeLocation = req.body.store_location;
+  const storeName = req.body.store_name;
+  const payPalEmail = req.body.email;
+
+  // Optional fields
+  const profilePicture = req.body.profile_picture;
+
   const newUser = new User({
     role: userRoles.merchant,
-    username: req.body.username,
-    password: req.body.password,
+    username: username,
+    password: password,
   });
 
   const newMerchant = new Merchant({
-    name: req.body.name,
-    username: req.body.username,
-    date_of_birth: req.body.date_of_birth,
-    profile_picture: req.body.profile_picture || "#",
-    store_name: req.body.store_name,
-    location: req.body.location,
-    email: req.body.email,
+    name: name,
+    username: username,
+    date_of_birth: dateOfBirth,
+    profile_picture: profilePicture || "#",
+    store_location: storeLocation,
+    store_name: storeName,
+    email: payPalEmail,
   });
 
   try {
     await newUser.save();
     await newMerchant.save();
-    const jwtToken = createUserToken(req.body.username, userRoles.merchant);
+    const jwtToken = createUserToken(username, userRoles.merchant);
     return res.status(StatusCodes.CREATED).send(createJwtMessage(jwtToken));
   } catch (err) {
     console.log(err);
@@ -52,20 +66,30 @@ router.post("/signup", async (req, res) => {
   }
 });
 
-// api/v1/user/merchant/upload
-router.use("/upload", [
+// api/v1/user/merchant/products/upload
+router.use("/products/upload", [
   verifyAuthHeader(userRoles.merchant),
   validateProductUpload,
 ]);
-router.post("/upload", async (req, res) => {
-  const decoded = decodeUserToken(req.headers.authorization);
+router.post("/products/upload", async (req, res) => {
+  const decodedMerchant = decodeUserToken(req.headers.authorization);
+
+  // Required fields
+  const productName = req.body.name;
+  const productDescription = req.body.description;
+  const productPrice = +req.body.price;
+  const productCategory = req.body.category;
+
+  // Optional fields
+  const productPicture = req.body.picture;
 
   const newProduct = new Product({
-    name: req.body.name,
-    description: req.body.description,
-    picture: req.body.picture || "#",
-    store_owner_username: decoded.username,
-    price: (+req.body.price).toFixed(2),
+    name: productName,
+    description: productDescription,
+    picture: productPicture || "#",
+    merchant: decodedMerchant.username,
+    price: productPrice.toFixed(2),
+    category: productCategory,
   });
 
   try {
@@ -83,39 +107,32 @@ router.post("/upload", async (req, res) => {
 
 // api/v1/user/merchant/products
 router.get("/products", async (req, res) => {
-  const parseRetrievedProducts = (product) => ({
-    name: product.name,
-    description: product.description,
-    picture: product.picture,
-    owner: product.store_owner_username,
-    price: product.price,
-  });
+  // Optional fields
+  const productName = req.query.name;
+  const merchantUsername = req.query.merchant;
 
   // Request wants a specific product
-  if (req.query.name) {
+  if (productName) {
     try {
-      const retrievedProduct = await Product.findOne({
-        name: req.query.name,
-      });
-      const parsedProduct = parseRetrievedProducts(retrievedProduct);
-
+      const retrievedProduct = await Product.findOne({ name: productName });
+      const parsedProduct = parseRetrievedProduct(retrievedProduct);
       return res.send(parsedProduct);
     } catch (err) {
       console.log(err);
       return res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .send(createTextMessage("Error retrieving products from database"));
+        .send(createTextMessage("Error retrieving product from database"));
     }
   }
 
   // Request wants products from a specific merchant
-  if (req.query.owner) {
+  if (merchantUsername) {
     try {
       const retrievedProducts = await Product.find({
-        store_owner_username: req.query.owner,
+        merchant: merchantUsername,
       });
       const parsedProducts = retrievedProducts.map((product) =>
-        parseRetrievedProducts(product)
+        parseRetrievedProduct(product)
       );
 
       return res.send(parsedProducts);
@@ -131,7 +148,7 @@ router.get("/products", async (req, res) => {
   try {
     const retrievedProducts = await Product.find({});
     const parsedProducts = retrievedProducts.map((product) =>
-      parseRetrievedProducts(product)
+      parseRetrievedProduct(product)
     );
     return res.send(parsedProducts);
   } catch (err) {
@@ -142,14 +159,17 @@ router.get("/products", async (req, res) => {
   }
 });
 
-// api/v1/user/merchant/delete
-router.use("/delete", [
+// api/v1/user/merchant/products/delete
+router.use("/products/delete", [
   verifyAuthHeader(userRoles.merchant),
   validateProductDelete,
 ]);
-router.post("/delete", async (req, res) => {
+router.post("/products/delete", async (req, res) => {
+  // Required fields
+  const productName = req.body.name;
+
   try {
-    await Product.deleteOne({ name: req.body.product });
+    await Product.deleteOne({ name: productName });
     return res
       .status(StatusCodes.OK)
       .send(createTextMessage("Product successfully deleted"));
@@ -166,56 +186,48 @@ router.use("/update", [
   verifyAuthHeader(userRoles.merchant),
   validateUpdateMerchant,
 ]);
-router.put("/update", async (req, res) => {
-  // Get require JWT token that include merchant username
-  const decoded = decodeUserToken(req.headers.authorization);
-  const merchantUsername = decoded.username;
+router.patch("/update", async (req, res) => {
+  const decodedMerchant = decodeUserToken(req.headers.authorization);
+
+  // Required fields
+  const name = req.body.name;
+  const storeLocation = req.body.store_location;
+  const storeName = req.body.store_name;
+  const payPalEmail = req.body.email;
+
+  // Optional fields
+  const profilePicture = req.body.profile_picture;
 
   try {
-    // Find a merchant and update them
-    await Merchant.findOneAndUpdate(
-      { username: merchantUsername },
+    await Merchant.updateOne(
+      { username: decodedMerchant.username },
       {
-        name: req.body.name,
-        profile_picture: req.body.profile_picture || "#",
-        store_name: req.body.store_name,
-        location: req.body.location,
-        email: req.body.email,
+        name: name,
+        profile_picture: profilePicture || "#",
+        store_location: storeLocation,
+        store_name: storeName,
+        email: payPalEmail,
       }
     );
     return res.send(createTextMessage("Successfully updated your profile"));
   } catch (err) {
     return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .send(createTextMessage("Error update profile"));
+      .send(createTextMessage("Error updating your profile"));
   }
 });
 
-// api/v1/user/merchant
-router.get("/", async (req, res) => {
-  // check if merchant name is given
-  if (!req.query.name) {
-    return res
-      .status(StatusCodes.BAD_REQUEST)
-      .send(createTextMessage("no username is given"));
-  }
-
-  if (
-    !(await User.exists({
-      username: req.query.name,
-      role: userRoles.merchant,
-    }))
-  ) {
-    return res
-      .status(StatusCodes.NOT_FOUND)
-      .send(createTextMessage("Cannot find given merchant"));
-  }
+// api/v1/user/merchant/private
+router.use("/private", verifyAuthHeader(userRoles.merchant));
+router.post("/private", async (req, res) => {
+  const decodedMerchant = decodeUserToken(req.headers.authorization);
 
   try {
     const retrievedMerchant = await Merchant.findOne({
-      username: req.query.name,
+      username: decodedMerchant.username,
     });
-    return res.send(retrievedMerchant);
+    const parsedMerchant = await parseRetrievedMerchant(retrievedMerchant);
+    return res.send(parsedMerchant);
   } catch (err) {
     console.log(err);
     return res
@@ -229,24 +241,29 @@ router.use("/products/update", [
   verifyAuthHeader(userRoles.merchant),
   validateProductUpdate,
 ]);
-router.put("/products/update", async (req, res) => {
-  // Get require JWT token that include merchant username
-  const decoded = decodeUserToken(req.headers.authorization);
-  const merchantUsername = decoded.username;
+router.patch("/products/update", async (req, res) => {
+  // Required fields
+  const productName = req.body.old_name;
+  const newProductName = req.body.new_name;
+  const productDescription = req.body.description;
+  const productPrice = +req.body.price;
+  const productCategory = req.body.category;
+
+  // Optional fields
+  const productPicture = req.body.picture;
 
   try {
-    // Find product and update info
-    await Product.findOneAndUpdate(
-      { name: req.body.old_name },
+    await Product.updateOne(
+      { name: productName },
       {
-        name: req.body.name,
-        description: req.body.description,
-        picture: req.body.picture || "#",
-        store_owner_username: merchantUsername,
-        price: (+req.body.price).toFixed(2),
+        name: newProductName,
+        description: productDescription,
+        picture: productPicture || "#",
+        price: productPrice.toFixed(2),
+        category: productCategory,
       }
     );
-    return res.send(createTextMessage("Successfully updated product info"));
+    return res.send(createTextMessage("Successfully updated product"));
   } catch (err) {
     return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)

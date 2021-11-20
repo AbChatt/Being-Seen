@@ -45,7 +45,7 @@
 - Every user type will have a dynamically rendered page showing controls for their specific user type.
 - `POST` requests (or `PATCH` is also appropriate) will be used to send data to the backend.
 
-### `/dashboard`: Dashboard page (NOT DONE YET)
+### `/dashboard`: Dashboard page
 
 **Description**: This is the dashboard page where all types of users will be able to access details regarding their accounts. <br />
 **Authorization**: All logged in users are authorized to view this page (unregistered users are redirected to `/`). <br />
@@ -77,7 +77,7 @@
 - Error handling is done purely server side (for security) and toast notifications provide optimal user experience.
 - Successful upload will redirect merchants to their profile.
 
-### `/edit`: Upload page
+### `/edit`: Edit page
 
 **Description**: This is the edit page where merchants will be able to edit their products. <br />
 **Authorization**: Only merchant users are authorized to view this page (all other users are redirected to `/`). <br />
@@ -103,12 +103,20 @@
 
 # Backend
 
+### `POST /api/v1/user/:user_type/signup`: Signup endpoint
+
+**Description**: These are the signup endpoints where all users will be able to create an account. <br />
+**Request Fields**: Each signup form has different fields for their specific signup process (error messages detail missing fields). <br />
+**Responses**:
+
+- `201`: user was successfully created and a JWT token is passed back (authorization is included as a `role` field within token).
+- `400`: bad request signal when request is malformed, does not contain the required fields, etc. (error sent as response)
+- `500`: unknown internal server error.
+
 ### `POST /api/v1/user/login` : Login endpoint
 
 **Description**: This is the login endpoint where all user types will be able to authenticate themselves. <br />
-**Request Fields**: Only authentication fields (detailed below) are required. <br />
 **Authentication**: Requests must pass their username and password as a JSON payload. <br />
-**Authorization**: No authorization required. <br />
 **Responses**:
 
 - `200`: user has correct credentials and a JWT token is passed back (authorization is included as a `role` field within token).
@@ -116,23 +124,9 @@
 - `401`: user cannot be authenticated and an appropriate message is passed back to indicate the specific error.
 - `500`: unknown internal server error.
 
-### `POST /api/v1/user/:user_type/signup`: Signup endpoint
-
-**Description**: These are the signup endpoints where all users will be able to create an account. <br />
-**Request Fields**: Each signup form has different fields for their specific signup process (error messages detail missing fields). <br />
-**Authentication**: No authentication required. <br />
-**Authorization**: No authorization required. <br />
-**Responses**:
-
-- `201`: user was successfully created and a JWT token is passed back (authorization is included as a `role` field within token).
-- `400`: bad request signal when request is malformed, does not contain the required fields, etc. (error sent as response)
-- `500`: unknown internal server error.
-
 ### `GET /api/v1/user/validate`: Validate endpoint
 
 **Description**: This is the validate endpoint where all user types can validate (in terms of expiration, format, etc.) their JWT token. <br />
-**Request Fields**: Only authorization fields (detailed below) are required. <br />
-**Authentication**: No authentication required. <br />
 **Authorization**: Requests must pass their JWT token as an `Authorization` header (bearer format is preferable). <br />
 **Responses**:
 
@@ -140,12 +134,30 @@
 - `401`: user has an invalid token and an appropriate message is passed back.
 - `500`: unknown internal server error.
 
+### `PATCH /api/v1/user/:user_type/update`: Update account information endpoint
+
+**Description**: This is the update account information endpoint where all user types can update details regarding their account (e.g., youths can update their story, saving plan, etc.). <br />
+**Authorization**: Requests must pass their JWT token as an `Authorization` header (bearer format is preferable). <br />
+**Responses**:
+
+- `200`: user has a valid token and an appropriate message is passed back.
+- `401`: user has an invalid token and an appropriate message is passed back.
+- `500`: unknown internal server error.
+
+### `POST /api/v1/user/:user_type/private`: Private account information endpoint
+
+**Description**: This is the private account information endpoint where all users can query for all private details regarding their account (this includes public information as well if applicable). <br />
+**Authorization**: Requests must pass their JWT token as an `Authorization` header (bearer format is preferable). <br />
+**Responses**:
+
+- `200`: request was successful and a success message is sent back.
+- `400`: bad request signal when request is malformed, does not contain the required fields, etc. (error sent as response)
+- `500`: unknown internal server error.
+
 ### `POST /api/v1/payment/donation/create`: Create donation endpoint
 
 **Description**: This is the create donation endpoint which creates a donation (order) with PayPal and saves it server side (note, this does not execute payment). <br />
 **Request Fields**: Requests must pass the youth username, donor username, and amount as a JSON payload. <br />
-**Authentication**: No authentication required. <br />
-**Authorization**: No authorization required. <br />
 **Responses**:
 
 - `201`: donation order was successfully created and an order ID is passed back to approve.
@@ -155,10 +167,8 @@
 
 ### `POST /api/v1/payment/donation/save`: Save donation endpoint
 
-**Description**: This is the save donation endpoint which saves a donation (if it is approved by PayPal and user). <br />
+**Description**: This is the save donation endpoint which saves a donation (if it is approved by PayPal). <br />
 **Request Fields**: Requests must pass the order ID that was approved by PayPal and user. <br />
-**Authentication**: No authentication required. <br />
-**Authorization**: No authorization required. <br />
 **Responses**:
 
 - `200`: donation order was successfully processed and success message is sent back.
@@ -166,132 +176,80 @@
 - `404`: order ID could not be found on server side (meaning it is invalid). (error sent as response)
 - `500`: unknown internal server error.
 
-### `GET /api/v1/user/youth`: Get youths endpoint
+### `PUT/DELETE /api/v1/user/donor/follow`: Put/delete follow relationship endpoint
 
-**Description**: This is the get youths endpoint which passes back either a single youth or all youths in DB. <br />
-**Request Fields**: Request may pass a URL parameter denoting the individual youth they want information for. <br />
-**Authentication**: No authentication required. <br />
-**Authorization**: No authorization required. <br />
+**Description**: This is the put or delete follow relationship endpoint to follow or unfollow users. <br />
+**Request Fields**: Requests must pass the name of the youth they want to follow or unfollow. <br />
+**Authorization**: Requests must pass their JWT token as an `Authorization` header (bearer format is preferable). <br />
 **Responses**:
 
-- `200`: request was successful and list or single youth is sent back.
-- `404`: provided youth could not be found on server side (only happens if request for single youth). (error sent as response)
+- `200`: request was successful and a success message is sent back.
+- `400`: bad request signal when request is malformed, does not contain the required fields, etc. (error sent as response)
+- `404`: youth account could not be found with given username. (error sent as response)
 - `500`: unknown internal server error.
 
 ### `GET /api/v1/user/merchant/products`: Get products endpoint
 
 **Description**: This is the get merchant products endpoint which passes back a single merchant's products or all products in DB. <br />
 **Request Fields**: Request may pass a URL parameter denoting the merchant name they want product information for. <br />
-**Authentication**: No authentication required. <br />
-**Authorization**: No authorization required. <br />
 **Responses**:
 
 - `200`: request was successful and list of products is sent back (non-existing merchants get empty list).
 - `500`: unknown internal server error.
 
-### `POST /api/v1/user/merchant/upload`: Upload product endpoint
+### `POST /api/v1/user/merchant/products/upload`: Upload product endpoint
 
 **Description**: This is the upload product endpoint that merchants use to add new products. <br />
 **Request Fields**: Request must pass the product name, description and price as a JSON payload. <br />
-**Authentication**: No authentication required. <br />
 **Authorization**: Requests must pass their JWT token as an `Authorization` header (bearer format is preferable). <br />
 **Responses**:
 
-- `201`: request was successful and list of products is updated on dashboard page as well as store page.
+- `201`: request was successful and product was added internally.
+- `400`: bad request signal when request is malformed, does not contain the required fields, etc. (error sent as response)
 - `500`: unknown internal server error.
 
-### `POST /api/v1/payment/purchase`: purchase product endpoint
+### `POST /api/v1/user/merchant/products/delete`: Delete product endpoint
+
+**Description**: This is the delete product endpoint. <br />
+**Request Fields**: Request must pass name (cannot be empty). <br />
+**Authorization**: Requests must pass their JWT token as an `Authorization` header (bearer format is preferable). <br />
+**Responses**:
+
+- `200`: request was successful and a successful message was sent back.
+- `400`: bad request signal when request is malformed, does not contain the required fields, etc. (error sent as response)
+- `404`: product could not be found with given name.
+- `500`: unknown internal server error.
+
+### `PATCH /api/v1/user/merchant/products/update`: Update product endpoint
+
+**Description**: This is the update product endpoint. <br />
+**Request Fields**: Request must pass name (cannot be empty), description (cannot be empty), price (cannot be empty), and picture. <br />
+**Authorization**: Requests must pass their JWT token as an `Authorization` header (bearer format is preferable). <br />
+**Responses**:
+
+- `200`: request was successful and a successful message was sent back.
+- `400`: bad request signal when request is malformed, does not contain the required fields, etc. (error sent as response)
+- `404`: product could not be found with given name.
+- `500`: unknown internal server error.
+
+### `POST /api/v1/payment/purchase`: Purchase product endpoint
 
 **Description**: This is the purchase product endpoint that youth use to purchase products. <br />
 **Request Fields**: Request must pass the product name as a JSON payload. <br />
-**Authentication**: No authentication required. <br />
 **Authorization**: Requests must pass their JWT token as an `Authorization` header (bearer format is preferable). <br />
 **Responses**:
 
 - `200`: request was successful and purchase was successful.
 - `400`: bad request due to not enough credits in the youth account, or does not contain the required fields, etc.
+- `404`: product could not be found with given name.
 - `500`: unknown internal server error.
 
-### `PUT /api/v1/user/youth/update`: update youth endpoint
+### `GET /api/v1/user/youth`: Get youths endpoint
 
-**Description**: This is the update youth profile endpoint. <br />
-**Request Fields**: Request must pass name (cannot be empty), profile_picture, story, and saving_plan. <br />
-**Authentication**: No authentication required. <br />
-**Authorization**: Requests must pass their JWT token as an `Authorization` header (bearer format is preferable). <br />
+**Description**: This is the get youths endpoint which passes back either a single youth or all youths in DB. <br />
+**Request Fields**: Request may pass a URL parameter denoting the individual youth they want information for. <br />
 **Responses**:
 
-- `200`: request was successful and a successful message was sent back.
-- `404`: provided empty youth name.
-- `500`: unknown internal server error.
-
-### `POST /api/v1/user/youth/private`: get youth private information endpoint
-
-**Description**: This is the get youth private information endpoint. <br />
-**Request Fields**: Only authorization fields (detailed below) are required. <br />
-**Authentication**: No authentication required. <br />
-**Authorization**: Requests must pass their JWT token as an `Authorization` header (bearer format is preferable). <br />
-**Responses**:
-
-- `200`: request was successful and a successful message was sent back.
-- `500`: unknown internal server error.
-
-### `POST /api/v1/user/donor/private`: get donor information endpoint
-
-**Description**: This is the get donor information endpoint. <br />
-**Request Fields**: Only authorization fields (detailed below) are required. <br />
-**Authentication**: No authentication required. <br />
-**Authorization**: Requests must pass their JWT token as an `Authorization` header (bearer format is preferable). <br />
-**Responses**:
-
-- `200`: request was successful and a successful message was sent back.
-- `400`: bad request signal when request is malformed, does not contain the required fields, etc. (error sent as response)
-- `500`: unknown internal server error.
-
-### `PUT /api/v1/user/donor/update`: update donor endpoint
-
-**Description**: This is the update donor profile endpoint. <br />
-**Request Fields**: Request must pass name (cannot be empty), organization, profile_picture, and anonymize. <br />
-**Authentication**: No authentication required. <br />
-**Authorization**: Requests must pass their JWT token as an `Authorization` header (bearer format is preferable). <br />
-**Responses**:
-
-- `200`: request was successful and a successful message was sent back.
-- `400`: bad request signal when request is malformed, does not contain the required fields, etc. (error sent as response)
-- `500`: unknown internal server error.
-
-### `POST /api/v1/user/merchant/upload`: upload product endpoint
-
-**Description**: This is the upload product endpoint. <br />
-**Request Fields**: Request must pass name (cannot be empty), description (cannot be empty), price (cannot be empty), and picture. <br />
-**Authentication**: No authentication required. <br />
-**Authorization**: Requests must pass their JWT token as an `Authorization` header (bearer format is preferable). <br />
-**Responses**:
-
-- `200`: request was successful and a successful message was sent back.
-- `400`: bad request signal when request is malformed, does not contain the required fields, etc. (error sent as response)
-- `500`: unknown internal server error.
-
-### `POST /api/v1/user/merchant/delete`: delete product endpoint
-
-**Description**: This is the delete product endpoint. <br />
-**Request Fields**: Request must pass name (cannot be empty). <br />
-**Authentication**: No authentication required. <br />
-**Authorization**: Requests must pass their JWT token as an `Authorization` header (bearer format is preferable). <br />
-**Responses**:
-
-- `200`: request was successful and a successful message was sent back.
-- `400`: bad request signal when request is malformed, does not contain the required fields, etc. (error sent as response)
-- `500`: unknown internal server error.
-
-### `GET /api/v1/user/merchant`: get merchant details endpoint
-
-**Description**: This is the get merchant details endpoint. <br />
-**Request Fields**: Request must pass name (cannot be empty). <br />
-**Authentication**: No authentication required. <br />
-**Authorization**: No authorization is required. <br />
-**Responses**:
-
-- `200`: request was successful and details are sent back.
-- `400`: bad request signal when request is malformed, does not contain the required fields, etc. (error sent as response)
-- `404`: merchant does not exist. (error sent as response)
+- `200`: request was successful and a success message is sent back.
+- `404`: provided youth could not be found on server side (only happens if request for single youth). (error sent as response)
 - `500`: unknown internal server error.

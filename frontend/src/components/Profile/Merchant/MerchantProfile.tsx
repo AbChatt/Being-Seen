@@ -19,7 +19,7 @@ const MerchantProfile = () => {
 
   const [name, setName] = useState("");
   const [storeName, setStoreName] = useState("");
-  const [location, setLocation] = useState("");
+  const [storeLocation, setStoreLocation] = useState("");
   const [pictureUrl, setPictureUrl] = useState("");
   const [email, setEmail] = useState("");
   const [oldName, setOldName] = useState("");
@@ -27,16 +27,12 @@ const MerchantProfile = () => {
 
   useEffect(() => {
     axiosBase
-      .get("/user/merchant", {
-        params: {
-          name: account?.username,
-        },
-      })
+      .post("/user/merchant/private", {}, getAuthHeader())
       .then((response) => {
         setName(response.data.name);
         setOldName(response.data.name);
         setPictureUrl(response.data.profile_picture);
-        setLocation(response.data.location);
+        setStoreLocation(response.data.store_location);
         setStoreName(response.data.store_name);
         setEmail(response.data.email);
         setUserExists(true);
@@ -68,19 +64,19 @@ const MerchantProfile = () => {
   };
 
   const handleLocationChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setLocation(event.target.value);
+    setStoreLocation(event.target.value);
   };
 
   const handleUpdate = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     axiosBase
-      .put(
+      .patch(
         "/user/merchant/update",
         {
           name: name,
           store_name: storeName,
-          location: location,
+          store_location: storeLocation,
           profile_picture: pictureUrl,
           email: email,
         },
@@ -114,6 +110,7 @@ const MerchantProfile = () => {
             </Typography>
             <TextField
               autoFocus
+              required
               fullWidth
               label="Name"
               margin="normal"
@@ -129,17 +126,15 @@ const MerchantProfile = () => {
             />
             <TextField
               fullWidth
-              multiline
-              rows={4}
+              required
               margin="normal"
-              label="store name"
+              label="Store Name"
               onChange={handleStoreNameChange}
               value={storeName}
             />
             <TextField
               fullWidth
-              multiline
-              rows={4}
+              required
               margin="normal"
               label="Email"
               onChange={handleEmailChange}
@@ -147,12 +142,11 @@ const MerchantProfile = () => {
             />
             <TextField
               fullWidth
-              multiline
-              rows={4}
+              required
               margin="normal"
-              label="location"
+              label="Store Location"
               onChange={handleLocationChange}
-              value={location}
+              value={storeLocation}
             />
             <Button
               fullWidth

@@ -214,20 +214,57 @@ Tracking on Jira Total Mark: _23_ / 24
 
 ---
 
-## Sprint Demo (Max 10 marks) 
+
+
+---
+## Sprint Demo (Max 14 marks) 
   - Attendance (max 2 marks)
     - 2 marks = full team is present
     - 1 mark = one member is not present
     - 0 marks = more than one member is not present
   
-  - Working software (max 2 marks)  
-    - 8 marks = features presented work flawlessly
-    - 1 mark removed for each error or missing records on Jira
+  Mark: 2
 
-  Your Mark: _TBD_ / 10
+  - Working software (max 2 marks)
+    - 8 marks = features presented work flawlessly
+    - 1 mark removed for each bug/error identified or for missing records on Jira
+
+  Mark: 7
+  Features:
+  - Share buttons + Sharing on Social Media
+  - Edit profile/story + profile pictures (donar + youth) 
+    - Profile picture wasn't updated for Donor after saving
+  - Store + Store Credits
+  - Edit products (as merchant)
+  - Deleting a product
+  - Search on youth page
+  - Donation history page
+
+  - Presentation (max 2 marks)
+    - 2 marks = UI demonstrated is visually appealing and intuitive for users
+    - 1 mark = one or more errors identified by the demo TA
+    - 0 marks = UI is visually unappealing
+
+  Mark: 2
+  Features: 
+  - Very clean, modern UI
+  - After saving your profile, good use of messaging to show the data has been saved. Better to include a back button on certain pages rather than relying them to use the main navigation 
+  - When purchasing items, have a confirmation and maybe a cart to confirm purchase
+  - Larger picture preview to see the images better
+  - Credits/Real dollar amounts - Maybe show both so it's consistent across the different types of accounts
+  - When deleting something, you want to include a confirmation message (ie. Are you sure you want to delete this?) in case they misclick.
+
+  - Documentation (max 2 marks)
+    - 2 marks = documentation has been created for frontend and backend systems with great detail
+    - 1 mark = documentation has been created for frontend and backend systems with some errors
+    - 0 marks = documentation has not been created
+
+  Mark: 2
+
+  Your Mark: 13 / 14
 
 ---
 
 ## Total Mark
 
-77__ / 89
+_90_ / 93

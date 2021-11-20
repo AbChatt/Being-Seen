@@ -7,6 +7,7 @@ import Avatar from "@mui/material/Avatar";
 import TextField from "@mui/material/TextField";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
+import MenuItem from "@mui/material/MenuItem";
 
 import Layout from "components/Layout";
 import { getAuthHeader } from "utils/authHelpers";
@@ -14,6 +15,7 @@ import { decodeAuthToken } from "utils/authHelpers";
 import handleResponseError from "utils/handleResponseError";
 import UserRoles from "utils/UserRoles";
 import axiosBase from "utils/axiosBase";
+import productCategories from "../../utils/productCategories";
 
 // Render the dashboard page of the application. If a user is not logged in (or
 // is not a merchant), we redirect them to the homepage.
@@ -24,6 +26,7 @@ const UploadPage = () => {
   const [price, setPrice] = useState("");
   const [pictureUrl, setPictureUrl] = useState("");
   const [description, setDescription] = useState("");
+  const [category, setCategory] = useState("");
 
   if (!account || account.role !== UserRoles.merchant) {
     history.push("/");
@@ -34,12 +37,13 @@ const UploadPage = () => {
     event.preventDefault();
     axiosBase
       .post(
-        "/user/merchant/upload",
+        "/user/merchant/products/upload",
         {
           name: name,
           description: description,
           picture: pictureUrl,
           price: price,
+          category: category,
         },
         getAuthHeader()
       )
@@ -69,13 +73,25 @@ const UploadPage = () => {
     setPrice(e.target.value);
   };
 
+  const handleCategoryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCategory(e.target.value);
+  };
+
   return (
     <Layout title="Upload Page">
-      <Container maxWidth="xl" sx={{ py: 5 }}>
-        <Typography gutterBottom variant="h4">
+      <Container maxWidth="md" sx={{ py: 5 }}>
+        <Typography gutterBottom align="center" variant="h4">
           Upload a new product
         </Typography>
-        <Box noValidate component="form" onSubmit={handleUpload} sx={{ mt: 1 }}>
+        <Box
+          noValidate
+          component="form"
+          onSubmit={handleUpload}
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          mt={1}
+        >
           <TextField
             autoFocus
             required
@@ -88,11 +104,28 @@ const UploadPage = () => {
           <TextField
             required
             fullWidth
+            multiline
+            rows={4}
             value={description}
             onChange={handleDescriptionChange}
             label="Description"
             margin="normal"
           />
+          <TextField
+            required
+            fullWidth
+            select
+            value={category}
+            onChange={handleCategoryChange}
+            label="Category"
+            margin="normal"
+          >
+            {productCategories.map((option) => (
+              <MenuItem key={option} value={option}>
+                {option}
+              </MenuItem>
+            ))}
+          </TextField>
           <TextField
             required
             fullWidth
@@ -112,7 +145,7 @@ const UploadPage = () => {
           />
           {pictureUrl && (
             <Box display="flex" justifyContent="center" mt={2}>
-              <Avatar src={pictureUrl} sx={{ width: 64, height: 64 }} />
+              <Avatar src={pictureUrl} sx={{ width: 128, height: 128 }} />
             </Box>
           )}
           <Button

@@ -8,6 +8,7 @@ const hasAuthHeader = (req, res, next) => {
       .status(StatusCodes.UNAUTHORIZED)
       .send(createTextMessage("No authorization header found"));
   }
+
   next();
 };
 

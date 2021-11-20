@@ -31,19 +31,22 @@ router.get("/validate", (req, res) => {
 // api/v1/user/login
 router.use("/login", validateLogin);
 router.post("/login", async (req, res) => {
-  const retrieved = await User.findOne({ username: req.body.username });
-  if (!retrieved || !(await retrieved.comparePassword(req.body.password))) {
+  // Required fields
+  const username = req.body.username;
+  const password = req.body.password;
+
+  // Optional fields
+  const remember = req.body.remember;
+
+  const retrievedUser = await User.findOne({ username: username });
+  if (!retrievedUser || !(await retrievedUser.comparePassword(password))) {
     return res
       .status(StatusCodes.UNAUTHORIZED)
       .send(createTextMessage("Username or password is incorrect"));
   } else {
     return res.send(
       createJwtMessage(
-        createUserToken(
-          req.body.username,
-          retrieved.role,
-          Boolean(req.body.remember)
-        )
+        createUserToken(username, retrievedUser.role, Boolean(remember))
       )
     );
   }

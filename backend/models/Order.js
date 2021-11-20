@@ -1,15 +1,7 @@
 import mongoose from "mongoose";
 
-const ProductSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-  },
-  description: {
-    type: String,
-    required: true,
-  },
-  picture: {
+const OrderSchema = new mongoose.Schema({
+  youth: {
     type: String,
     required: true,
   },
@@ -17,14 +9,18 @@ const ProductSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  product: {
+    type: String,
+    required: true,
+  },
   price: {
     type: Number,
     required: true,
   },
-  category: {
+  date: {
     type: String,
     required: true,
   },
 });
 
-export default mongoose.model("products", ProductSchema);
+export default mongoose.model("orders", OrderSchema);

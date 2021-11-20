@@ -37,6 +37,9 @@ interface DonationCardProps {
   youthUsername?: string;
   donorUsername?: string;
   isDonating?: boolean;
+  isDonor?: boolean;
+  followCount: number;
+  updateDonations?: () => any;
 }
 
 const DonationCard = ({
@@ -45,6 +48,9 @@ const DonationCard = ({
   youthUsername,
   donorUsername,
   isDonating,
+  isDonor,
+  followCount,
+  updateDonations,
 }: DonationCardProps) => {
   const [donationAmount, setDonationAmount] = useState("5");
   const validDonationAmounts = ["5", "10", "25", "100"];
@@ -64,7 +70,7 @@ const DonationCard = ({
   return (
     <Card style={{ background: "rgba(0 0 0 / 2%)" }}>
       <CardContent>
-        <Grid container sx={{ mb: 2.5 }}>
+        <Grid container>
           <Grid item xs={4}>
             <Statistic
               stat={
@@ -80,15 +86,26 @@ const DonationCard = ({
           </Grid>
           <Grid item xs={4}>
             <Statistic
-              stat={0}
+              stat={followCount}
               label={isDonating ? "following" : "followers"}
             />
           </Grid>
         </Grid>
-        {donations.length !== 0 && (
-          <DonationsTable inCredits={inCredits} donations={donations} />
-        )}
-        {donorUsername && (
+        {donations.length !== 0 &&
+          (isDonor ? (
+            <Box sx={{ mt: 2.5 }}>
+              <DonationsTable
+                inCredits={inCredits}
+                donations={donations}
+                isDonor
+              />
+            </Box>
+          ) : (
+            <Box sx={{ mt: 2.5 }}>
+              <DonationsTable inCredits={inCredits} donations={donations} />
+            </Box>
+          ))}
+        {donorUsername && youthUsername && (
           <Box
             display="flex"
             flexDirection="column"
@@ -122,8 +139,11 @@ const DonationCard = ({
               onApprove={(data: any, actions: any) =>
                 actions.order.capture().then((details: { id: string }) => {
                   axiosBase
-                    .post("/payment/donation/save", { orderId: details.id })
-                    .then((response) => toast.success(response.data.message))
+                    .post("/payment/donation/save", { order_id: details.id })
+                    .then((response) => {
+                      toast.success(response.data.message);
+                      updateDonations && updateDonations();
+                    })
                     .catch(({ response }) => handleResponseError(response));
                 })
               }

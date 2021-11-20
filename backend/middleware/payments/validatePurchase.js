@@ -1,22 +1,19 @@
 import { StatusCodes } from "http-status-codes";
-
 import { createTextMessage } from "../../utils/defaultMessages.js";
-import userRoles from "../../utils/userRoles.js";
-
 import Product from "../../models/Product.js";
-import User from "../../models/User.js";
 
-// Middleware to validate whether parameters associated with the validate
-// purchase endpoint (product) are present and valid
+// Middleware to validate required parameters for the purchase endpoint
+// (product) are present and valid
 const validatePurchase = async (req, res, next) => {
-  console.log(req.body);
+  // Fields to validate
+  const productName = req.body.name;
 
   // Validate product name
-  if (!req.body.product) {
+  if (!productName) {
     return res
       .status(StatusCodes.BAD_REQUEST)
       .send(createTextMessage("Product name is empty"));
-  } else if (!(await Product.exists({ name: req.body.product }))) {
+  } else if (!(await Product.exists({ name: productName }))) {
     return res
       .status(StatusCodes.NOT_FOUND)
       .send(createTextMessage("Product does not exist"));

@@ -67,7 +67,7 @@ const DonorProfile = () => {
     event.preventDefault();
 
     axiosBase
-      .put(
+      .patch(
         "/user/donor/update",
         {
           name: name,
@@ -105,6 +105,7 @@ const DonorProfile = () => {
             </Typography>
             <TextField
               autoFocus
+              required
               fullWidth
               label="Name"
               margin="normal"

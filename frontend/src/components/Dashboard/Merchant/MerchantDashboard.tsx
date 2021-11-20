@@ -9,8 +9,9 @@ import axiosBase from "utils/axiosBase";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 
-import { Product } from "common/Types";
+import { Product, Order } from "common/Types";
 import ProductCard from "components/Card/Product";
+import OrderCard from "components/Card/Orders";
 import { decodeAuthToken } from "utils/authHelpers";
 import handleResponseError from "utils/handleResponseError";
 import Layout from "components/Layout";
@@ -20,25 +21,15 @@ const MerchantDashboard = () => {
   const account = decodeAuthToken();
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState<Product[]>([]);
+  const [orders, setOrders] = useState<Order[]>([]);
   const history = useHistory();
 
   useEffect(() => {
     axiosBase
-      .get("/user/merchant/products", {
-        params: {
-          owner: account?.username,
-        },
-      })
+      .post("/user/merchant/private", {}, getAuthHeader())
       .then((response) => {
-        setProducts(
-          response.data.map((data: any) => ({
-            name: data.name,
-            description: data.description,
-            picture: data.picture,
-            owner: data.owner,
-            price: String(data.price),
-          }))
-        );
+        setProducts(response.data.products);
+        setOrders(response.data.orders);
       })
       .catch(({ response }) => {
         handleResponseError(response);
@@ -51,9 +42,9 @@ const MerchantDashboard = () => {
   const handleDelete = (name: string) => {
     axiosBase
       .post(
-        "/user/merchant/delete",
+        "/user/merchant/products/delete",
         {
-          product: name,
+          name: name,
         },
         getAuthHeader()
       )
@@ -102,6 +93,10 @@ const MerchantDashboard = () => {
         ) : (
           <Typography>No products uploaded yet</Typography>
         )}
+        <Typography variant="h4" mt={7} mb={3}>
+          Past Orders
+        </Typography>
+        <OrderCard orders={orders} isMerchant />
       </Container>
     </Layout>
   );

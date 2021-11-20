@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 import client from "../utils/payPalClient.js";
 import { decodeUserToken } from "../utils/jwtHelpers.js";
 import { createTextMessage } from "../utils/defaultMessages.js";
-import { donationToCredit } from "../utils/creditConversion.js";
+import { dollarToCredit } from "../utils/creditConversion.js";
 import userRoles from "../utils/userRoles.js";
 
 import validatePurchase from "../middleware/payments/validatePurchase.js";
@@ -15,32 +15,33 @@ import verifyAuthHeader from "../middleware/security/verifyAuthHeader.js";
 import Youth from "../models/Youth.js";
 import Product from "../models/Product.js";
 import Merchant from "../models/Merchant.js";
+import Order from "../models/Order.js";
 
 const router = express.Router();
 
 // api/v1/payment/purchase
 router.use("/", [verifyAuthHeader(userRoles.youth), validatePurchase]);
 router.post("/", async (req, res) => {
-  const decoded = decodeUserToken(req.headers.authorization);
-  const youthUsername = decoded.username;
-  const productName = req.body.product;
+  const decodedYouth = decodeUserToken(req.headers.authorization);
+
+  // Required fields
+  const productName = req.body.name;
 
   const retrievedProduct = await Product.findOne({ name: productName });
-  const retrievedYouth = await Youth.findOne({ username: youthUsername });
+  const retrievedYouth = await Youth.findOne({
+    username: decodedYouth.username,
+  });
 
-  // If youth don't have enough credit to buy the product
-  if (
-    retrievedYouth.credit_balance < donationToCredit(retrievedProduct.price)
-  ) {
+  if (retrievedYouth.credit_balance < dollarToCredit(retrievedProduct.price)) {
     return res
       .status(StatusCodes.BAD_REQUEST)
       .send(createTextMessage("Not enough credits to purchase product"));
   }
 
   const reqBatchId = `test-sdk-${uuidv4()}`;
-  const reqInformation = `Youth @${youthUsername} purchased ${productName}`;
+  const reqInformation = `Youth @${decodedYouth.username} purchased ${productName}`;
   const retrievedMerchant = await Merchant.findOne({
-    username: retrievedProduct.store_owner_username,
+    username: retrievedProduct.merchant,
   });
 
   let requestBody = {
@@ -64,18 +65,28 @@ router.post("/", async (req, res) => {
   try {
     let request = new paypal.payouts.PayoutsPostRequest();
     request.requestBody(requestBody);
-    await client().execute(request);
+    const payOutOrder = await client().execute(request);
     await Youth.updateOne(
-      { username: youthUsername },
+      { username: decodedYouth.username },
       {
         $set: {
           credit_balance: (
             retrievedYouth.credit_balance -
-            donationToCredit(retrievedProduct.price)
+            dollarToCredit(retrievedProduct.price)
           ).toFixed(2),
         },
       }
     );
+
+    const newOrder = new Order({
+      youth: decodedYouth.username,
+      merchant: retrievedMerchant.username,
+      product: retrievedProduct.name,
+      price: retrievedProduct.price,
+      date: payOutOrder.headers.date,
+    });
+
+    await newOrder.save();
 
     return res.send(createTextMessage("Successfully processed payment"));
   } catch (err) {

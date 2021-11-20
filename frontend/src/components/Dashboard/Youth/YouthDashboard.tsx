@@ -10,6 +10,7 @@ import { PrivateYouth } from "common/Types";
 import { decodeAuthToken, getAuthHeader } from "utils/authHelpers";
 import handleResponseError from "utils/handleResponseError";
 import DonationCard from "components/Card/Donation";
+import OrderCard from "components/Card/Orders/OrderCard";
 import axiosBase from "utils/axiosBase";
 import Layout from "components/Layout";
 import ShareButtons from "components/ShareButtons";
@@ -26,12 +27,14 @@ const YouthDashboard = () => {
         setYouth({
           name: response.data.name,
           username: response.data.username,
-          dob: response.data.dateOfBirth,
-          image: response.data.profilePicture,
-          savingPlan: response.data.savingPlan,
+          dateOfBirth: response.data.date_of_birth,
+          profilePicture: response.data.profile_picture,
+          savingPlan: response.data.saving_plan,
           story: response.data.story,
           donations: response.data.donations,
-          credits: response.data.credits,
+          followCount: response.data.follow_count,
+          creditBalance: response.data.credit_balance,
+          orders: response.data.orders,
         });
       })
       .catch(({ response }) => {
@@ -62,7 +65,7 @@ const YouthDashboard = () => {
               <Typography variant="h4">Welcome {youth.name}!</Typography>
               <Chip
                 icon={<MoneyIcon />}
-                label={`Balance: ${youth.credits} CR`}
+                label={`Balance: ${youth.creditBalance} CR`}
                 color="primary"
                 style={{
                   height: "2.5rem",
@@ -72,11 +75,16 @@ const YouthDashboard = () => {
               />
             </Box>
 
-            {youth.donations.length === 0 ? (
-              <Typography>No donations yet!</Typography>
-            ) : (
-              <DonationCard inCredits donations={youth.donations} />
-            )}
+            <DonationCard
+              inCredits
+              donations={youth.donations}
+              followCount={youth.followCount}
+            />
+
+            <Typography variant="h4" mt={5} mb={3}>
+              Past Orders
+            </Typography>
+            <OrderCard inCredits orders={youth.orders} />
           </>
         ) : (
           <Typography variant="h4">

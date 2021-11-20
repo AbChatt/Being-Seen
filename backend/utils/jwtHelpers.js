@@ -41,7 +41,7 @@ const decodeUserToken = (token) => {
     }
     console.log("Decoded token is not valid: " + JSON.stringify(decoded));
   } catch (err) {
-    console.log(err);
+    console.log(`Token is not valid (${err.message})`);
   }
 
   return null;
